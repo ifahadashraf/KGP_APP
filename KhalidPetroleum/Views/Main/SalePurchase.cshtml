@@ -1,0 +1,633 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    @{var rights = Session["Rights"] as KhalidPetroleum.Models.Role;
+      var user = Session["User"] as KhalidPetroleum.Models.User;}
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>Vehicle Management System</title>
+    <!-- Favicon-->
+    <link rel="icon" href="~/Content/images/khalid.jpg" type="image/x-icon">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+    <!-- Bootstrap Core Css -->
+    <link href="~/Content/plugins/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <!-- Waves Effect Css -->
+    <link href="~/Content/plugins/node-waves/waves.css" rel="stylesheet" />
+    <!-- Animation Css -->
+    <link href="~/Content/plugins/animate-css/animate.css" rel="stylesheet" />
+    <!-- Sweetalert Css -->
+    <link href="~/Content/plugins/sweetalert/sweetalert.css" rel="stylesheet" />
+    <!-- Bootstrap Material Datetime Picker Css -->
+    <link href="~/Content/plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css" rel="stylesheet" />
+    <!-- Custom Css -->
+    <link href="~/Css/style.css" rel="stylesheet">
+    <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
+    <link href="~/Css/themes/all-themes.css" rel="stylesheet" />
+    
+</head>
+<body class="theme-blue">
+    <!-- Top Bar -->
+    <nav class="navbar">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
+                <a href="javascript:void(0);" class="bars"></a>
+                <a class="navbar-brand">Khalid Group of Petroleum | Sale/Purchase</a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <!-- Notifications -->
+                    <li class="dropdown">
+                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button">
+                            <i class="material-icons">menu</i>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="header">Menu</li>
+                            <li class="body">
+                                <ul class="menu">
+                                    <li>
+                                        <a href="/Main/SignIn">
+                                            <div class="icon-circle bg-light-green">
+                                                <i class="material-icons">input</i>
+                                            </div>
+                                            <div class="menu-info">
+                                                <h4>Logout</h4>
+                                                <p>
+                                                    Exit the system
+                                                </p>
+                                            </div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- #END# Notifications -->
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- #Top Bar -->
+    <section>
+        <!-- Left Sidebar -->
+        <aside id="leftsidebar" class="sidebar">
+            <!-- User Info -->
+            <div class="user-info">
+                <div class="image">
+                    <img src="~/Content/images/khalid.jpg" width="48" height="48" alt="User" />
+                </div>
+                <div class="info-container">
+                    <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">@Session["Username"]</div>
+                    <div class="email">Khalid group</div>
+                </div>
+            </div>
+            <!-- #User Info -->
+            <!-- Menu -->
+            <div class="menu">
+                <ul class="list">
+                    <li class="header">MAIN NAVIGATION</li>
+                    <li class="active">
+                        <a href="/Main/Index">
+                            <i class="material-icons">home</i>
+                            <span>Home</span>
+                        </a>
+                    </li>
+                    <li @(rights.isMNVehicles ? string.Empty : "style=display:none")>
+                        <a href="/Main/Vehicles">
+                            <i class="material-icons">directions_car</i>
+                            <span>Vehicles</span>
+                        </a>
+                    </li>
+                    <li @(rights.isMNStaff ? string.Empty : "style=display:none")>
+                        <a href="/Main/Staff">
+                            <i class="material-icons">person</i>
+                            <span>Staff</span>
+                        </a>
+                    </li>
+
+                    <li @(rights.isMNDeliverySites ? string.Empty : "style=display:none")>
+                        <a href="/Main/DSites">
+                            <i class="material-icons">ev_station</i>
+                            <span>Delivery Sites</span>
+                        </a>
+                    </li>
+
+                    <li @((user.UserID == 3) ? string.Empty : "style=display:none")>
+                        <a href="/Main/Roles">
+                            <i class="material-icons">supervisor_account</i>
+                            <span>Roles</span>
+                        </a>
+                    </li>
+                    <li @((user.UserID == 3) ? string.Empty : "style=display:none")>
+                        <a href="/Admin/Index">
+                            <i class="material-icons">assessment</i>
+                            <span>Stats</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <!-- #Menu -->
+            <!-- Footer -->
+            <!-- #Footer -->
+        </aside>
+        <!-- #END# Left Sidebar -->
+    </section>
+    <section class="content">
+        <div class="container-fluid">
+            <div class="block-header">
+                <h2>SALE/PURCHASE</h2>
+            </div>
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>
+                                VEHICLE DETAILS
+                            </h2>
+                        </div>
+                        <div class="body">
+                            <form>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <label for="datePicker">Date</label>
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="date" id="txtDate" class="datepicker form-control" placeholder="Please choose a date">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="txtVechileNo">Vehicle No</label>
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <select id="txtVechileNo" class="form-control show-tick" onchange="setCurrentReading()"></select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="txtVCM">VCM</label>
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="text" id="txtVCM" class="form-control" placeholder="Enter VCM's Name">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="txtDrivers">Captain</label>
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <select id="txtDrivers" class="form-control show-tick">
+                                                    <option value="">Please select</option>
+                                                    <option value="1">Ali</option>
+                                                    <option value="2">Adil</option>
+                                                    <option value="3">Rasheed</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>
+                                PURCHASE
+                                <small>Depot Detail</small>
+                            </h2>
+                        </div>
+                        <div class="body">
+                            <form>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="txtDepotCode">Code</label>
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <select id="txtDepotCode" class="form-control show-tick" onchange="setDepotName()">
+                                                    <option value="">Please select</option>
+                                                    <option value="1">Ali</option>
+                                                    <option value="2">Adil</option>
+                                                    <option value="3">Rasheed</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="depotName">Name</label>
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="text" id="txtDepotName" class="form-control" placeholder="Depot Name" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @*<div class="col-md-4">
+                                        <label for="newDepot">New Depot</label>
+                                        <div class="form-group">
+                                            <div class="button-demo js-modal-buttons">
+                                                <button type="button" class="btn bg-light-blue waves-effect" data-toggle="modal" data-target="#mdModal">+ Add New</button>
+                                            </div>
+                                        </div>
+                                    </div>*@
+                                </div>
+                                <div class="row">
+                                    
+                                    <div class="col-md-4">
+                                        <label for="txtSUP">SUP</label>
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="number" id="txtSUP" class="form-control" placeholder="Enter amout of super"  onkeyup="setTotal()">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="txtHSD">HSD</label>
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="number" id="txtHSD" class="form-control" placeholder="Enter amout of diesel"  onkeyup="setTotal()">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="totalQuantity">Total Quantity</label>
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="number" id="txtTotalQuantity" class="form-control" placeholder="Enter total amount of fuel" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>
+                                SALE
+                            </h2>
+                        </div>
+                        <div class="body">
+                            <form>
+                                <div class="row">
+                                    <table>
+                                        <thead >
+                                            <td class="col-md-3"><label>Delivery No</label></td>
+                                            <td class="col-md-3"><label>Quantity</label></td>
+                                            <td class="col-md-3"><label>Site</label></td>
+                                            <td class="col-md-2"><label>Receipt (ONLY JPG)</label></td>
+                                            <td class="col-md-1"></td>
+                                        </thead>
+                                        <tbody id="salesTable">
+                                            
+                                        </tbody>
+                                    </table>
+                                    
+                                </div>
+                                <div align="right">
+                                    <button type="button" class="btn btn-primary m-t-15 waves-effect" onclick="addNewSalesRow()">ADD</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>
+                                DIFFERENCE
+                                <small>Temperature Gain/Loss</small>
+                            </h2>
+                        </div>
+                        <div class="body">
+                            <form>
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <label for="super">SUP</label>
+                                                <select id="txtSUPDropoff" class="form-control show-tick">
+                                                    <option value="PUMP">PUMP</option>
+                                                    <option value="MACHIKEY">MACHIKEY</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <label>SUP Rate</label>
+                                                <input type="number" id="txtRateSup" class="form-control" placeholder="Rate" onkeyup="setGain()">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <label>SUP Quantity</label>
+                                                <input type="number" id="txtQuantitySup" class="form-control" placeholder="Quantity"  onkeyup="setGain()">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <label>HSD</label>
+                                                <select id="txtHSDDropoff" class="form-control show-tick">
+                                                    <option value="PUMP">PUMP</option>
+                                                    <option value="MACHIKEY">MACHIKEY</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <label>HSD Rate</label>
+                                                <input type="number" id="txtRateHsd" class="form-control" placeholder="Rate"  onkeyup="setGain()">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <label>HSD Quantity</label>
+                                                <input type="number" id="txtQuantityHsd" class="form-control" placeholder="Quantity"  onkeyup="setGain()">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>
+                                EXPENSES
+                            </h2>
+                        </div>
+                        <div class="body">
+                            <form>
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <label for="ToolExp">Tool Exp</label>
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="number" id="txtToolExp" class="form-control" placeholder=""  onkeyup="setPaid()">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label for="MunshiExp">Munshi Exp</label>
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="number" id="txtMunshiExp" class="form-control" placeholder=""  onkeyup="setPaid()">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label for="ParkingExp">Parking/Maint</label>
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="number" id="txtParkingExp" class="form-control" placeholder=""  onkeyup="setPaid()">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label for="GuardExp">Guard Exp</label>
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="number" id="txtGuardExp" class="form-control" placeholder=""  onkeyup="setPaid()">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label for="MealExp">Meal Exp</label>
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="number" id="txtMealExp" class="form-control" placeholder=""  onkeyup="setPaid()">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label for="OtherExp">Others</label>
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="number" id="txtOtherExp" class="form-control" placeholder=""  onkeyup="setPaid()">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>
+                                FUEL CONSUMPTION
+                            </h2>
+                        </div>
+                        <div class="body">
+                            <div class="row">
+                                <form>
+                                    <div class="col-md-3">
+                                        <label>Fuel Type</label>
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <select id="selectLubeFuel" class="form-control show-tick">
+                                                    <option value="">Please select</option>
+                                                    <option value="hsd">HSD</option>
+                                                    <option value="lube">Lube</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label for="">Rate </label>
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="number" id="txtRateLubeFuel" class="datepicker form-control" placeholder="Rate"  onkeyup="setPaid()">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label for="">Quantity </label>
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="number" id="txtQuantityLubeFuel" class="form-control" placeholder="Quantity"  onkeyup="setPaid()">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label>Opening Meter</label>
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="number" id="txtOpeningMeter" value="Focused" class="form-control" placeholder="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label for="ClosingMeter">Closing Meter</label>
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="number" id="txtClosingMeter"  class="form-control" placeholder="" onkeyup="setTotalKM()">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <label for="km">Total Kilometers</label>
+                                    <div class="form-group">
+                                        <div class="form-line disabled focused">
+                                            <input type="number" id="txtKilometers" class="form-control" placeholder="" disabled>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <label for="average">Average</label>
+                                    <div class="form-group">
+                                        <div class="form-line focused disabled">
+                                            <input type="number" id="txtAverage" class="form-control" placeholder="" disabled>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>
+                                GAIN/LOSS
+                            </h2>
+                        </div>
+                        <div class="body">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <label for="totalPaid">Total Paid</label>
+                                    <div class="form-group">
+                                        <div class="form-line focused">
+                                            <input type="text" id="txtTotalPaid"  class="form-control" placeholder="" onchange="setGainLoss()" disabled>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <label for="totalReceived">Total Received</label>
+                                    <div class="form-group">
+                                        <div class="form-line focused">
+                                            <input type="text" id="txtTotalReceived"  class="form-control" placeholder="" onchange="setGainLoss()" disabled>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <label for="gainLoss">Net Gain/Loss</label>
+                                    <div class="form-group">
+                                        <div class="form-line focused">
+                                            <input type="text" id="txtNetGainLoss"  class="form-control" placeholder="" disabled>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div align="right">
+                                <button type="button" class="btn btn-primary m-t-15 waves-effect" onclick="submitDailyReport()">SUBMIT</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--Modal Start-->
+
+            <div class="modal fade" id="mdModal" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content modal-col-light-blue">
+                        <div class="modal-header">
+                            <h3 class="modal-title" id="defaultModalLabel">ADD NEW DEPOT</h3>
+                        </div>
+                        <div class="modal-body">
+                            <div id="alertdiv" class="row">
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <label for="depotCode">Code</label>
+                                            <input type="text" id="txtNewDepotCode" class="form-control" placeholder="">
+                                        </div>
+                                        <div class="col-md-5">
+                                            <label for="depotName">Name</label>
+                                            <input type="text" id="txtNewDepotName" class="form-control" placeholder="">
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            @*<button type="button" class="btn btn-link waves-effect">SAVE CHANGES</button>
+                            <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--Modal End-->
+
+
+        </div>
+    </section>
+    <script></script>
+    <!-- Jquery Core Js -->
+    <script src="~/Content/plugins/jquery/jquery.min.js"></script>
+    <script src="http://code.jquery.com/jquery-migrate-1.2.1.js"></script>
+    <!-- Bootstrap Core Js -->
+    <script src="~/Content/plugins/bootstrap/js/bootstrap.js"></script>
+    <!-- Select Plugin Js -->
+    <script src="~/Content/plugins/bootstrap-select/js/bootstrap-select.js"></script>
+    <!-- Moment Plugin Js -->
+    <script src="~/Content/plugins/momentjs/moment.js"></script>
+    <!-- Bootstrap Material Datetime Picker Plugin Js -->
+    <script src="~/Content/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js"></script>
+    <!-- Slimscroll Plugin Js -->
+    <script src="~/Content/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
+    <!-- Waves Effect Plugin Js -->
+    <script src="~/Content/plugins/node-waves/waves.js"></script>
+    <!-- SweetAlert Plugin Js -->
+    <script src="~/Content/plugins/sweetalert/sweetalert.min.js"></script>
+    <!-- Custom Js -->
+    <script src="~/Scripts/js/admin.js"></script>
+    <script src="~/Scripts/main.js"></script>
+    <script src="~/Scripts/sale-purchase.js"></script>
+    <!-- Bootstrap Notify Plugin Js -->
+    <script src="~/Content/plugins/bootstrap-notify/bootstrap-notify.js"></script>
+    <!-- Demo Js -->
+    @*<script src="~/Scripts/js/demo.js"></script>*@
+    <!-- Custom Js -->
+    @*<script src="~/Scripts/js/admin.js"></script>*@
+    <script src="~/Scripts/js/pages/ui/modals.js"></script>
+</body>
+</html>

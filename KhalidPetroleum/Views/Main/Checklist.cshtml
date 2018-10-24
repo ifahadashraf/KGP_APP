@@ -1,0 +1,579 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    @{var rights = Session["Rights"] as KhalidPetroleum.Models.Role;
+      var user = Session["User"] as KhalidPetroleum.Models.User;}
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>Vehicle Management System</title>
+    <!-- Favicon-->
+    <link rel="icon" href="~/Content/images/khalid.jpg" type="image/x-icon">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+    <!-- Bootstrap Core Css -->
+    <link href="~/Content/plugins/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <!-- Bootstrap Material Datetime Picker Css -->
+    <link href="~/Content/plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css" rel="stylesheet" />
+    <!-- Waves Effect Css -->
+    <link href="~/Content/plugins/node-waves/waves.css" rel="stylesheet" />
+    <!-- Animation Css -->
+    <link href="~/Content/plugins/animate-css/animate.css" rel="stylesheet" />
+    <!-- Dropzone Css -->
+    <link href="~/Content/plugins/dropzone/dropzone.css" rel="stylesheet">
+
+    <!-- Custom Css -->
+    <link href="~/Css/style.css" rel="stylesheet">
+    <!-- Wait Me Css -->
+    <link href="~/Content/plugins/waitme/waitMe.css" rel="stylesheet" />
+    <!-- Bootstrap Select Css -->
+    <link href="~/Content/plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
+    <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
+    <link href="~/Css/themes/all-themes.css" rel="stylesheet" />
+
+</head>
+<body class="theme-blue">
+    <!-- Top Bar -->
+    <nav class="navbar">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
+                <a href="javascript:void(0);" class="bars"></a>
+                <a class="navbar-brand">Khalid Group of Petroleum | Vehicle Checklist</a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <!-- Notifications -->
+                    <li class="dropdown">
+                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button">
+                            <i class="material-icons">menu</i>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="header">Menu</li>
+                            <li class="body">
+                                <ul class="menu">
+                                    <li>
+                                        <a href="/Main/SignIn">
+                                            <div class="icon-circle bg-light-green">
+                                                <i class="material-icons">input</i>
+                                            </div>
+                                            <div class="menu-info">
+                                                <h4>Logout</h4>
+                                                <p>
+                                                    Exit the system
+                                                </p>
+                                            </div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- #END# Notifications -->
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- #Top Bar -->
+    <section>
+        <!-- Left Sidebar -->
+        <aside id="leftsidebar" class="sidebar">
+            <!-- User Info -->
+            <div class="user-info">
+                <div class="image">
+                    <img src="~/Content/images/khalid.jpg" width="48" height="48" alt="User" />
+                </div>
+                <div class="info-container">
+                    <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">@Session["Username"]</div>
+                    <div class="email">Khalid group</div>
+                </div>
+            </div>
+            <!-- #User Info -->
+            <!-- Menu -->
+            <div class="menu">
+                <ul class="list">
+                    <li class="header">MAIN NAVIGATION</li>
+                    <li class="active">
+                        <a href="/Main/Index">
+                            <i class="material-icons">home</i>
+                            <span>Home</span>
+                        </a>
+                    </li>
+                    <li @(rights.isMNVehicles ? string.Empty : "style=display:none")>
+                        <a href="/Main/Vehicles">
+                            <i class="material-icons">directions_car</i>
+                            <span>Vehicles</span>
+                        </a>
+                    </li>
+                    <li @(rights.isMNStaff ? string.Empty : "style=display:none")>
+                        <a href="/Main/Staff">
+                            <i class="material-icons">person</i>
+                            <span>Staff</span>
+                        </a>
+                    </li>
+
+                    <li @(rights.isMNDeliverySites ? string.Empty : "style=display:none")>
+                        <a href="/Main/DSites">
+                            <i class="material-icons">ev_station</i>
+                            <span>Delivery Sites</span>
+                        </a>
+                    </li>
+
+                    <li @((user.UserID == 3) ? string.Empty : "style=display:none")>
+                        <a href="/Main/Roles">
+                            <i class="material-icons">supervisor_account</i>
+                            <span>Roles</span>
+                        </a>
+                    </li>
+                    <li @((user.UserID == 3) ? string.Empty : "style=display:none")>
+                        <a href="/Admin/Index">
+                            <i class="material-icons">assessment</i>
+                            <span>Stats</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+        <!-- #END# Left Sidebar -->
+
+    </section>
+    <section class="content">
+        <div class="container-fluid">
+            <div class="block-header">
+                <h2>VEHICLE CHECKLIST</h2>
+            </div>
+
+            <!-- #END# Color Pickers -->
+            <!-- File Upload | Drag & Drop OR With Click & Choose -->
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>
+                                FILE UPLOAD - DRAG & DROP OR WITH CLICK & CHOOSE
+                                <small>Taken from <a href="http://www.dropzonejs.com/" target="_blank">www.dropzonejs.com</a></small>
+                            </h2>
+                            <ul class="header-dropdown m-r--5">
+                                <li class="dropdown">
+                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                        <i class="material-icons">more_vert</i>
+                                    </a>
+                                    <ul class="dropdown-menu pull-right">
+                                        <li><a href="javascript:void(0);">Action</a></li>
+                                        <li><a href="javascript:void(0);">Another action</a></li>
+                                        <li><a href="javascript:void(0);">Something else here</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="body">
+                            <div id="frmFileUpload" class="dropzone">
+                                <div class="dz-message">
+                                    <div class="drag-icon-cph">
+                                        <i class="material-icons">touch_app</i>
+                                    </div>
+                                    <h3>Drop files here or click to upload.</h3>
+                                    <em>(This is just a demo dropzone. Selected files are <strong>not</strong> actually uploaded.)</em>
+                                </div>
+                                <div class="fallback">
+                                    <input name="file" type="file" multiple />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- #END# File Upload | Drag & Drop OR With Click & Choose -->
+            <!-- Masked Input -->
+
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>
+                                VEHICLE DETAILS
+                            </h2>
+                        </div>
+                        <div class="body">
+                            <form>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <label for="datePicker">Date</label>
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="text" id="txtDate" class="datepicker form-control" placeholder="Please choose a date">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="vehicleNo">Vehicle Number</label>
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <select id="txtVechileNo" class="form-control show-tick" >
+                                                    
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @*<div class="col-md-3">
+                                        <label for="captainName">Captain</label>
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="text" id="txtCaptainName" class="form-control" placeholder="Enter Driver's Name">
+                                            </div>
+                                        </div>
+                                    </div>*@
+                                    <div class="col-md-3">
+                                        <label for="openingMeter">Opening Meter</label>
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="number" id="txtOpeningMeter" class="form-control" placeholder="Enter Reading of meter">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3" style="display:none">
+                                        <label for="newVehicle">Add New Vehicle</label>
+                                        <div class="form-group" >
+                                            <div class="button-demo js-modal-buttons">
+                                                <button type="button" class="btn bg-light-blue waves-effect" data-toggle="modal" data-target="#mdModal">+ Add New</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>
+                                CHECKLIST
+                            </h2>
+                        </div>
+                        <div class="body">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Sr#</th>
+                                        <th>Details</th>
+                                        <th>Yes / No</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="questionsTable">
+                                    <tr>
+                                        <th scope="row">1</th>
+                                        <td>Cabin is Clean</td>
+                                        <td>
+                                            <input name="group1" type="radio" id="radio_01" class="with-gap radio-col-green" /><label for="radio_01"></label>
+                                            <input name="group1" type="radio" id="radio_02" class="with-gap radio-col-red" checked /><label for="radio_02"></label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">2</th>
+                                        <td>Radiator water is full</td>
+                                        <td>
+                                            <input name="group2" type="radio" id="radio_03" class="with-gap radio-col-green" /><label for="radio_03"></label>
+                                            <input name="group2" type="radio" id="radio_04" class="with-gap radio-col-red" checked /><label for="radio_04"></label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">3</th>
+                                        <td>Engine oil is full</td>
+                                        <td>
+                                            <input name="group3" type="radio" id="radio_05" class="with-gap radio-col-green" /><label for="radio_05"></label>
+                                            <input name="group3" type="radio" id="radio_06" class="with-gap radio-col-red" checked /><label for="radio_06"></label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">4</th>
+                                        <td>Battery water is full</td>
+                                        <td>
+                                            <input name="group4" type="radio" id="radio_07" class="with-gap radio-col-green" /><label for="radio_07"></label>
+                                            <input name="group4" type="radio" id="radio_08" class="with-gap radio-col-red" checked /><label for="radio_08"></label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">5</th>
+                                        <td>All lights are working</td>
+                                        <td>
+                                            <input name="group5" type="radio" id="radio_09" class="with-gap radio-col-green" /><label for="radio_09"></label>
+                                            <input name="group5" type="radio" id="radio_10" class="with-gap radio-col-red" checked /><label for="radio_10"></label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">6</th>
+                                        <td>First aid box is complete</td>
+                                        <td>
+                                            <input name="group6" type="radio" id="radio_11" class="with-gap radio-col-green" /><label for="radio_11"></label>
+                                            <input name="group6" type="radio" id="radio_12" class="with-gap radio-col-red" checked /><label for="radio_12"></label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">7</th>
+                                        <td>Tool box is complete</td>
+                                        <td>
+                                            <input name="group7" type="radio" id="radio_13" class="with-gap radio-col-green" /><label for="radio_13"></label>
+                                            <input name="group7" type="radio" id="radio_14" class="with-gap radio-col-red" checked /><label for="radio_14"></label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">8</th>
+                                        <td>Air in tyres is checked</td>
+                                        <td>
+                                            <input name="group8" type="radio" id="radio_15" class="with-gap radio-col-green" /><label for="radio_15"></label>
+                                            <input name="group8" type="radio" id="radio_16" class="with-gap radio-col-red" checked /><label for="radio_16"></label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">9</th>
+                                        <td>All meters are working</td>
+                                        <td>
+                                            <input name="group9" type="radio" id="radio_17" class="with-gap radio-col-green" /><label for="radio_17"></label>
+                                            <input name="group9" type="radio" id="radio_18" class="with-gap radio-col-red" checked /><label for="radio_18"></label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">10</th>
+                                        <td>Fire cylinder is not expired</td>
+                                        <td>
+                                            <input name="group10" type="radio" id="radio_19" class="with-gap radio-col-green" /><label for="radio_19"></label>
+                                            <input name="group10" type="radio" id="radio_20" class="with-gap radio-col-red" checked /><label for="radio_20"></label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">11</th>
+                                        <td>Staff uniform is complete and clean</td>
+                                        <td>
+                                            <input name="group11" type="radio" id="radio_21" class="with-gap radio-col-green" /><label for="radio_21"></label>
+                                            <input name="group11" type="radio" id="radio_22" class="with-gap radio-col-red" checked /><label for="radio_22"></label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">12</th>
+                                        <td>Registration book</td>
+                                        <td>
+                                            <input name="group12" type="radio" id="radio_23" class="with-gap radio-col-green" /><label for="radio_23"></label>
+                                            <input name="group12" type="radio" id="radio_24" class="with-gap radio-col-red" checked /><label for="radio_24"></label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">13</th>
+                                        <td>Root permit</td>
+                                        <td>
+                                            <input name="group13" type="radio" id="radio_25" class="with-gap radio-col-green" /><label for="radio_25"></label>
+                                            <input name="group13" type="radio" id="radio_26" class="with-gap radio-col-red" checked /><label for="radio_26"></label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">14</th>
+                                        <td>Insurance is not expired</td>
+                                        <td>
+                                            <input name="group14" type="radio" id="radio_27" class="with-gap radio-col-green" /><label for="radio_27"></label>
+                                            <input name="group14" type="radio" id="radio_28" class="with-gap radio-col-red" checked /><label for="radio_28"></label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">15</th>
+                                        <td>Dip chart is not expired</td>
+                                        <td>
+                                            <input name="group15" type="radio" id="radio_29" class="with-gap radio-col-green" /><label for="radio_29"></label>
+                                            <input name="group15" type="radio" id="radio_30" class="with-gap radio-col-red" checked /><label for="radio_30"></label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">16</th>
+                                        <td>Log book is complete</td>
+                                        <td>
+                                            <input name="group16" type="radio" id="radio_31" class="with-gap radio-col-green" /><label for="radio_31"></label>
+                                            <input name="group16" type="radio" id="radio_32" class="with-gap radio-col-red" checked /><label for="radio_32"></label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">17</th>
+                                        <td>Weekly greasing is done</td>
+                                        <td>
+                                            <input name="group17" type="radio" id="radio_33" class="with-gap radio-col-green" /><label for="radio_33"></label>
+                                            <input name="group17" type="radio" id="radio_34" class="with-gap radio-col-red" checked /><label for="radio_34"></label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">18</th>
+                                        <td>Monthly checkup is done</td>
+                                        <td>
+                                            <input name="group18" type="radio" id="radio_35" class="with-gap radio-col-green" /><label for="radio_35"></label>
+                                            <input name="group18" type="radio" id="radio_36" class="with-gap radio-col-red" checked /><label for="radio_36"></label>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>
+                                MAINTENANCE REQUIRED
+                            </h2>
+                        </div>
+                        <div class="body">
+                            <form class="form-horizontal">
+                                <div class="row clearfix">
+                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                                        <label for="email_address_2">1.</label>
+                                    </div>
+                                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-7">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="text" id="email_address_2" class="form-control" placeholder="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row clearfix">
+                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                                        <label for="email_address_2">2.</label>
+                                    </div>
+                                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-7">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="text" id="email_address_2" class="form-control" placeholder="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row clearfix">
+                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                                        <label for="email_address_2">3.</label>
+                                    </div>
+                                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-7">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="text" id="email_address_2" class="form-control" placeholder="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row clearfix">
+                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                                        <label for="email_address_2">4.</label>
+                                    </div>
+                                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-7">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="text" id="email_address_2" class="form-control" placeholder="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div align="right">
+                                    <button type="button" class="btn btn-primary m-t-15 waves-effect" onclick="submitCheckList()">SUBMIT</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--Modal Start-->
+
+            <div class="modal fade" id="mdModal" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content modal-col-light-blue">
+                        <div class="modal-header">
+                            <h3 class="modal-title" id="defaultModalLabel">ADD NEW VEHICLE</h3>
+                        </div>
+                        <div class="modal-body">
+                            <div id="alertdiv" class="row">
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label for="depotName">Number</label>
+                                            <input type="text" id="txtVehicleNumber" min="0" max="9999" class="form-control" placeholder="i.e. 9848">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="depotName">Model</label>
+                                            <input type="number" id="txtVehicleModel" min="0" max="9999" class="form-control" placeholder="i.e. 2011">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="depotName">Vehicle Type</label>
+                                            <select id="txtVehicleType" class="form-control show-tick">
+                                                <option value="">Please select</option>
+                                                <option value="TANKER">TANKER</option>
+                                                <option value="CAR">CAR</option>
+                                                <option value="BIKE">BIKE</option>
+                                                <option value="GENERATOR">GENERATOR</option>
+                                                <option value="OTHER">OTHER</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label for="txtVehicleCompany">Company</label>
+                                            <input type="text" id="txtVehicleCompany" class="form-control" placeholder="i.e. TOYOTA">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="txtVehicleOwner">Owner</label>
+                                            <input type="text" id="txtVehicleOwner" class="form-control" placeholder="i.e. XYZ">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="txtVehicleReading">Current Reading</label>
+                                            <input type="text" id="txtVehicleReading" min="0" class="form-control" placeholder="i.e. 999999" >
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-link waves-effect" onclick="addVehicle()">SAVE</button>
+                            <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--Modal End-->
+
+        </div>
+    </section>
+
+
+    <!-- Jquery Core Js -->
+    <script src="~/Content/plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap Core Js -->
+    <script src="~/Content/plugins/bootstrap/js/bootstrap.js"></script>
+    <!-- Select Plugin Js -->
+    <script src="~/Content/plugins/bootstrap-select/js/bootstrap-select.js"></script>
+    <!-- Slimscroll Plugin Js -->
+    <script src="~/Content/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
+    <!-- Waves Effect Plugin Js -->
+    <script src="~/Content/plugins/node-waves/waves.js"></script>
+    <!-- Dropzone Plugin Js -->
+    <script src="~/Content/plugins/dropzone/dropzone.js"></script>
+    <!-- Demo Js -->
+    <script src="~/Scripts/js/demo.js"></script>
+    <!-- Custom Js -->
+    <script src="~/Scripts/js/admin.js"></script>
+    <script src="~/Scripts/main.js"></script>
+    <script src="~/Scripts/checklist.js"></script>
+    <script src="~/Scripts/js/pages/forms/basic-form-elements.js"></script>
+    <!-- Moment Plugin Js -->
+    <script src="~/Content/plugins/momentjs/moment.js"></script>
+    <!-- Bootstrap Material Datetime Picker Plugin Js -->
+    <script src="~/Content/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js"></script>
+    <!-- Autosize Plugin Js -->
+    <script src="~/Content/plugins/autosize/autosize.js"></script>
+
+</body>
+</html>

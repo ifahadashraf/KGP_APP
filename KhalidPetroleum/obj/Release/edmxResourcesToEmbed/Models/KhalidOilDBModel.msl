@@ -1,0 +1,261 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="KhalidOilDBModelStoreContainer" CdmEntityContainer="KhalidOilDBEntities">
+    <EntitySetMapping Name="Attendances">
+      <EntityTypeMapping TypeName="KhalidOilDBModel.Attendance">
+        <MappingFragment StoreEntitySet="Attendances">
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="AttendanceDate" ColumnName="AttendanceDate" />
+          <ScalarProperty Name="ArrivalTime" ColumnName="ArrivalTime" />
+          <ScalarProperty Name="DepartureTime" ColumnName="DepartureTime" />
+          <ScalarProperty Name="AttendanceStatus" ColumnName="AttendanceStatus" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CheckList_Question">
+      <EntityTypeMapping TypeName="KhalidOilDBModel.CheckList_Question">
+        <MappingFragment StoreEntitySet="CheckList_Question">
+          <ScalarProperty Name="CheckListID" ColumnName="CheckListID" />
+          <ScalarProperty Name="QuestionID" ColumnName="QuestionID" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="CheckListQuestionID" ColumnName="CheckListQuestionID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DailyCheckLists">
+      <EntityTypeMapping TypeName="KhalidOilDBModel.DailyCheckList">
+        <MappingFragment StoreEntitySet="DailyCheckLists">
+          <ScalarProperty Name="CheckListID" ColumnName="CheckListID" />
+          <ScalarProperty Name="VehicleNumber" ColumnName="VehicleNumber" />
+          <ScalarProperty Name="Date" ColumnName="Date" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DailyReports">
+      <EntityTypeMapping TypeName="KhalidOilDBModel.DailyReport">
+        <MappingFragment StoreEntitySet="DailyReports">
+          <ScalarProperty Name="DailyReportID" ColumnName="DailyReportID" />
+          <ScalarProperty Name="Date" ColumnName="Date" />
+          <ScalarProperty Name="VehicleNumber" ColumnName="VehicleNumber" />
+          <ScalarProperty Name="DriverID" ColumnName="DriverID" />
+          <ScalarProperty Name="VCM" ColumnName="VCM" />
+          <ScalarProperty Name="DepotID" ColumnName="DepotID" />
+          <ScalarProperty Name="PurchasedSUP" ColumnName="PurchasedSUP" />
+          <ScalarProperty Name="PurchasedHSD" ColumnName="PurchasedHSD" />
+          <ScalarProperty Name="SUPDropOff" ColumnName="SUPDropOff" />
+          <ScalarProperty Name="SUPDifferenceRate" ColumnName="SUPDifferenceRate" />
+          <ScalarProperty Name="SUPDifferenceQuantity" ColumnName="SUPDifferenceQuantity" />
+          <ScalarProperty Name="HSDDropOff" ColumnName="HSDDropOff" />
+          <ScalarProperty Name="HSDDifferenceRate" ColumnName="HSDDifferenceRate" />
+          <ScalarProperty Name="HSDDifferenceQuantity" ColumnName="HSDDifferenceQuantity" />
+          <ScalarProperty Name="ToolExpense" ColumnName="ToolExpense" />
+          <ScalarProperty Name="MunshiExpense" ColumnName="MunshiExpense" />
+          <ScalarProperty Name="ParkingExpense" ColumnName="ParkingExpense" />
+          <ScalarProperty Name="GuardExpense" ColumnName="GuardExpense" />
+          <ScalarProperty Name="MealExpense" ColumnName="MealExpense" />
+          <ScalarProperty Name="OtherExpense" ColumnName="OtherExpense" />
+          <ScalarProperty Name="FilledFuelRate" ColumnName="FilledFuelRate" />
+          <ScalarProperty Name="FilledFuelQuantity" ColumnName="FilledFuelQuantity" />
+          <ScalarProperty Name="OpeningMeter" ColumnName="OpeningMeter" />
+          <ScalarProperty Name="ClosingMeter" ColumnName="ClosingMeter" />
+          <ScalarProperty Name="PetrolAverage" ColumnName="PetrolAverage" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DailyReportSales">
+      <EntityTypeMapping TypeName="KhalidOilDBModel.DailyReportSale">
+        <MappingFragment StoreEntitySet="DailyReportSales">
+          <ScalarProperty Name="DailyReportSalesID" ColumnName="DailyReportSalesID" />
+          <ScalarProperty Name="DailyReportID" ColumnName="DailyReportID" />
+          <ScalarProperty Name="DeliveryNo" ColumnName="DeliveryNo" />
+          <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+          <ScalarProperty Name="SiteID" ColumnName="SiteID" />
+          <ScalarProperty Name="SaleReceiptImage" ColumnName="SaleReceiptImage" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Depots">
+      <EntityTypeMapping TypeName="KhalidOilDBModel.Depot">
+        <MappingFragment StoreEntitySet="Depots">
+          <ScalarProperty Name="DepotCode" ColumnName="DepotCode" />
+          <ScalarProperty Name="DepotName" ColumnName="DepotName" />
+          <ScalarProperty Name="DepotLocation" ColumnName="DepotLocation" />
+          <ScalarProperty Name="DepotStatus" ColumnName="DepotStatus" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Questions">
+      <EntityTypeMapping TypeName="KhalidOilDBModel.Question">
+        <MappingFragment StoreEntitySet="Questions">
+          <ScalarProperty Name="QuestionID" ColumnName="QuestionID" />
+          <ScalarProperty Name="QuestionStatement" ColumnName="QuestionStatement" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UnloadSites">
+      <EntityTypeMapping TypeName="KhalidOilDBModel.UnloadSite">
+        <MappingFragment StoreEntitySet="UnloadSites">
+          <ScalarProperty Name="SiteID" ColumnName="SiteID" />
+          <ScalarProperty Name="SiteName" ColumnName="SiteName" />
+          <ScalarProperty Name="SiteLocation" ColumnName="SiteLocation" />
+          <ScalarProperty Name="ChargingRate" ColumnName="ChargingRate" />
+          <ScalarProperty Name="ParentCompany" ColumnName="ParentCompany" />
+          <ScalarProperty Name="SiteStatus" ColumnName="SiteStatus" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Vehicles">
+      <EntityTypeMapping TypeName="KhalidOilDBModel.Vehicle">
+        <MappingFragment StoreEntitySet="Vehicles">
+          <ScalarProperty Name="VehicleNumber" ColumnName="VehicleNumber" />
+          <ScalarProperty Name="VehicleModel" ColumnName="VehicleModel" />
+          <ScalarProperty Name="VehicleCompany" ColumnName="VehicleCompany" />
+          <ScalarProperty Name="VehicleType" ColumnName="VehicleType" />
+          <ScalarProperty Name="VehicleCurrentReading" ColumnName="VehicleCurrentReading" />
+          <ScalarProperty Name="VehicleExpectedChange" ColumnName="VehicleExpectedChange" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="ADD_DAILY_CHECKLIST" FunctionName="KhalidOilDBModel.Store.ADD_DAILY_CHECKLIST" />
+    <FunctionImportMapping FunctionImportName="GET_PARENT_COMPANY_RENT_BY_DATE" FunctionName="KhalidOilDBModel.Store.GET_PARENT_COMPANY_RENT_BY_DATE">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="KhalidOilDBModel.GET_PARENT_COMPANY_RENT_BY_DATE_Result">
+          <ScalarProperty Name="ParentCompany" ColumnName="ParentCompany" />
+          <ScalarProperty Name="TotalRent" ColumnName="TotalRent" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="GET_SALES_HISTORY_BY_DATE" FunctionName="KhalidOilDBModel.Store.GET_SALES_HISTORY_BY_DATE">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="KhalidOilDBModel.GET_SALES_HISTORY_BY_DATE_Result">
+          <ScalarProperty Name="Date" ColumnName="Date" />
+          <ScalarProperty Name="DeliveryNo" ColumnName="DeliveryNo" />
+          <ScalarProperty Name="SiteID" ColumnName="SiteID" />
+          <ScalarProperty Name="SiteName" ColumnName="SiteName" />
+          <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+          <ScalarProperty Name="Total_Rent" ColumnName="Total Rent" />
+          <ScalarProperty Name="SaleReceiptImage" ColumnName="SaleReceiptImage" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <EntitySetMapping Name="Roles">
+      <EntityTypeMapping TypeName="KhalidOilDBModel.Role">
+        <MappingFragment StoreEntitySet="Roles">
+          <ScalarProperty Name="isHPayments" ColumnName="isHPayments" />
+          <ScalarProperty Name="isHCash" ColumnName="isHCash" />
+          <ScalarProperty Name="isHPettyCash" ColumnName="isHPettyCash" />
+          <ScalarProperty Name="isHRent" ColumnName="isHRent" />
+          <ScalarProperty Name="isHTaskMng" ColumnName="isHTaskMng" />
+          <ScalarProperty Name="isHMaintenance" ColumnName="isHMaintenance" />
+          <ScalarProperty Name="isHAttendance" ColumnName="isHAttendance" />
+          <ScalarProperty Name="isHSalePurchase" ColumnName="isHSalePurchase" />
+          <ScalarProperty Name="isHVehicleChecklist" ColumnName="isHVehicleChecklist" />
+          <ScalarProperty Name="isMNDeliverySites" ColumnName="isMNDeliverySites" />
+          <ScalarProperty Name="isMNStaff" ColumnName="isMNStaff" />
+          <ScalarProperty Name="isMNVehicles" ColumnName="isMNVehicles" />
+          <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+          <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Users">
+      <EntityTypeMapping TypeName="KhalidOilDBModel.User">
+        <MappingFragment StoreEntitySet="Users">
+          <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+          <ScalarProperty Name="Userusername" ColumnName="Userusername" />
+          <ScalarProperty Name="UserPassword" ColumnName="UserPassword" />
+          <ScalarProperty Name="UserStatus" ColumnName="UserStatus" />
+          <ScalarProperty Name="UserAddress" ColumnName="UserAddress" />
+          <ScalarProperty Name="UserType" ColumnName="UserType" />
+          <ScalarProperty Name="UserGender" ColumnName="UserGender" />
+          <ScalarProperty Name="UserDOB" ColumnName="UserDOB" />
+          <ScalarProperty Name="UserCNIC" ColumnName="UserCNIC" />
+          <ScalarProperty Name="UserPhoneNumber" ColumnName="UserPhoneNumber" />
+          <ScalarProperty Name="UserEmail" ColumnName="UserEmail" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="GET_ALL_USERS" FunctionName="KhalidOilDBModel.Store.GET_ALL_USERS">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="KhalidOilDBModel.GET_ALL_USERS_Result">
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="UserEmail" ColumnName="UserEmail" />
+          <ScalarProperty Name="UserPhoneNumber" ColumnName="UserPhoneNumber" />
+          <ScalarProperty Name="UserCNIC" ColumnName="UserCNIC" />
+          <ScalarProperty Name="UserDOB" ColumnName="UserDOB" />
+          <ScalarProperty Name="UserGender" ColumnName="UserGender" />
+          <ScalarProperty Name="UserType" ColumnName="UserType" />
+          <ScalarProperty Name="UserAddress" ColumnName="UserAddress" />
+          <ScalarProperty Name="UserStatus" ColumnName="UserStatus" />
+          <ScalarProperty Name="UserPassword" ColumnName="UserPassword" />
+          <ScalarProperty Name="Userusername" ColumnName="Userusername" />
+          <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+          <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="GET_DAILY_REPORT_BY_DATE" FunctionName="KhalidOilDBModel.Store.GET_DAILY_REPORT_BY_DATE">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="KhalidOilDBModel.GET_DAILY_REPORT_BY_DATE_Result">
+          <ScalarProperty Name="DailyReportID" ColumnName="DailyReportID" />
+          <ScalarProperty Name="Date" ColumnName="Date" />
+          <ScalarProperty Name="VehicleNumber" ColumnName="VehicleNumber" />
+          <ScalarProperty Name="DriverID" ColumnName="DriverID" />
+          <ScalarProperty Name="VCM" ColumnName="VCM" />
+          <ScalarProperty Name="DepotID" ColumnName="DepotID" />
+          <ScalarProperty Name="PurchasedSUP" ColumnName="PurchasedSUP" />
+          <ScalarProperty Name="PurchasedHSD" ColumnName="PurchasedHSD" />
+          <ScalarProperty Name="SUPDropOff" ColumnName="SUPDropOff" />
+          <ScalarProperty Name="SUPDifferenceRate" ColumnName="SUPDifferenceRate" />
+          <ScalarProperty Name="SUPDifferenceQuantity" ColumnName="SUPDifferenceQuantity" />
+          <ScalarProperty Name="HSDDropOff" ColumnName="HSDDropOff" />
+          <ScalarProperty Name="HSDDifferenceRate" ColumnName="HSDDifferenceRate" />
+          <ScalarProperty Name="HSDDifferenceQuantity" ColumnName="HSDDifferenceQuantity" />
+          <ScalarProperty Name="ToolExpense" ColumnName="ToolExpense" />
+          <ScalarProperty Name="MunshiExpense" ColumnName="MunshiExpense" />
+          <ScalarProperty Name="ParkingExpense" ColumnName="ParkingExpense" />
+          <ScalarProperty Name="GuardExpense" ColumnName="GuardExpense" />
+          <ScalarProperty Name="MealExpense" ColumnName="MealExpense" />
+          <ScalarProperty Name="OtherExpense" ColumnName="OtherExpense" />
+          <ScalarProperty Name="FilledFuelRate" ColumnName="FilledFuelRate" />
+          <ScalarProperty Name="FilledFuelQuantity" ColumnName="FilledFuelQuantity" />
+          <ScalarProperty Name="OpeningMeter" ColumnName="OpeningMeter" />
+          <ScalarProperty Name="ClosingMeter" ColumnName="ClosingMeter" />
+          <ScalarProperty Name="PetrolAverage" ColumnName="PetrolAverage" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="DepotCode" ColumnName="DepotCode" />
+          <ScalarProperty Name="DepotName" ColumnName="DepotName" />
+          <ScalarProperty Name="DepotLocation" ColumnName="DepotLocation" />
+          <ScalarProperty Name="DepotStatus" ColumnName="DepotStatus" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="GET_SALES_BY_REPORT_ID" FunctionName="KhalidOilDBModel.Store.GET_SALES_BY_REPORT_ID">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="KhalidOilDBModel.GET_SALES_BY_REPORT_ID_Result">
+          <ScalarProperty Name="DailyReportSalesID" ColumnName="DailyReportSalesID" />
+          <ScalarProperty Name="DailyReportID" ColumnName="DailyReportID" />
+          <ScalarProperty Name="DeliveryNo" ColumnName="DeliveryNo" />
+          <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+          <ScalarProperty Name="SiteID" ColumnName="SiteID" />
+          <ScalarProperty Name="SaleReceiptImage" ColumnName="SaleReceiptImage" />
+          <ScalarProperty Name="SiteName" ColumnName="SiteName" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <EntitySetMapping Name="DailyCheckListImages">
+      <EntityTypeMapping TypeName="KhalidOilDBModel.DailyCheckListImage">
+        <MappingFragment StoreEntitySet="DailyCheckListImages">
+          <ScalarProperty Name="ImageName" ColumnName="ImageName" />
+          <ScalarProperty Name="DailyCheckListId" ColumnName="DailyCheckListId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

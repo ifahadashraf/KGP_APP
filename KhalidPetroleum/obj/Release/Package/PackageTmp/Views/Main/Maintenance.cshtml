@@ -1,0 +1,420 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    @{var rights = Session["Rights"] as KhalidPetroleum.Models.Role;
+      var user = Session["User"] as KhalidPetroleum.Models.User;}
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>Vehicle Management System</title>
+    <!-- Favicon-->
+    <link rel="icon" href="~/Content/images/khalid.jpg" type="image/x-icon">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+    <!-- Bootstrap Core Css -->
+    <link href="~/Content/plugins/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <!-- Bootstrap Material Datetime Picker Css -->
+    <link href="~/Content/plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css" rel="stylesheet" />
+    <!-- Waves Effect Css -->
+    <link href="~/Content/plugins/node-waves/waves.css" rel="stylesheet" />
+    <!-- Animation Css -->
+    <link href="~/Content/plugins/animate-css/animate.css" rel="stylesheet" />
+    <!-- Custom Css -->
+    <link href="~/Css/style.css" rel="stylesheet">
+    <!-- Wait Me Css -->
+    <link href="~/Content/plugins/waitme/waitMe.css" rel="stylesheet" />
+    <!-- Bootstrap Select Css -->
+    <link href="~/Content/plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
+    <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
+    <link href="~/Css/themes/all-themes.css" rel="stylesheet" />
+</head>
+<body class="theme-blue">
+    <!-- Top Bar -->
+    <nav class="navbar">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
+                <a href="javascript:void(0);" class="bars"></a>
+                <a class="navbar-brand">Khalid Group of Petroleum | Maintenance Record</a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <!-- Notifications -->
+                    <li class="dropdown">
+                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button">
+                            <i class="material-icons">menu</i>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="header">Menu</li>
+                            <li class="body">
+                                <ul class="menu">
+                                    <li>
+                                        <a href="/Main/SignIn">
+                                            <div class="icon-circle bg-light-green">
+                                                <i class="material-icons">input</i>
+                                            </div>
+                                            <div class="menu-info">
+                                                <h4>Logout</h4>
+                                                <p>
+                                                    Exit the system
+                                                </p>
+                                            </div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- #END# Notifications -->
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- #Top Bar -->
+    <section>
+        <!-- Left Sidebar -->
+        <aside id="leftsidebar" class="sidebar">
+            <!-- User Info -->
+            <div class="user-info">
+                <div class="image">
+                    <img src="~/Content/images/khalid.jpg" width="48" height="48" alt="User" />
+                </div>
+                <div class="info-container">
+                    <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">@Session["Username"]</div>
+                    <div class="email">Khalid group</div>
+                </div>
+            </div>
+            <!-- #User Info -->
+            <!-- Menu -->
+            <div class="menu">
+                <ul class="list">
+                    <li class="header">MAIN NAVIGATION</li>
+                    <li class="active">
+                        <a href="/Main/Index">
+                            <i class="material-icons">home</i>
+                            <span>Home</span>
+                        </a>
+                    </li>
+                    <li @(rights.isMNVehicles ? string.Empty : "style=display:none")>
+                        <a href="/Main/Vehicles">
+                            <i class="material-icons">directions_car</i>
+                            <span>Vehicles</span>
+                        </a>
+                    </li>
+                    <li @(rights.isMNStaff ? string.Empty : "style=display:none")>
+                        <a href="/Main/Staff">
+                            <i class="material-icons">person</i>
+                            <span>Staff</span>
+                        </a>
+                    </li>
+
+                    <li @(rights.isMNDeliverySites ? string.Empty : "style=display:none")>
+                        <a href="/Main/DSites">
+                            <i class="material-icons">ev_station</i>
+                            <span>Delivery Sites</span>
+                        </a>
+                    </li>
+
+                    <li @((user.UserID == 3) ? string.Empty : "style=display:none")>
+                        <a href="/Main/Roles">
+                            <i class="material-icons">supervisor_account</i>
+                            <span>Roles</span>
+                        </a>
+                    </li>
+                    <li @((user.UserID == 3) ? string.Empty : "style=display:none")>
+                        <a href="/Admin/Index">
+                            <i class="material-icons">assessment</i>
+                            <span>Stats</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+        </aside>
+        <!-- #END# Left Sidebar -->
+    </section>
+    <section class="content">
+        <div class="container-fluid">
+            <div class="block-header">
+                <h2></h2>
+            </div>
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>
+                                VEHICLE DETAILS
+                            </h2>
+                        </div>
+                        <div class="body">
+                            <form>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <label for="datePicker">Date</label>
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="text" id="txtDate" class="datepicker form-control" placeholder="Please choose a date">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="vehicleNo">Vehicle Number</label>
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <select class="form-control show-tick">
+                                                    <option value="">Please select</option>
+                                                    <option value="1">LEP-727</option>
+                                                    <option value="2">LE-1098</option>
+                                                    <option value="3">JP-090</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label for="newVehicle">Add New Vehicle</label>
+                                        <div class="form-group">
+                                            <div class="button-demo js-modal-buttons">
+                                                <button type="button" class="btn bg-light-blue waves-effect" data-toggle="modal" data-target="#mdModal">+ Add New</button>
+                                            </div>
+                                        </div>
+                                    </div><br><br><br>
+                                    <div align="right" style="padding-right:15px">
+                                        <button type="button" class="btn btn-primary m-t-15 waves-effect">SEARCH</button>
+                                    </div>
+                                </div>
+                             </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>
+                                MAINTENANCE
+                            </h2>
+                        </div>
+                        <div class="body">
+                            <form>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <label>Lube Change Date</label>
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="text" id="txtLubeChangeDate" class="datepicker form-control" placeholder="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label>Oil Name</label>
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="text" id="txtOilName" class="form-control" placeholder="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label>Quantity</label>
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="text" id="txtOilQuantity" class="form-control" placeholder="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label>Opening Meter Reading</label>
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="number" id="txtOpeningReading" class="form-control" placeholder="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <label>Oil Change Required</label>
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="number" id="txtOilChangeRequired" class="form-control" placeholder="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label>Next Change</label>
+                                        <div class="form-group">
+                                            <div class="form-line focused">
+                                                <input type="text" id="txtNextChange" class="form-control" placeholder="" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label>Current Reading</label>
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="number" id="txtCurrentReading" class="form-control" placeholder="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label>Completed Mileage</label>
+                                        <div class="form-group">
+                                            <div class="form-line focused">
+                                                <input type="text" id="txtCompletedMileage" class="form-control" placeholder="" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <label>Over(+) / Under(-)</label>
+                                        <div class="form-group">
+                                            <div class="form-line focused">
+                                                <input type="number" id="txtOverUnder" class="form-control" placeholder="" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label>Person to Remind</label>
+                                        <div class="form-group">
+                                            <select class="form-control show-tick form-line">
+                                                <option value="">Please select</option>
+                                                <option value="1">Arslan</option>
+                                                <option value="2">Mian</option>
+                                                <option value="3">Bilal</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label for="newVehicle">Add New Person</label>
+                                        <div class="form-group">
+                                            <div class="button-demo js-modal-buttons">
+                                                <button type="button" class="btn bg-light-blue waves-effect" data-toggle="modal" data-target="#mdModal1">+ Add New</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label>Comments</label>
+                                        <div class="form-group">
+                                            <div class="form-line focused">
+                                                <textarea rows="2" class="form-control no-resize" id="txtComments" placeholder=""></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div align="right">
+                                    <button type="button" class="btn btn-primary m-t-15 waves-effect">SUBMIT</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--Modal Start-->
+            <div class="modal fade" id="mdModal" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content modal-col-light-blue">
+                        <div class="modal-header">
+                            <h3 class="modal-title" id="defaultModalLabel">ADD NEW VEHICLE</h3>
+                        </div>
+                        <div class="modal-body">
+                            <div id="alertdiv" class="row">
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <label for="depotName">Number</label>
+                                            <input type="text" id="txtVehicleNumber" class="form-control" placeholder="">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="depotName">Model</label>
+                                            <input type="text" id=txtVehicleModel class="form-control" placeholder="">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="depotName">Vehicle Type</label>
+                                            <select class="form-control show-tick">
+                                                <option value="">Please select</option>
+                                                <option value="10">Tanker</option>
+                                                <option value="20">Car</option>
+                                                <option value="30">Bike</option>
+                                                <option value="40">Generator</option>
+                                                <option value="50">Other</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="depotName">Owner</label>
+                                            <input type="text" id="txtVehicleOwner" class="form-control" placeholder="">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-link waves-effect">SAVE CHANGES</button>
+                            <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--Modal End-->
+            <!--Second Modal-->
+            <div class="modal fade" id="mdModal1" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content modal-col-light-blue">
+                        <div class="modal-header">
+                            <h3 class="modal-title" id="defaultModalLabel">ADD NEW PERSON</h3>
+                        </div>
+                        <div class="modal-body">
+                            <div id="alertdiv" class="row">
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <label for="depotCode">Name</label>
+                                            <input type="text" id="txtPersonName" class="form-control" placeholder="">
+                                        </div>
+                                        <div class="col-md-5">
+                                            <label for="depotName">Number</label>
+                                            <input type="number" id="txtPersonNumber" class="form-control" placeholder="">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-link waves-effect">SAVE CHANGES</button>
+                            <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--Modal End-->
+        </div>
+    </section>
+
+    <!-- Jquery Core Js -->
+    <script src="~/Content/plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap Core Js -->
+    <script src="~/Content/plugins/bootstrap/js/bootstrap.js"></script>
+    <!-- Select Plugin Js -->
+    <script src="~/Content/plugins/bootstrap-select/js/bootstrap-select.js"></script>
+    <!-- Slimscroll Plugin Js -->
+    <script src="~/Content/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
+    <!-- Waves Effect Plugin Js -->
+    <script src="~/Content/plugins/node-waves/waves.js"></script>
+    <!-- Demo Js -->
+    <script src="~/Scripts/js/demo.js"></script>
+    <!-- Custom Js -->
+    <script src="~/Scripts/js/admin.js"></script>
+    <script src="~/Scripts/js/pages/forms/basic-form-elements.js"></script>
+    <!-- Moment Plugin Js -->
+    <script src="~/Content/plugins/momentjs/moment.js"></script>
+    <!-- Bootstrap Material Datetime Picker Plugin Js -->
+    <script src="~/Content/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js"></script>
+    <!-- Autosize Plugin Js -->
+    <script src="~/Content/plugins/autosize/autosize.js"></script>
+</body>
+</html>

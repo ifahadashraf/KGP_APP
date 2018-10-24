@@ -1,0 +1,432 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    @{var rights = Session["Rights"] as KhalidPetroleum.Models.Role;
+      var user = Session["User"] as KhalidPetroleum.Models.User;}
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>Vehicle Management System</title>
+    <!-- Favicon-->
+    <link rel="icon" href="~/Content/images/khalid.jpg" type="image/x-icon">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+    <!-- Bootstrap Core Css -->
+    <!-- Bootstrap Core Css -->
+    <link href="~/Content/plugins/bootstrap/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Waves Effect Css -->
+    <link href="~/Content/plugins/node-waves/waves.css" rel="stylesheet" />
+
+    <!-- Animation Css -->
+    <link href="~/Content/plugins/animate-css/animate.css" rel="stylesheet" />
+
+    <!-- Colorpicker Css -->
+    <link href="~/Content/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.css" rel="stylesheet" />
+
+    <!-- Dropzone Css -->
+    <link href="~/Content/plugins/dropzone/dropzone.css" rel="stylesheet">
+
+    <!-- Multi Select Css -->
+    <link href="~/Content/plugins/multi-select/css/multi-select.css" rel="stylesheet">
+
+    <!-- Bootstrap Spinner Css -->
+    <link href="~/Content/plugins/jquery-spinner/css/bootstrap-spinner.css" rel="stylesheet">
+
+    <!-- Bootstrap Tagsinput Css -->
+    <link href="~/Content/plugins/bootstrap-tagsinput/bootstrap-tagsinput.css" rel="stylesheet">
+
+    <!-- Bootstrap Select Css -->
+    <link href="~/Content/plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
+
+    <!-- noUISlider Css -->
+    <link href="~/Content/plugins/nouislider/nouislider.min.css" rel="stylesheet" />
+
+    <!-- Custom Css -->
+    <link href="~/Css/style.css" rel="stylesheet">
+
+    <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
+    <link href="~/Css/themes/all-themes.css" rel="stylesheet" />
+</head>
+<body class="theme-blue">
+    <!-- Top Bar -->
+    <nav class="navbar">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
+                <a href="javascript:void(0);" class="bars"></a>
+                <a class="navbar-brand">Khalid Group of Petroleum | Staff Attendance</a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <!-- Notifications -->
+                    <li class="dropdown">
+                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button">
+                            <i class="material-icons">menu</i>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="header">Menu</li>
+                            <li class="body">
+                                <ul class="menu">
+                                    <li>
+                                        <a href="/Main/SignIn">
+                                            <div class="icon-circle bg-light-green">
+                                                <i class="material-icons">input</i>
+                                            </div>
+                                            <div class="menu-info">
+                                                <h4>Logout</h4>
+                                                <p>
+                                                    Exit the system
+                                                </p>
+                                            </div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- #END# Notifications -->
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- #Top Bar -->
+    <section>
+        <!-- Left Sidebar -->
+        <aside id="leftsidebar" class="sidebar">
+            <!-- User Info -->
+            <div class="user-info">
+                <div class="image">
+                    <img src="~/Content/images/khalid.jpg" width="48" height="48" alt="User" />
+                </div>
+                <div class="info-container">
+                    <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">@Session["Username"]</div>
+                    <div class="email">Khalid group</div>
+                </div>
+            </div>
+            <!-- #User Info -->
+            <!-- Menu -->
+            <div class="menu">
+                <ul class="list">
+                    <li class="header">MAIN NAVIGATION</li>
+                    <li class="active">
+                        <a href="/Main/Index">
+                            <i class="material-icons">home</i>
+                            <span>Home</span>
+                        </a>
+                    </li>
+                    <li @(rights.isMNVehicles ? string.Empty : "style=display:none")>
+                        <a href="/Main/Vehicles">
+                            <i class="material-icons">directions_car</i>
+                            <span>Vehicles</span>
+                        </a>
+                    </li>
+                    <li @(rights.isMNStaff ? string.Empty : "style=display:none")>
+                        <a href="/Main/Staff">
+                            <i class="material-icons">person</i>
+                            <span>Staff</span>
+                        </a>
+                    </li>
+
+                    <li @(rights.isMNDeliverySites ? string.Empty : "style=display:none")>
+                        <a href="/Main/DSites">
+                            <i class="material-icons">ev_station</i>
+                            <span>Delivery Sites</span>
+                        </a>
+                    </li>
+
+                    <li @((user.UserID == 3) ? string.Empty : "style=display:none")>
+                        <a href="/Main/Roles">
+                            <i class="material-icons">supervisor_account</i>
+                            <span>Roles</span>
+                        </a>
+                    </li>
+                    <li @((user.UserID == 3) ? string.Empty : "style=display:none")>
+                        <a href="/Admin/Index">
+                            <i class="material-icons">assessment</i>
+                            <span>Stats</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+        <!-- #END# Left Sidebar -->
+    </section>
+    <section class="content">
+        <div class="container-fluid">
+            <div class="block-header">
+                <h2>ATTENDANCE</h2>
+            </div>
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>
+                                ATTENDANCE DETAILS
+                            </h2>
+                        </div>
+                        <div class="body">
+                            <form>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <label for="datePicker">Date</label>
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="text" id="txtDate" class="datepicker form-control" placeholder="Please choose a date">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="vehicleNo">Attendance Taker</label>
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="text" id=txtAttendanceTaker class="form-control" placeholder="Enter your name">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="captainName">New Employee</label>
+                                        <div class="form-group">
+                                            <div class="button-demo js-modal-buttons">
+                                                <button type="button" class="btn bg-light-blue waves-effect" data-toggle="modal" data-target="#mdModal">+ Add New</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>
+                                MARK ATTENDANCE
+                            </h2>
+                        </div>
+                        <div class="body">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th class="col-md-1">Sr#</th>
+                                        <th class="col-md-2">Name</th>
+                                        <th class="col-md-2">Designation</th>
+                                        <th class="col-md-2">Status</th>
+                                        <th class="col-md-5">Timings</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">1</th>
+                                        <td>Muhammad Hassan Ali</td>
+                                        <td>Manager</td>
+                                        <td>
+                                            <div class="form-line">
+                                                <select class="form-control show-tick">
+                                                    <option value="">Please select</option>
+                                                    <option value="1">Present</option>
+                                                    <option value="2">Absent</option>
+                                                    <option value="3">Leave</option>
+                                                </select>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">
+                                                            <i class="material-icons">access_time</i>
+                                                        </span>
+                                                        <div class="form-line">
+                                                            <input type="text" class="form-control time24" placeholder="Ex: 23:59">
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">
+                                                            <i class="material-icons">access_time</i>
+                                                        </span>
+                                                        <div class="form-line">
+                                                            <input type="text" class="form-control time24" placeholder="Ex: 23:59">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">1</th>
+                                        <td>Muhammad Hassan Ali</td>
+                                        <td>Manager</td>
+                                        <td>
+                                            <div class="form-line">
+                                                <select class="form-control show-tick">
+                                                    <option value="">Please select</option>
+                                                    <option value="1">Present</option>
+                                                    <option value="2">Absent</option>
+                                                    <option value="3">Leave</option>
+                                                </select>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">
+                                                            <i class="material-icons">access_time</i>
+                                                        </span>
+                                                        <div class="form-line">
+                                                            <input type="text" class="form-control time24" placeholder="Ex: 23:59">
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">
+                                                            <i class="material-icons">access_time</i>
+                                                        </span>
+                                                        <div class="form-line">
+                                                            <input type="text" class="form-control time24" placeholder="Ex: 23:59">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">1</th>
+                                        <td>Muhammad Hassan Ali</td>
+                                        <td>Manager</td>
+                                        <td>
+                                            <div class="form-line">
+                                                <select class="form-control show-tick">
+                                                    <option value="">Please select</option>
+                                                    <option value="1">Present</option>
+                                                    <option value="2">Absent</option>
+                                                    <option value="3">Leave</option>
+                                                </select>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">
+                                                            <i class="material-icons">access_time</i>
+                                                        </span>
+                                                        <div class="form-line">
+                                                            <input type="text" class="form-control time24" placeholder="Ex: 23:59">
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">
+                                                            <i class="material-icons">access_time</i>
+                                                        </span>
+                                                        <div class="form-line">
+                                                            <input type="text" class="form-control time24" placeholder="Ex: 23:59">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                            <div align="right">
+                                <button type="button" class="btn btn-primary m-t-15 waves-effect">SUBMIT</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!--Modal Start-->
+
+            <div class="modal fade" id="mdModal" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content modal-col-light-blue">
+                        <div class="modal-header">
+                            <h3 class="modal-title" id="defaultModalLabel">ADD NEW EMPLOYEE</h3>
+                        </div>
+                        <div class="modal-body">
+                            <div id="alertdiv" class="row">
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label for="depotCode">Name</label>
+                                            <input type="text" id="txtNewDepotCode" class="form-control" placeholder="">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="depotName">Designation</label>
+                                            <input type="text" id="txtNewDepotName" class="form-control" placeholder="">
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-link waves-effect">SAVE CHANGES</button>
+                            <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--Modal End-->
+
+        </div>
+    </section>
+    <!-- Jquery Core Js -->
+    <script src="~/Content/plugins/jquery/jquery.min.js"></script>
+
+    <!-- Bootstrap Core Js -->
+    <script src="~/Content/plugins/bootstrap/js/bootstrap.js"></script>
+
+    <!-- Select Plugin Js -->
+    <script src="~/Content/plugins/bootstrap-select/js/bootstrap-select.js"></script>
+
+    <!-- Slimscroll Plugin Js -->
+    <script src="~/Content/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
+
+    <!-- Bootstrap Colorpicker Js -->
+    <script src="~/Content/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
+
+    <!-- Dropzone Plugin Js -->
+    <script src="~/Content/plugins/dropzone/dropzone.js"></script>
+
+    <!-- Input Mask Plugin Js -->
+    <script src="~/Content/plugins/jquery-inputmask/jquery.inputmask.bundle.js"></script>
+
+    <!-- Multi Select Plugin Js -->
+    <script src="~/Content/plugins/multi-select/js/jquery.multi-select.js"></script>
+
+    <!-- Jquery Spinner Plugin Js -->
+    <script src="~/Content/plugins/jquery-spinner/js/jquery.spinner.js"></script>
+
+    <!-- Bootstrap Tags Input Plugin Js -->
+    <script src="~/Content/plugins/bootstrap-tagsinput/bootstrap-tagsinput.js"></script>
+
+    <!-- Waves Effect Plugin Js -->
+    <script src="~/Content/plugins/node-waves/waves.js"></script>
+    <!-- Custom Js -->
+    <script src="~/Scripts/js/admin.js"></script>
+    <script>
+        $('.time24').inputmask('hh:mm', { placeholder: '__:__ _m', alias: 'time24', hourFormat: '24' });
+    </script>
+
+</body>
+</html>

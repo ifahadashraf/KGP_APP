@@ -1,0 +1,328 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    @{var rights = Session["Rights"] as KhalidPetroleum.Models.Role;
+      var user = Session["User"] as KhalidPetroleum.Models.User;}
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>Vehicle Management System</title>
+    <!-- Favicon-->
+    <link rel="icon" href="~/Content/images/khalid.jpg" type="image/x-icon">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+    <!-- Bootstrap Core Css -->
+    <link href="~/Content/plugins/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <!-- Bootstrap Material Datetime Picker Css -->
+    <link href="~/Content/plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css" rel="stylesheet" />
+    <!-- Waves Effect Css -->
+    <link href="~/Content/plugins/node-waves/waves.css" rel="stylesheet" />
+    <!-- Animation Css -->
+    <link href="~/Content/plugins/animate-css/animate.css" rel="stylesheet" />
+    <!-- Custom Css -->
+    <link href="~/Css/style.css" rel="stylesheet">
+    <!-- Wait Me Css -->
+    <link href="~/Content/plugins/waitme/waitMe.css" rel="stylesheet" />
+    <!-- Bootstrap Select Css -->
+    <link href="~/Content/plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
+    <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
+    <link href="~/Css/themes/all-themes.css" rel="stylesheet" />
+</head>
+<body class="theme-blue">
+    <!-- Top Bar -->
+    <nav class="navbar">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
+                <a href="javascript:void(0);" class="bars"></a>
+                <a class="navbar-brand">Khalid Group of Petroleum | Manage Staff</a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <!-- Notifications -->
+                    <li class="dropdown">
+                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button">
+                            <i class="material-icons">menu</i>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="header">Menu</li>
+                            <li class="body">
+                                <ul class="menu">
+                                    <li>
+                                        <a href="/Main/SignIn">
+                                            <div class="icon-circle bg-light-green">
+                                                <i class="material-icons">input</i>
+                                            </div>
+                                            <div class="menu-info">
+                                                <h4>Logout</h4>
+                                                <p>
+                                                    Exit the system
+                                                </p>
+                                            </div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- #END# Notifications -->
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- #Top Bar -->
+    <section>
+        <!-- Left Sidebar -->
+        <aside id="leftsidebar" class="sidebar">
+            <!-- User Info -->
+            <div class="user-info">
+                <div class="image">
+                    <img src="~/Content/images/khalid.jpg" width="48" height="48" alt="User" />
+                </div>
+                <div class="info-container">
+                    <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">@Session["Username"]</div>
+                    <div class="email">Khalid group</div>
+                </div>
+            </div>
+            <!-- #User Info -->
+            <!-- Menu -->
+            <div class="menu">
+                <ul class="list">
+                    <li class="header">MAIN NAVIGATION</li>
+                    <li>
+                        <a href="/Main/Index">
+                            <i class="material-icons">home</i>
+                            <span>Home</span>
+                        </a>
+                    </li>
+                    <li @(rights.isMNVehicles ? string.Empty : "style=display:none")>
+                        <a href="/Main/Vehicles">
+                            <i class="material-icons">directions_car</i>
+                            <span>Vehicles</span>
+                        </a>
+                    </li>
+                    <li @(rights.isMNStaff ? string.Empty : "style=display:none")>
+                        <a href="/Main/Staff">
+                            <i class="material-icons">person</i>
+                            <span>Staff</span>
+                        </a>
+                    </li>
+
+                    <li @(rights.isMNDeliverySites ? string.Empty : "style=display:none")>
+                        <a href="/Main/DSites">
+                            <i class="material-icons">ev_station</i>
+                            <span>Delivery Sites</span>
+                        </a>
+                    </li>
+
+                    <li class="active" @((user.UserID == 3) ? string.Empty : "style=display:none")>
+                        <a href="/Main/Roles">
+                            <i class="material-icons">supervisor_account</i>
+                            <span>Roles</span>
+                        </a>
+                    </li>
+                    <li @((user.UserID == 3) ? string.Empty : "style=display:none")>
+                        <a href="/Admin/Index">
+                            <i class="material-icons">assessment</i>
+                            <span>Stats</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+        <!-- #END# Left Sidebar -->
+    </section>
+    <section class="content">
+        <div class="container-fluid">
+            <div class="block-header">
+                <h2>ROLES</h2>
+            </div>
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>
+                                ADD/ASSIGN ROLE
+                            </h2>
+                        </div>
+                        <div class="body">
+                            <form>
+                                <div align="right">
+                                    <button type="button" class="btn btn-primary m-t-15 waves-effect" data-toggle="modal" data-target="#mdModal">Add New Role +</button>
+                                    <button type="button" class="btn btn-primary m-t-15 waves-effect" data-toggle="modal" data-target="#mdAssignModal">Assign Role</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>
+                                DETAILS
+                            </h2>
+                        </div>
+                        <div class="body">
+                            <div class="table-responsive">
+                                <table id="rolesTable" class="table table-bordered table-striped table-hover dataTable js-exportable">
+                                    <thead>
+                                        <tr>
+                                            <th>Sr #</th>
+                                            <th>RoleName</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th>Sr #</th>
+                                            <th>RoleName</th>
+                                            <th></th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody id="rentBody"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--Modal Start-->
+            <div class="modal fade" id="mdModal" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3 class="modal-title" id="defaultModalLabel">New Role</h3>
+                        </div>
+                        <div class="modal-body">
+                            <div id="alertdiv" class="row">
+                            </div>
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" id="txtRoleName" class="form-control" placeholder="Type a role name...">
+                                </div>
+                            </div>
+                            <h4 class="card-inside-title">Main Navigation</h4>
+                            <div class="demo-checkbox">
+                                <input type="checkbox" id="checkbox_0" class="filled-in chk-col-light-green" checked/>
+                                <label for="checkbox_0">Vehicles Mng.</label>
+                                <input type="checkbox" id="checkbox_1" class="filled-in chk-col-light-green" checked />
+                                <label for="checkbox_1">Staff Mng.</label>
+                                <input type="checkbox" id="checkbox_2" class="filled-in chk-col-light-green" checked />
+                                <label for="checkbox_2">Delivery Sites Mng.</label>
+                            </div>
+                            <h4 class="card-inside-title">Home</h4>
+                            <div class="demo-checkbox">
+                                <input type="checkbox" id="checkbox_3" class="filled-in chk-col-light-green" checked />
+                                <label for="checkbox_3">Checklist</label>
+                                <input type="checkbox" id="checkbox_4" class="filled-in chk-col-light-green" checked />
+                                <label for="checkbox_4">Sale/Purchase</label>
+                                <input type="checkbox" id="checkbox_5" class="filled-in chk-col-light-green" checked />
+                                <label for="checkbox_5">Attendance</label>
+                                <input type="checkbox" id="checkbox_6" class="filled-in chk-col-light-green" checked />
+                                <label for="checkbox_6">Maintenance</label>
+                                <input type="checkbox" id="checkbox_7" class="filled-in chk-col-light-green" checked />
+                                <label for="checkbox_7">Task Mng.</label>
+                                <input type="checkbox" id="checkbox_8" class="filled-in chk-col-light-green" checked />
+                                <label for="checkbox_8">Rent</label>
+                                <input type="checkbox" id="checkbox_9" class="filled-in chk-col-light-green" checked />
+                                <label for="checkbox_9">Petty Cash</label>
+                                <input type="checkbox" id="checkbox_10" class="filled-in chk-col-light-green" checked />
+                                <label for="checkbox_10">Cash Details</label>
+                                <input type="checkbox" id="checkbox_11" class="filled-in chk-col-light-green" checked />
+                                <label for="checkbox_11">Payments</label>
+
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button id="btnAddModal" type="button" class="btn btn-link waves-effect" onclick="onClickbtnAddModal()">Add</button>
+                            <button id="btnCloseModal" type="button" class="btn btn-link waves-effect" onclick="onClickbtnCloseModal()">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--Modal End-->
+
+            <!--Modal Start-->
+            <div class="modal fade" id="mdAssignModal" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3 class="modal-title" id="defaultModalLabel">New Role</h3>
+                        </div>
+                        <div class="modal-body">
+                            <div id="alertdiv1" class="row">
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <label>User</label>
+                                    <select id="sltUsers" class="form-control show-tick">
+                                        <option value="">-- Please select --</option>
+                                        <option value="10">10</option>
+                                        <option value="20">20</option>
+                                        <option value="30">30</option>
+                                        <option value="40">40</option>
+                                        <option value="50">50</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-6">
+                                    <label>Role</label>
+                                    <select id="sltRoles" class="form-control show-tick">
+                                        <option value="">-- Please select --</option>
+                                        <option value="10">10</option>
+                                        <option value="20">20</option>
+                                        <option value="30">30</option>
+                                        <option value="40">40</option>
+                                        <option value="50">50</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-link waves-effect" onclick="assignRole()">Assign</button>
+                            <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--Modal End-->
+        </div>
+    </section>
+
+    <!-- Jquery Core Js -->
+    <script src="~/Content/plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap Core Js -->
+    <script src="~/Content/plugins/bootstrap/js/bootstrap.js"></script>
+    <!-- Select Plugin Js -->
+    <script src="~/Content/plugins/bootstrap-select/js/bootstrap-select.js"></script>
+    <!-- Slimscroll Plugin Js -->
+    <script src="~/Content/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
+    <!-- Waves Effect Plugin Js -->
+    <script src="~/Content/plugins/node-waves/waves.js"></script>
+    <!-- Jquery DataTable Plugin Js -->
+    <script src="~/Content/plugins/jquery-datatable/jquery.dataTables.js"></script>
+    <script src="~/Content/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
+    <script src="~/Content/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>
+    <script src="~/Content/plugins/jquery-datatable/extensions/export/buttons.flash.min.js"></script>
+    <script src="~/Content/plugins/jquery-datatable/extensions/export/jszip.min.js"></script>
+    <script src="~/Content/plugins/jquery-datatable/extensions/export/pdfmake.min.js"></script>
+    <script src="~/Content/plugins/jquery-datatable/extensions/export/vfs_fonts.js"></script>
+    <script src="~/Content/plugins/jquery-datatable/extensions/export/buttons.html5.min.js"></script>
+    <script src="~/Content/plugins/jquery-datatable/extensions/export/buttons.print.min.js"></script>
+    <!-- Custom Js -->
+    <script src="~/Scripts/js/admin.js"></script>
+    <script src="~/Scripts/js/pages/forms/basic-form-elements.js"></script>
+    <script src="~/Scripts/js/pages/tables/jquery-datatable.js"></script>
+    <script src="~/Scripts/main.js"></script>
+    <script src="~/Scripts/roles.js"></script>
+    <!-- Moment Plugin Js -->
+    <script src="~/Content/plugins/momentjs/moment.js"></script>
+    <!-- Bootstrap Material Datetime Picker Plugin Js -->
+    <script src="~/Content/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js"></script>
+    <!-- Autosize Plugin Js -->
+    <script src="~/Content/plugins/autosize/autosize.js"></script>
+</body>
+</html>
