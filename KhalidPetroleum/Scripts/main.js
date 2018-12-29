@@ -22,6 +22,10 @@ var ASSIGN_ROLE = "AssignRole";
 var GET_ROLES = "GetRoles";
 var UPDATE_ROLE = "UpdateRole";
 var GET_REPORT_IMAGES = "GetReportImages";
+var GET_TASKS_BY_USER_ID = "GetTasksByUserId";
+var ADD_TASK = "AddTask";
+var UPDATE_TASK = "UpdateTask";
+var GET_VEHICLE_CHECKLISTS = "GetVehicleChecklists";
 
 //*************END OF CONSTANTS*************//
 
@@ -313,5 +317,58 @@ function getReportImagesApi(id,cb) {
     });
 }
 
+function getTasksByUserId(id, cb) {
+    $.ajax({
+        url: BASE_URL + GET_TASKS_BY_USER_ID + "?id=" + id,
+        method: "GET",
+        success: function (data) {
+            cb(data);
+        },
+        error: function (data) {
+            cb(data);
+        }
+    });
+}
+
+function addTaskApi(body, cb) {
+    $.ajax({
+        url: BASE_URL + ADD_TASK,
+        method: "POST",
+        data: JSON.stringify(body),
+        success: function (data) {
+            cb(data);
+        },
+        error: function (data) {
+            cb(data);
+        }
+    });
+}
+
+function updateTaskApi(body, cb) {
+    $.ajax({
+        url: BASE_URL + UPDATE_TASK,
+        method: "POST",
+        data: JSON.stringify(body),
+        success: function (data) {
+            cb(data);
+        },
+        error: function (data) {
+            cb(data);
+        }
+    });
+}
+
+function getVehicleChecklists(fro, to, vn, cb) {
+    $.ajax({
+        url: BASE_URL + GET_VEHICLE_CHECKLISTS + "?from=" + fro + "&to=" + to + "&vehicleNumber=" + vn,
+        method: "GET",
+        success: function (data) {
+            cb(data);
+        },
+        error: function (data) {
+            cb(data);
+        }
+    });
+}
 
 //*******************END******************//

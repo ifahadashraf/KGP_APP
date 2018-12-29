@@ -22,6 +22,7 @@ namespace KhalidPetroleum.Models
         public long CheckListID { get; set; }
         public string VehicleNumber { get; set; }
         public System.DateTime Date { get; set; }
+        public string Reading { get; set; }
     
         public virtual ICollection<CheckList_Question> CheckList_Question { get; set; }
         public virtual Vehicle Vehicle { get; set; }

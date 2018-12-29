@@ -21,7 +21,8 @@
     <link href="~/Content/plugins/animate-css/animate.css" rel="stylesheet" />
     <!-- Dropzone Css -->
     <link href="~/Content/plugins/dropzone/dropzone.css" rel="stylesheet">
-
+    <!-- Sweetalert Css -->
+    <link href="~/Content/plugins/sweetalert/sweetalert.css" rel="stylesheet" />
     <!-- Custom Css -->
     <link href="~/Css/style.css" rel="stylesheet">
     <!-- Wait Me Css -->
@@ -33,6 +34,21 @@
 
 </head>
 <body class="theme-blue">
+    <div class="page-loader-wrapper">
+        <div class="loader">
+            <div class="preloader">
+                <div class="spinner-layer pl-blue">
+                    <div class="circle-clipper left">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="circle-clipper right">
+                        <div class="circle"></div>
+                    </div>
+                </div>
+            </div>
+            <p>Please wait...</p>
+        </div>
+    </div>
     <!-- Top Bar -->
     <nav class="navbar">
         <div class="container-fluid">
@@ -125,7 +141,7 @@
                             <span>Roles</span>
                         </a>
                     </li>
-                    <li @((user.UserID == 3) ? string.Empty : "style=display:none")>
+                    <li @((user.UserID == 3 || user.UserType == "CRO" || user.UserType == "ACCOUNTS-MANAGER") ? string.Empty : "style=display:none")>
                         <a href="/Admin/Index">
                             <i class="material-icons">assessment</i>
                             <span>Stats</span>
@@ -151,18 +167,12 @@
                         <div class="header">
                             <h2>
                                 FILE UPLOAD - DRAG & DROP OR WITH CLICK & CHOOSE
-                                <small>Taken from <a href="http://www.dropzonejs.com/" target="_blank">www.dropzonejs.com</a></small>
                             </h2>
                             <ul class="header-dropdown m-r--5">
                                 <li class="dropdown">
                                     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                         <i class="material-icons">more_vert</i>
                                     </a>
-                                    <ul class="dropdown-menu pull-right">
-                                        <li><a href="javascript:void(0);">Action</a></li>
-                                        <li><a href="javascript:void(0);">Another action</a></li>
-                                        <li><a href="javascript:void(0);">Something else here</a></li>
-                                    </ul>
                                 </li>
                             </ul>
                         </div>
@@ -176,7 +186,7 @@
                                     <em>(This is just a demo dropzone. Selected files are <strong>not</strong> actually uploaded.)</em>
                                 </div>
                                 <div class="fallback">
-                                    <input name="file" type="file" multiple />
+                                    <input name="file" type="file" accept="image/*" capture />
                                 </div>
                             </div>
                         </div>
@@ -434,7 +444,7 @@
                                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-7">
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <input type="text" id="email_address_2" class="form-control" placeholder="">
+                                                <input type="text" id="task_1" class="form-control" placeholder="">
                                             </div>
                                         </div>
                                     </div>
@@ -446,7 +456,7 @@
                                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-7">
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <input type="text" id="email_address_2" class="form-control" placeholder="">
+                                                <input type="text" id="task_2" class="form-control" placeholder="">
                                             </div>
                                         </div>
                                     </div>
@@ -458,7 +468,7 @@
                                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-7">
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <input type="text" id="email_address_2" class="form-control" placeholder="">
+                                                <input type="text" id="task_3" class="form-control" placeholder="">
                                             </div>
                                         </div>
                                     </div>
@@ -470,11 +480,24 @@
                                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-7">
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <input type="text" id="email_address_2" class="form-control" placeholder="">
+                                                <input type="text" id="task_4" class="form-control" placeholder="">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                                <div class="row clearfix">
+                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                                        <label for="email_address_2">5.</label>
+                                    </div>
+                                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-7">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="text" id="task_5" class="form-control" placeholder="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
                                 <div align="right">
                                     <button type="button" class="btn btn-primary m-t-15 waves-effect" onclick="submitCheckList()">SUBMIT</button>
                                 </div>
@@ -563,6 +586,8 @@
     <script src="~/Content/plugins/dropzone/dropzone.js"></script>
     <!-- Demo Js -->
     <script src="~/Scripts/js/demo.js"></script>
+    <!-- SweetAlert Plugin Js -->
+    <script src="~/Content/plugins/sweetalert/sweetalert.min.js"></script>
     <!-- Custom Js -->
     <script src="~/Scripts/js/admin.js"></script>
     <script src="~/Scripts/main.js"></script>

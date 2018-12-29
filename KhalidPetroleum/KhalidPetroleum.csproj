@@ -132,6 +132,7 @@
       <DependentUpon>KhalidOilDBModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CheckListModel.cs" />
+    <Compile Include="Models\ChecklistReportModel.cs" />
     <Compile Include="Models\CheckList_Question.cs">
       <DependentUpon>KhalidOilDBModel.tt</DependentUpon>
     </Compile>
@@ -151,6 +152,12 @@
     <Compile Include="Models\Depot.cs">
       <DependentUpon>KhalidOilDBModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\GET_ALL_TASKS_BY_OWNER_ID_Result.cs">
+      <DependentUpon>KhalidOilDBModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GET_ALL_TASKS_Result.cs">
+      <DependentUpon>KhalidOilDBModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\GET_ALL_USERS_Result.cs">
       <DependentUpon>KhalidOilDBModel.tt</DependentUpon>
     </Compile>
@@ -164,6 +171,9 @@
       <DependentUpon>KhalidOilDBModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\GET_SALES_HISTORY_BY_DATE_Result.cs">
+      <DependentUpon>KhalidOilDBModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GET_VEHICLE_CHECKLISTS_Result.cs">
       <DependentUpon>KhalidOilDBModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\KhalidOilDBModel.Context.cs">
@@ -185,6 +195,9 @@
       <DependentUpon>KhalidOilDBModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Role.cs">
+      <DependentUpon>KhalidOilDBModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Task.cs">
       <DependentUpon>KhalidOilDBModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\UnloadSite.cs">
@@ -3595,6 +3608,7 @@
     <Content Include="Scripts\js\wheel.js" />
     <Content Include="Scripts\rents.js" />
     <Content Include="Scripts\roles.js" />
+    <Content Include="Scripts\task.js" />
     <Content Include="Scripts\vehicles.js" />
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Admin\Rents.cshtml" />
@@ -3650,7 +3664,9 @@
     <Content Include="Scripts\main.js" />
     <Content Include="Scripts\sale-purchase.js" />
     <Content Include="Scripts\staff.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -3676,6 +3692,8 @@
     <None Include="Properties\PublishProfiles\khalidgroup.net - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\local.pubxml" />
     <Content Include="Views\Main\Roles.cshtml" />
+    <Content Include="Views\Admin\ChecklistReport.cshtml" />
+    <Content Include="Scripts\checklist.report.js" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

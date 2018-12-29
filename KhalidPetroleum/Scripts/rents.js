@@ -69,7 +69,7 @@ function viewRentDetails(id) {
                 html += '<td>' + item.SiteName + '</td>';
                 html += '<td>' + item.Quantity + '</td>';
                 html += '<td>' + item.Total_Rent + '</td>';
-                html += '<td><a id="single_image" href="http://kgp.azurewebsites.net/Content/images/' + item.SaleReceiptImage + '" target="_blank"><img src="http://kgp.azurewebsites.net/Content/images/' + item.SaleReceiptImage + '" alt="" height="50" width="50"/></a></td></tr>';
+                html += '<td><a id="single_image" href="/Content/images/' + item.SaleReceiptImage + '" target="_blank"><img src="/Content/images/' + item.SaleReceiptImage + '" alt="" height="50" width="50"/></a></td></tr>';
             });
             html += '</tbody></table>';
             $('.modal-body').html(html);

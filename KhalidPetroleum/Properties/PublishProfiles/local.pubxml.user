@@ -16,16 +16,16 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>07/21/2018 18:11:14</publishTime>
     </File>
     <File Include="bin/KhalidPetroleum.dll">
-      <publishTime>10/15/2018 23:56:06</publishTime>
+      <publishTime>12/24/2018 02:01:52</publishTime>
     </File>
     <File Include="bin/Microsoft.Web.Infrastructure.dll">
-      <publishTime>07/30/2018 02:35:33</publishTime>
+      <publishTime>10/22/2018 21:57:53</publishTime>
     </File>
     <File Include="bin/Microsoft.Web.Mvc.FixedDisplayModes.dll">
       <publishTime>07/21/2018 17:44:13</publishTime>
     </File>
     <File Include="bin/Newtonsoft.Json.dll">
-      <publishTime>07/30/2018 02:35:33</publishTime>
+      <publishTime>10/22/2018 21:57:53</publishTime>
     </File>
     <File Include="bin/System.Net.Http.Formatting.dll">
       <publishTime>07/30/2018 02:35:33</publishTime>
@@ -10039,7 +10039,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>07/31/2018 01:51:54</publishTime>
     </File>
     <File Include="Css/style.css">
-      <publishTime>07/21/2018 17:44:13</publishTime>
+      <publishTime>11/24/2018 11:03:22</publishTime>
     </File>
     <File Include="Css/style.min.css">
       <publishTime>07/21/2018 17:44:13</publishTime>
@@ -10171,16 +10171,19 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>07/21/2018 17:44:13</publishTime>
     </File>
     <File Include="Models/KhalidOilDBModel.edmx.diagram">
-      <publishTime>09/22/2018 12:51:02</publishTime>
+      <publishTime>12/24/2018 00:32:27</publishTime>
     </File>
     <File Include="packages.config">
       <publishTime>07/30/2018 02:35:48</publishTime>
     </File>
     <File Include="Scripts/checklist.js">
-      <publishTime>07/26/2018 19:57:31</publishTime>
+      <publishTime>11/24/2018 10:40:30</publishTime>
+    </File>
+    <File Include="Scripts/checklist.report.js">
+      <publishTime>12/24/2018 01:57:39</publishTime>
     </File>
     <File Include="Scripts/dailyreport.js">
-      <publishTime>10/15/2018 23:36:53</publishTime>
+      <publishTime>10/19/2018 01:38:15</publishTime>
     </File>
     <File Include="Scripts/dsites.js">
       <publishTime>07/30/2018 23:26:50</publishTime>
@@ -10327,79 +10330,85 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>07/31/2018 01:51:30</publishTime>
     </File>
     <File Include="Scripts/main.js">
-      <publishTime>10/09/2018 09:04:26</publishTime>
+      <publishTime>12/24/2018 00:55:07</publishTime>
     </File>
     <File Include="Scripts/rents.js">
-      <publishTime>07/31/2018 02:36:04</publishTime>
+      <publishTime>11/25/2018 23:55:11</publishTime>
     </File>
     <File Include="Scripts/roles.js">
       <publishTime>10/09/2018 09:49:15</publishTime>
     </File>
     <File Include="Scripts/sale-purchase.js">
-      <publishTime>09/09/2018 23:23:53</publishTime>
+      <publishTime>11/22/2018 23:37:14</publishTime>
     </File>
     <File Include="Scripts/staff.js">
-      <publishTime>09/24/2018 01:05:29</publishTime>
+      <publishTime>10/22/2018 21:57:53</publishTime>
+    </File>
+    <File Include="Scripts/task.js">
+      <publishTime>12/17/2018 13:50:06</publishTime>
     </File>
     <File Include="Scripts/vehicles.js">
-      <publishTime>07/28/2018 12:21:58</publishTime>
+      <publishTime>10/22/2018 21:57:53</publishTime>
+    </File>
+    <File Include="Views/Admin/ChecklistReport.cshtml">
+      <publishTime>12/24/2018 01:32:53</publishTime>
     </File>
     <File Include="Views/Admin/DailyReport.cshtml">
-      <publishTime>10/15/2018 23:38:16</publishTime>
+      <publishTime>11/25/2018 23:06:32</publishTime>
     </File>
     <File Include="Views/Admin/Index.cshtml">
-      <publishTime>08/12/2018 09:06:46</publishTime>
+      <publishTime>12/23/2018 21:21:48</publishTime>
     </File>
     <File Include="Views/Admin/Rents.cshtml">
-      <publishTime>10/15/2018 20:50:51</publishTime>
+      <publishTime>11/25/2018 23:07:08</publishTime>
     </File>
     <File Include="Views/Main/Attendance.cshtml">
-      <publishTime>10/15/2018 20:46:03</publishTime>
+      <publishTime>11/25/2018 23:07:21</publishTime>
     </File>
     <File Include="Views/Main/CashReceived.cshtml">
-      <publishTime>10/15/2018 20:46:12</publishTime>
+      <publishTime>11/25/2018 23:07:33</publishTime>
     </File>
     <File Include="Views/Main/Checklist.cshtml">
-      <publishTime>10/15/2018 20:46:19</publishTime>
+      <publishTime>11/25/2018 23:07:44</publishTime>
     </File>
     <File Include="Views/Main/DailyExpenses.cshtml">
-      <publishTime>10/15/2018 20:46:24</publishTime>
+      <publishTime>11/25/2018 23:07:51</publishTime>
     </File>
     <File Include="Views/Main/DSites.cshtml">
-      <publishTime>10/15/2018 20:46:30</publishTime>
+      <publishTime>11/25/2018 23:07:58</publishTime>
     </File>
     <File Include="Views/Main/Index.cshtml">
-      <publishTime>10/15/2018 20:45:32</publishTime>
+      <publishTime>11/25/2018 23:08:06</publishTime>
     </File>
     <File Include="Views/Main/Maintenance.cshtml">
-      <publishTime>10/15/2018 20:46:42</publishTime>
+      <publishTime>11/25/2018 23:08:13</publishTime>
     </File>
     <File Include="Views/Main/Payments.cshtml">
-      <publishTime>10/15/2018 20:46:47</publishTime>
+      <publishTime>11/25/2018 23:08:21</publishTime>
     </File>
     <File Include="Views/Main/Roles.cshtml">
-      <publishTime>10/15/2018 20:46:57</publishTime>
+      <publishTime>11/25/2018 23:08:37</publishTime>
     </File>
     <File Include="Views/Main/SalePurchase.cshtml">
-      <publishTime>10/15/2018 20:47:03</publishTime>
+      <publishTime>12/15/2018 12:28:41</publishTime>
     </File>
     <File Include="Views/Main/SignIn.cshtml">
-      <publishTime>09/08/2018 00:15:49</publishTime>
+      <publishTime>11/24/2018 11:00:48</publishTime>
     </File>
     <File Include="Views/Main/Staff.cshtml">
-      <publishTime>10/15/2018 20:47:16</publishTime>
+      <publishTime>11/25/2018 23:08:58</publishTime>
     </File>
     <File Include="Views/Main/Tasks.cshtml">
-      <publishTime>10/15/2018 20:47:23</publishTime>
+      <publishTime>12/17/2018 13:49:08</publishTime>
     </File>
     <File Include="Views/Main/Vehicles.cshtml">
-      <publishTime>10/15/2018 20:47:29</publishTime>
+      <publishTime>11/25/2018 23:09:25</publishTime>
     </File>
     <File Include="Views/Web.config">
       <publishTime>07/21/2018 17:44:13</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>10/15/2018 23:56:09</publishTime>
+      <publishTime>12/24/2018 02:01:56</publishTime>
     </File>
   </ItemGroup>
 </Project>

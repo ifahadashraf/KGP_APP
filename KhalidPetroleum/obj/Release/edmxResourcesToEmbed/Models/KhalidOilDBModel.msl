@@ -22,15 +22,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="DailyCheckLists">
-      <EntityTypeMapping TypeName="KhalidOilDBModel.DailyCheckList">
-        <MappingFragment StoreEntitySet="DailyCheckLists">
-          <ScalarProperty Name="CheckListID" ColumnName="CheckListID" />
-          <ScalarProperty Name="VehicleNumber" ColumnName="VehicleNumber" />
-          <ScalarProperty Name="Date" ColumnName="Date" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="DailyReports">
       <EntityTypeMapping TypeName="KhalidOilDBModel.DailyReport">
         <MappingFragment StoreEntitySet="DailyReports">
@@ -257,5 +248,77 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="Tasks">
+      <EntityTypeMapping TypeName="KhalidOilDBModel.Task">
+        <MappingFragment StoreEntitySet="Tasks">
+          <ScalarProperty Name="TaskStatus" ColumnName="TaskStatus" />
+          <ScalarProperty Name="LastUpdate" ColumnName="LastUpdate" />
+          <ScalarProperty Name="AssignedTo" ColumnName="AssignedTo" />
+          <ScalarProperty Name="TaskOwner" ColumnName="TaskOwner" />
+          <ScalarProperty Name="EstimatedDate" ColumnName="EstimatedDate" />
+          <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+          <ScalarProperty Name="Details" ColumnName="Details" />
+          <ScalarProperty Name="TaskName" ColumnName="TaskName" />
+          <ScalarProperty Name="TaskId" ColumnName="TaskId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="GET_ALL_TASKS" FunctionName="KhalidOilDBModel.Store.GET_ALL_TASKS">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="KhalidOilDBModel.GET_ALL_TASKS_Result">
+          <ScalarProperty Name="TaskId" ColumnName="TaskId" />
+          <ScalarProperty Name="TaskName" ColumnName="TaskName" />
+          <ScalarProperty Name="Details" ColumnName="Details" />
+          <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+          <ScalarProperty Name="EstimatedDate" ColumnName="EstimatedDate" />
+          <ScalarProperty Name="TaskOwner" ColumnName="TaskOwner" />
+          <ScalarProperty Name="AssignedTo" ColumnName="AssignedTo" />
+          <ScalarProperty Name="LastUpdate" ColumnName="LastUpdate" />
+          <ScalarProperty Name="TaskStatus" ColumnName="TaskStatus" />
+          <ScalarProperty Name="OwnerName" ColumnName="OwnerName" />
+          <ScalarProperty Name="AssigneeName" ColumnName="AssigneeName" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="GET_ALL_TASKS_BY_OWNER_ID" FunctionName="KhalidOilDBModel.Store.GET_ALL_TASKS_BY_OWNER_ID">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="KhalidOilDBModel.GET_ALL_TASKS_BY_OWNER_ID_Result">
+          <ScalarProperty Name="TaskId" ColumnName="TaskId" />
+          <ScalarProperty Name="TaskName" ColumnName="TaskName" />
+          <ScalarProperty Name="Details" ColumnName="Details" />
+          <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+          <ScalarProperty Name="EstimatedDate" ColumnName="EstimatedDate" />
+          <ScalarProperty Name="TaskOwner" ColumnName="TaskOwner" />
+          <ScalarProperty Name="AssignedTo" ColumnName="AssignedTo" />
+          <ScalarProperty Name="LastUpdate" ColumnName="LastUpdate" />
+          <ScalarProperty Name="TaskStatus" ColumnName="TaskStatus" />
+          <ScalarProperty Name="OwnerName" ColumnName="OwnerName" />
+          <ScalarProperty Name="AssigneeName" ColumnName="AssigneeName" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <EntitySetMapping Name="DailyCheckLists">
+      <EntityTypeMapping TypeName="KhalidOilDBModel.DailyCheckList">
+        <MappingFragment StoreEntitySet="DailyCheckLists">
+          <ScalarProperty Name="Reading" ColumnName="Reading" />
+          <ScalarProperty Name="Date" ColumnName="Date" />
+          <ScalarProperty Name="VehicleNumber" ColumnName="VehicleNumber" />
+          <ScalarProperty Name="CheckListID" ColumnName="CheckListID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="GET_VEHICLE_CHECKLISTS" FunctionName="KhalidOilDBModel.Store.GET_VEHICLE_CHECKLISTS">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="KhalidOilDBModel.GET_VEHICLE_CHECKLISTS_Result">
+          <ScalarProperty Name="CheckListID" ColumnName="CheckListID" />
+          <ScalarProperty Name="VehicleNumber" ColumnName="VehicleNumber" />
+          <ScalarProperty Name="Date" ColumnName="Date" />
+          <ScalarProperty Name="Reading" ColumnName="Reading" />
+          <ScalarProperty Name="ImageName" ColumnName="ImageName" />
+          <ScalarProperty Name="QuestionStatement" ColumnName="QuestionStatement" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
   </EntityContainerMapping>
 </Mapping>

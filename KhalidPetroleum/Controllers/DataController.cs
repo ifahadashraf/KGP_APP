@@ -1,5 +1,6 @@
 ﻿using KhalidPetroleum.Models;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -57,9 +58,16 @@ namespace KhalidPetroleum.Controllers
                 string requestFromPost = reader.ReadToEnd();
                 CheckListModel vehicle = JsonConvert.DeserializeObject<CheckListModel>(requestFromPost);
 
-                var selectedVehicle = db.Database.SqlQuery<Vehicle>("SELECT * FROM Vehicles WHERE VehicleNumber = '" + vehicle.VehicleNumber +"'").ToList<Vehicle>()[0];
+                db.DailyCheckLists.Add(new DailyCheckList
+                {
+                    VehicleNumber = vehicle.VehicleNumber,
+                    Date = DateTime.Now,
+                    Reading = ""+vehicle.OpeningReading
+                });
 
-                var checkListID = db.ADD_DAILY_CHECKLIST(vehicle.VehicleNumber, DateTime.Now).FirstOrDefault();
+                db.SaveChanges();
+
+                var checkListID = db.DailyCheckLists.ToList().LastOrDefault().CheckListID;
 
                 foreach (string img in vehicle.ListOfImages)
                 {
@@ -71,7 +79,7 @@ namespace KhalidPetroleum.Controllers
 
                 //if(vehicle.OpeningReading > long.Parse(selectedVehicle.VehicleCurrentReading))
                 {
-                    var v = db.Vehicles.Where<Vehicle>(x => x.VehicleNumber == selectedVehicle.VehicleNumber).ToList<Vehicle>()[0]; 
+                    var v = db.Vehicles.Where<Vehicle>(x => x.VehicleNumber == vehicle.VehicleNumber).ToList<Vehicle>()[0]; 
                     v.VehicleCurrentReading = ""+vehicle.OpeningReading;
                 }
 
@@ -83,6 +91,22 @@ namespace KhalidPetroleum.Controllers
                     temp.Status = x.status;
 
                     db.CheckList_Question.Add(temp);
+                }
+
+                var OM = db.Users.Where(x => x.UserType == "OPERATIONS-MANAGER").ToList();
+
+                foreach (String task in vehicle.tasks)
+                {
+                    db.Tasks.Add(new Task
+                    {
+                        TaskName = "Task <" + vehicle.VehicleNumber + ">",
+                        Details = task,
+                        StartDate = vehicle.Date,
+                        EstimatedDate = vehicle.Date.AddDays(1),
+                        TaskOwner = OM[0].UserID,
+                        TaskStatus = "PENDING",
+                        LastUpdate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Pakistan Standard Time"))
+                    });
                 }
 
                 db.SaveChanges();
@@ -406,6 +430,7 @@ namespace KhalidPetroleum.Controllers
             }
             Response.ContentType = "text/plain";
             Response.Write(str_image);
+            //Response.Close();
         }
 
         [System.Web.Http.HttpGet]
@@ -442,5 +467,124 @@ namespace KhalidPetroleum.Controllers
             var list = db.DailyReportSales.Where(x => x.DailyReportID == id).Select(x => new { x.SaleReceiptImage }).ToList();
             return JsonConvert.SerializeObject(list);
         } 
+
+        [System.Web.Http.HttpGet]
+        public string GetTasksByUserId(long id)
+        {
+            //if (id == 3)
+            //{
+                
+            //}
+            //else
+            //{
+            //    var list = db.GET_ALL_TASKS_BY_OWNER_ID(id).ToList<GET_ALL_TASKS_BY_OWNER_ID_Result>();
+            //    return JsonConvert.SerializeObject(list);
+            //}
+            var list = db.GET_ALL_TASKS().ToList<GET_ALL_TASKS_Result>();
+            return JsonConvert.SerializeObject(list);
+            
+        }
+
+        [System.Web.Http.HttpPost]
+        public string AddTask()
+        {
+            try
+            {
+                StreamReader reader = new StreamReader(Request.InputStream);
+                string requestFromPost = reader.ReadToEnd();
+
+                Task newTask = JsonConvert.DeserializeObject<Task>(requestFromPost);
+                newTask.LastUpdate = DateTime.Now;
+                db.Tasks.Add(newTask);
+                db.SaveChanges();
+
+                return "1";
+            }
+            catch (Exception e)
+            {
+                return e.Message;
+            }
+        }
+
+        [System.Web.Http.HttpPost]
+        public string UpdateTask()
+        {
+            try
+            {
+                StreamReader reader = new StreamReader(Request.InputStream);
+                string requestFromPost = reader.ReadToEnd();
+
+                Task t = JsonConvert.DeserializeObject<Task>(requestFromPost);
+                t.LastUpdate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Pakistan Standard Time"));
+                var existingRole = db.Tasks.SingleOrDefault(x => x.TaskId == t.TaskId);
+                if (t.TaskOwner == -1)
+                    t.TaskOwner = existingRole.TaskOwner;
+                db.Entry(existingRole).CurrentValues.SetValues(t);
+                db.SaveChanges();
+
+                return "1";
+            }
+            catch (Exception e)
+            {
+                return e.Message;
+            }
+        }
+
+        [System.Web.Http.HttpGet]
+        public String GetVehicleChecklists(DateTime from, DateTime to, string vehicleNumber)
+        {
+            var fr = "" + from.Year + "-" + from.Month + "-" + from.Day;
+            var t = "" + to.Year + "-" + to.Month + "-" + to.Day; 
+
+            var list = db.GET_VEHICLE_CHECKLISTS(fr, t, vehicleNumber).ToList<GET_VEHICLE_CHECKLISTS_Result>();
+            List<CheckListModel> checklistQuestions = new List<CheckListModel>();
+            int startingIndex = 0;
+            foreach (var obj in list)
+            {
+                if (!isDateFound(obj.Date, checklistQuestions))
+                {
+                    CheckListModel checklist = new CheckListModel();
+                    checklist.list = new List<CheckListArray>();
+                    checklist.ListOfImages = new List<string>();
+                    checklist.Date = obj.Date;
+                    checklist.VehicleNumber = vehicleNumber;
+                    if(obj.Reading != null)
+                        checklist.OpeningReading = long.Parse(obj.Reading);
+                    for (int i = startingIndex; i < list.Count; i++)
+                    {
+                        if (obj.Date == list[i].Date)
+                        {
+                            CheckListArray cla = new CheckListArray();
+                            cla.question = list[i].QuestionStatement;
+                            cla.status = list[i].Status;
+                            checklist.list.Add(cla);
+
+                            if (!checklist.ListOfImages.Contains(list[i].ImageName))
+                            {
+                                checklist.ListOfImages.Add(list[i].ImageName);
+                            }
+                        }
+                        else
+                        {
+                            startingIndex = i;
+                            break;
+                        }
+                    }
+                    checklistQuestions.Add(checklist);
+                }
+            }
+            return JsonConvert.SerializeObject(checklistQuestions);
+        }
+
+        private bool isDateFound(DateTime ft, List<CheckListModel> list){
+            foreach (var obj in list)
+            {
+                if (obj.Date == ft)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }

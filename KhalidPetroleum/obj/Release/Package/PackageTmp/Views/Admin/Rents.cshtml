@@ -124,7 +124,7 @@
                             <span>Roles</span>
                         </a>
                     </li>
-                    <li class="active" @((user.UserID == 3) ? string.Empty : "style=display:none")>
+                    <li class="active" @((user.UserID == 3 || user.UserType == "CRO" || user.UserType == "ACCOUNTS-MANAGER") ? string.Empty : "style=display:none")>
                         <a href="/Admin/Index">
                             <i class="material-icons">assessment</i>
                             <span>Stats</span>

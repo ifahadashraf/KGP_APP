@@ -155,7 +155,7 @@
                             <span>Roles</span>
                         </a>
                     </li>
-                    <li class="active" @((user.UserID == 3) ? string.Empty : "style=display:none")>
+                    <li class="active" @((user.UserID == 3 || user.UserType == "CRO" || user.UserType == "ACCOUNTS-MANAGER") ? string.Empty : "style=display:none")>
                         <a href="/Admin/Index">
                             <i class="material-icons">assessment</i>
                             <span>Stats</span>
@@ -198,6 +198,19 @@
                             </div>
                             <div class="content">
                                 <div class="text"><h3>Sale/Purchase Report</h3></div>
+                                <div class="number count-to" data-from="0" data-to="1225" data-speed="1000" data-fresh-interval="20"></div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                    <a style="text-decoration:none" href="/Admin/ChecklistReport">
+                        <div class="info-box bg-pink hover-expand-effect">
+                            <div class="icon">
+                                <i class="material-icons">playlist_add_check</i>
+                            </div>
+                            <div class="content">
+                                <div class="text"><h3>Checklist Report</h3></div>
                                 <div class="number count-to" data-from="0" data-to="1225" data-speed="1000" data-fresh-interval="20"></div>
                             </div>
                         </div>

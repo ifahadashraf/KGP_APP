@@ -8,6 +8,7 @@ namespace KhalidPetroleum.Models
     public class CheckListArray
     {
         public int questionID { get; set; }
+        public string question { get; set; }
         public bool status { get; set; }
     }
 
@@ -19,5 +20,6 @@ namespace KhalidPetroleum.Models
         public Nullable<long> OpeningReading { get; set; }
         public List<CheckListArray> list { get; set; }
         public List<String> ListOfImages { get; set; }
+        public List<String> tasks { get; set; }
     }
 }

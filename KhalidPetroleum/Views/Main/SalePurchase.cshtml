@@ -28,6 +28,21 @@
     
 </head>
 <body class="theme-blue">
+    <div class="page-loader-wrapper">
+        <div class="loader">
+            <div class="preloader">
+                <div class="spinner-layer pl-blue">
+                    <div class="circle-clipper left">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="circle-clipper right">
+                        <div class="circle"></div>
+                    </div>
+                </div>
+            </div>
+            <p>Please wait...</p>
+        </div>
+    </div>
     <!-- Top Bar -->
     <nav class="navbar">
         <div class="container-fluid">
@@ -120,7 +135,7 @@
                             <span>Roles</span>
                         </a>
                     </li>
-                    <li @((user.UserID == 3) ? string.Empty : "style=display:none")>
+                    <li @((user.UserID == 3 || user.UserType == "CRO" || user.UserType == "ACCOUNTS-MANAGER") ? string.Empty : "style=display:none")>
                         <a href="/Admin/Index">
                             <i class="material-icons">assessment</i>
                             <span>Stats</span>
@@ -162,7 +177,9 @@
                                         <label for="txtVechileNo">Vehicle No</label>
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <select id="txtVechileNo" class="form-control show-tick" onchange="setCurrentReading()"></select>
+                                                <select id="txtVechileNo" class="form-control show-tick" onchange="setCurrentReading()">
+                                                    <option value="-1">-Select Vehicle-</option>
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
@@ -170,7 +187,10 @@
                                         <label for="txtVCM">VCM</label>
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <input type="text" id="txtVCM" class="form-control" placeholder="Enter VCM's Name">
+                                                <select id="txtVCM" class="form-control show-tick">
+                                                    <option value="-1">Please select</option>
+                                                    
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
@@ -179,10 +199,8 @@
                                         <div class="form-group">
                                             <div class="form-line">
                                                 <select id="txtDrivers" class="form-control show-tick">
-                                                    <option value="">Please select</option>
-                                                    <option value="1">Ali</option>
-                                                    <option value="2">Adil</option>
-                                                    <option value="3">Rasheed</option>
+                                                    <option value="-1">Please select</option>
+                                                    
                                                 </select>
                                             </div>
                                         </div>
@@ -211,10 +229,8 @@
                                         <div class="form-group">
                                             <div class="form-line">
                                                 <select id="txtDepotCode" class="form-control show-tick" onchange="setDepotName()">
-                                                    <option value="">Please select</option>
-                                                    <option value="1">Ali</option>
-                                                    <option value="2">Adil</option>
-                                                    <option value="3">Rasheed</option>
+                                                    <option value="-1">-Select Depot-</option>
+                                                    
                                                 </select>
                                             </div>
                                         </div>
@@ -227,14 +243,12 @@
                                             </div>
                                         </div>
                                     </div>
-                                    @*<div class="col-md-4">
+                                    <div class="col-md-4">
                                         <label for="newDepot">New Depot</label>
                                         <div class="form-group">
-                                            <div class="button-demo js-modal-buttons">
-                                                <button type="button" class="btn bg-light-blue waves-effect" data-toggle="modal" data-target="#mdModal">+ Add New</button>
-                                            </div>
+                                            <button type="button" class="btn bg-light-blue waves-effect" data-toggle="modal" data-target="#mdModal">+ Add New</button>
                                         </div>
-                                    </div>*@
+                                    </div>
                                 </div>
                                 <div class="row">
                                     
@@ -588,8 +602,8 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            @*<button type="button" class="btn btn-link waves-effect">SAVE CHANGES</button>
-                            <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>*@
+                            <button type="button" class="btn btn-link waves-effect">SAVE CHANGES</button>
+                            <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
                         </div>
                     </div>
                 </div>
@@ -619,6 +633,7 @@
     <!-- SweetAlert Plugin Js -->
     <script src="~/Content/plugins/sweetalert/sweetalert.min.js"></script>
     <!-- Custom Js -->
+    <script src="~/Scripts/js/demo.js"></script>
     <script src="~/Scripts/js/admin.js"></script>
     <script src="~/Scripts/main.js"></script>
     <script src="~/Scripts/sale-purchase.js"></script>

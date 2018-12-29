@@ -26,5 +26,10 @@ namespace KhalidPetroleum.Controllers
             return View();
         }
 
+        public ActionResult ChecklistReport()
+        {
+            return View();
+        }
+
     }
 }

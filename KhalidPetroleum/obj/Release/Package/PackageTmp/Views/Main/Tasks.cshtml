@@ -25,10 +25,23 @@
     <link href="~/Css/style.css" rel="stylesheet">
     <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
     <link href="~/Css/themes/all-themes.css" rel="stylesheet" />
-    <!-- JQuery DatePicker -->
-    <link rel="stylesheet" href="~Content/plugins/jquery-ui/jquery-ui.css">
 </head>
 <body class="theme-blue">
+    <div class="page-loader-wrapper">
+        <div class="loader">
+            <div class="preloader">
+                <div class="spinner-layer pl-blue">
+                    <div class="circle-clipper left">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="circle-clipper right">
+                        <div class="circle"></div>
+                    </div>
+                </div>
+            </div>
+            <p>Please wait...</p>
+        </div>
+    </div>
     <!-- Top Bar -->
     <nav class="navbar">
         <div class="container-fluid">
@@ -121,7 +134,7 @@
                             <span>Roles</span>
                         </a>
                     </li>
-                    <li @((user.UserID == 3) ? string.Empty : "style=display:none")>
+                    <li @((user.UserID == 3 || user.UserType == "CRO" || user.UserType == "ACCOUNTS-MANAGER") ? string.Empty : "style=display:none")>
                         <a href="/Admin/Index">
                             <i class="material-icons">assessment</i>
                             <span>Stats</span>
@@ -140,7 +153,7 @@
             <div class="block-header">
                 <h2>TASK MANAGEMENT</h2>
             </div>
-            <div class="row clearfix">
+            @*<div class="row clearfix">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="card">
                         <div class="header">
@@ -180,7 +193,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>*@
             <div class="row clearfix">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="card">
@@ -190,114 +203,376 @@
                             </h2>
                         </div>
                         <div class="body">
-                            <div class="table-responsive">
-                                <table class="table table-bordered table-striped table-hover js-basic-example dataTable">
-                                    <thead>
-                                        <tr>
-                                            <th>Sr#</th>
-                                            <th>Task Name</th>
-                                            <th>Details</th>
-                                            <th>Date</th>
-                                            <th>Assign to</th>
-                                            <th>Status</th>
-                                            <th>Colse Date</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tfoot>
-                                        <tr>
-                                            <th>Sr#</th>
-                                            <th>Task Name</th>
-                                            <th>Details</th>
-                                            <th>Date</th>
-                                            <th>Assign to</th>
-                                            <th>Status</th>
-                                            <th>Colse Date</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </tfoot>
-                                    <tbody>
-                                        <tr>
-                                            <th scope="row">1</th>
-                                            <td>Wash Tanker</td>
-                                            <td>Provide details</td>
-                                            <td>23-7-2018</td>
-                                            <td>Suleman</td>
-                                            <td>Pending</td>
-                                            <td>23-7-2018</td>
-                                            <td><div><button type="button" class="btn bg-light-blue waves-effect" data-toggle="modal" data-target="#mdModal">Edit</button></div></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">2</th>
-                                            <td>Check Oil</td>
-                                            <td>details</td>
-                                            <td>23-7-2018</td>
-                                            <td>Sajid</td>
-                                            <td>Completed</td>
-                                            <td>23-7-2018</td>
-                                            <td><div><button type="button" class="btn bg-light-blue waves-effect">Edit</button></div></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">3</th>
-                                            <td>Manage system</td>
-                                            <td>manager</td>
-                                            <td>23-7-2018</td>
-                                            <td>Awais</td>
-                                            <td>Cleared</td>
-                                            <td>23-7-2018</td>
-                                            <td><div><button type="button" class="btn bg-light-blue waves-effect">Edit</button></div></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">4</th>
-                                            <td>Answer calls</td>
-                                            <td>online</td>
-                                            <td>23-7-2018</td>
-                                            <td>Azam</td>
-                                            <td>Verified</td>
-                                            <td>23-7-2018</td>
-                                            <td><div><button type="button" class="btn bg-light-blue waves-effect">Edit</button></div></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">5</th>
-                                            <td>Do something</td>
-                                            <td>Details here</td>
-                                            <td>23-7-2018</td>
-                                            <td>Majid</td>
-                                            <td>Completed</td>
-                                            <td>23-7-2018</td>
-                                            <td><div><button type="button" class="btn bg-light-blue waves-effect">Edit</button></div></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                            <input id="txtUserId" style="display:none" value="@user.UserID"/>
+                            <input id="txtUserType" style="display:none" value="@user.UserType" /> 
+                            <button type="button" class="btn bg-light-blue waves-effect pull-right" data-toggle="modal" data-target="#mdModal">+ Add New</button>
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <!-- Nav tabs -->
+                                <ul class="nav nav-tabs" role="tablist">
+                                    <li role="presentation" ><a href="#all" data-toggle="tab" @((user.UserType == "ADMIN") ? string.Empty : "style=display:none")>All</a></li>
+                                    <li role="presentation"><a href="#my_tasks" data-toggle="tab" >My Tasks</a></li>
+                                    <li role="presentation"><a href="#readonly_tasks" data-toggle="tab" @((user.UserType == "ACCOUNTS-MANAGER" || user.UserType == "CRO") ? string.Empty : "style=display:none")>CC</a></li>
+                                    <li role="presentation"><a href="#assigned_by_me" data-toggle="tab" @((user.UserType == "ADMIN" || user.UserType == "OPERATIONS-MANAGER" || user.UserType == "CRO") ? string.Empty : "style=display:none")>Assigned By Me</a></li>
+                                </ul>
+
+                                <!-- Tab panes -->
+                                <div class="tab-content">
+                                    <div role="tabpanel" class="tab-pane fade" id="all">
+                                        <div class="table-responsive">
+                                            <table id="tasksTable" class="table table-bordered table-striped table-hover js-basic-example dataTable">
+                                                <thead>
+                                                    <tr>
+                                                        <th>No</th>
+                                                        <th>StartDate</th>
+                                                        <th>Est.Date</th>
+                                                        <th class="col-lg-2">TaskName</th>
+                                                        <th>TaskOwner</th>
+                                                        <th>AssignedTo</th>
+                                                        <th class="col-lg-2">Details</th>
+                                                        <th>UpdatedOn</th>
+                                                        <th>Status</th>
+                                                    </tr>
+                                                </thead>
+                                                <tfoot>
+                                                    <tr>
+                                                        <th>No</th>
+                                                        <th>StartDate</th>
+                                                        <th>Est.Date</th>
+                                                        <th class="col-lg-2">TaskName</th>
+                                                        <th>TaskOwner</th>
+                                                        <th>AssignedTo</th>
+                                                        <th class="col-lg-2">Details</th>
+                                                        <th>UpdatedOn</th>
+                                                        <th>Status</th>
+                                                    </tr>
+                                                </tfoot>
+                                                <tbody>
+                                                    
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div role="tabpanel" class="tab-pane fade" id="my_tasks">
+                                        <div class="table-responsive">
+                                            <table id="my_tasks_tbl" class="table table-bordered table-striped table-hover js-basic-example dataTable">
+                                                <thead>
+                                                    <tr>
+                                                        <th>No</th>
+                                                        <th>StartDate</th>
+                                                        <th>Est.Date</th>
+                                                        <th class="col-lg-2">TaskName</th>
+                                                        <th>TaskOwner</th>
+                                                        <th>AssignedTo</th>
+                                                        <th class="col-lg-2">Details</th>
+                                                        <th>UpdatedOn</th>
+                                                        <th>Status</th>
+                                                    </tr>
+                                                </thead>
+                                                <tfoot>
+                                                    <tr>
+                                                        <th>No</th>
+                                                        <th>StartDate</th>
+                                                        <th>Est.Date</th>
+                                                        <th class="col-lg-2">TaskName</th>
+                                                        <th>TaskOwner</th>
+                                                        <th>AssignedTo</th>
+                                                        <th class="col-lg-2">Details</th>
+                                                        <th>UpdatedOn</th>
+                                                        <th>Status</th>
+                                                    </tr>
+                                                </tfoot>
+                                                <tbody>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div role="tabpanel" class="tab-pane fade" id="assigned_by_me">
+                                        <div class="table-responsive">
+                                            <table id="assigned_by_me_tbl" class="table table-bordered table-striped table-hover js-basic-example dataTable">
+                                                <thead>
+                                                    <tr>
+                                                        <th>No</th>
+                                                        <th>StartDate</th>
+                                                        <th>Est.Date</th>
+                                                        <th class="col-lg-2">TaskName</th>
+                                                        <th>TaskOwner</th>
+                                                        <th>AssignedTo</th>
+                                                        <th class="col-lg-2">Details</th>
+                                                        <th>UpdatedOn</th>
+                                                        <th>Status</th>
+                                                    </tr>
+                                                </thead>
+                                                <tfoot>
+                                                    <tr>
+                                                        <th>No</th>
+                                                        <th>StartDate</th>
+                                                        <th>Est.Date</th>
+                                                        <th class="col-lg-2">TaskName</th>
+                                                        <th>TaskOwner</th>
+                                                        <th>AssignedTo</th>
+                                                        <th class="col-lg-2">Details</th>
+                                                        <th>UpdatedOn</th>
+                                                        <th>Status</th>
+                                                    </tr>
+                                                </tfoot>
+                                                <tbody>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div role="tabpanel" class="tab-pane fade" id="readonly_tasks">
+                                        <div class="table-responsive">
+                                            <table id="readonlyTasksTable" class="table table-bordered table-striped table-hover js-basic-example dataTable">
+                                                <thead>
+                                                    <tr>
+                                                        <th>No</th>
+                                                        <th>StartDate</th>
+                                                        <th>Est.Date</th>
+                                                        <th class="col-lg-2">TaskName</th>
+                                                        <th>TaskOwner</th>
+                                                        <th>AssignedTo</th>
+                                                        <th class="col-lg-2">Details</th>
+                                                        <th>UpdatedOn</th>
+                                                        <th>Status</th>
+                                                    </tr>
+                                                </thead>
+                                                <tfoot>
+                                                    <tr>
+                                                        <th>No</th>
+                                                        <th>StartDate</th>
+                                                        <th>Est.Date</th>
+                                                        <th class="col-lg-2">TaskName</th>
+                                                        <th>TaskOwner</th>
+                                                        <th>AssignedTo</th>
+                                                        <th class="col-lg-2">Details</th>
+                                                        <th>UpdatedOn</th>
+                                                        <th>Status</th>
+                                                    </tr>
+                                                </tfoot>
+                                                <tbody>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+
+                            <div style="visibility: hidden">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-striped table-hover js-basic-example dataTable">
+                                        <thead>
+                                            <tr>
+                                                <th>Sr#</th>
+                                                <th>Task Name</th>
+                                                <th>Details</th>
+                                                <th>Date</th>
+                                                <th>Assign to</th>
+                                                <th>Status</th>
+                                                <th>Colse Date</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tfoot>
+                                            <tr>
+                                                <th>Sr#</th>
+                                                <th>Task Name</th>
+                                                <th>Details</th>
+                                                <th>Date</th>
+                                                <th>Assign to</th>
+                                                <th>Status</th>
+                                                <th>Colse Date</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </tfoot>
+                                        <tbody>
+                                            <tr>
+                                                <th scope="row">1</th>
+                                                <td>Wash Tanker</td>
+                                                <td>Provide details</td>
+                                                <td>23-7-2018</td>
+                                                <td>Suleman</td>
+                                                <td>Pending</td>
+                                                <td>23-7-2018</td>
+                                                <td><div><button type="button" class="btn bg-light-blue waves-effect" data-toggle="modal" data-target="#mdModal">Edit</button></div></td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">2</th>
+                                                <td>Check Oil</td>
+                                                <td>details</td>
+                                                <td>23-7-2018</td>
+                                                <td>Sajid</td>
+                                                <td>Completed</td>
+                                                <td>23-7-2018</td>
+                                                <td><div><button type="button" class="btn bg-light-blue waves-effect">Edit</button></div></td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">3</th>
+                                                <td>Manage system</td>
+                                                <td>manager</td>
+                                                <td>23-7-2018</td>
+                                                <td>Awais</td>
+                                                <td>Cleared</td>
+                                                <td>23-7-2018</td>
+                                                <td><div><button type="button" class="btn bg-light-blue waves-effect">Edit</button></div></td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">4</th>
+                                                <td>Answer calls</td>
+                                                <td>online</td>
+                                                <td>23-7-2018</td>
+                                                <td>Azam</td>
+                                                <td>Verified</td>
+                                                <td>23-7-2018</td>
+                                                <td><div><button type="button" class="btn bg-light-blue waves-effect">Edit</button></div></td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">5</th>
+                                                <td>Do something</td>
+                                                <td>Details here</td>
+                                                <td>23-7-2018</td>
+                                                <td>Majid</td>
+                                                <td>Completed</td>
+                                                <td>23-7-2018</td>
+                                                <td><div><button type="button" class="btn bg-light-blue waves-effect">Edit</button></div></td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">5</th>
+                                                <td>Do something</td>
+                                                <td>Details here</td>
+                                                <td>23-7-2018</td>
+                                                <td>Majid</td>
+                                                <td>Completed</td>
+                                                <td>23-7-2018</td>
+                                                <td><div><button type="button" class="btn bg-light-blue waves-effect">Edit</button></div></td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">5</th>
+                                                <td>Do something</td>
+                                                <td>Details here</td>
+                                                <td>23-7-2018</td>
+                                                <td>Majid</td>
+                                                <td>Completed</td>
+                                                <td>23-7-2018</td>
+                                                <td><div><button type="button" class="btn bg-light-blue waves-effect">Edit</button></div></td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">5</th>
+                                                <td>Do something</td>
+                                                <td>Details here</td>
+                                                <td>23-7-2018</td>
+                                                <td>Majid</td>
+                                                <td>Completed</td>
+                                                <td>23-7-2018</td>
+                                                <td><div><button type="button" class="btn bg-light-blue waves-effect">Edit</button></div></td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">5</th>
+                                                <td>Do something</td>
+                                                <td>Details here</td>
+                                                <td>23-7-2018</td>
+                                                <td>Majid</td>
+                                                <td>Completed</td>
+                                                <td>23-7-2018</td>
+                                                <td><div><button type="button" class="btn bg-light-blue waves-effect">Edit</button></div></td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">5</th>
+                                                <td>Do something</td>
+                                                <td>Details here</td>
+                                                <td>23-7-2018</td>
+                                                <td>Majid</td>
+                                                <td>Completed</td>
+                                                <td>23-7-2018</td>
+                                                <td><div><button type="button" class="btn bg-light-blue waves-effect">Edit</button></div></td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">1</th>
+                                                <td>Wash Tanker</td>
+                                                <td>Provide details</td>
+                                                <td>23-7-2018</td>
+                                                <td>Suleman</td>
+                                                <td>Pending</td>
+                                                <td>23-7-2018</td>
+                                                <td><div><button type="button" class="btn bg-light-blue waves-effect" data-toggle="modal" data-target="#mdModal">Edit</button></div></td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">2</th>
+                                                <td>Check Oil</td>
+                                                <td>details</td>
+                                                <td>23-7-2018</td>
+                                                <td>Sajid</td>
+                                                <td>Completed</td>
+                                                <td>23-7-2018</td>
+                                                <td><div><button type="button" class="btn bg-light-blue waves-effect">Edit</button></div></td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">3</th>
+                                                <td>Manage system</td>
+                                                <td>manager</td>
+                                                <td>23-7-2018</td>
+                                                <td>Awais</td>
+                                                <td>Cleared</td>
+                                                <td>23-7-2018</td>
+                                                <td><div><button type="button" class="btn bg-light-blue waves-effect">Edit</button></div></td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">4</th>
+                                                <td>Answer calls</td>
+                                                <td>online</td>
+                                                <td>23-7-2018</td>
+                                                <td>Azam</td>
+                                                <td>Verified</td>
+                                                <td>23-7-2018</td>
+                                                <td><div><button type="button" class="btn bg-light-blue waves-effect">Edit</button></div></td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">5</th>
+                                                <td>Do something</td>
+                                                <td>Details here</td>
+                                                <td>23-7-2018</td>
+                                                <td>Majid</td>
+                                                <td>Completed</td>
+                                                <td>23-7-2018</td>
+                                                <td><div><button type="button" class="btn bg-light-blue waves-effect">Edit</button></div></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            
                         </div>
                     </div>
                 </div>
             </div>
             <!--Modal Start-->
             <div class="modal fade" id="mdModal" tabindex="-1" role="dialog">
-                <div class="modal-dialog" role="document">
+                <div class="modal-dialog " role="document">
                     <div class="modal-content modal-col-light-blue">
                         <div class="modal-header">
-                            <h3 class="modal-title" id="defaultModalLabel">ADD NEW TASK</h3>
+                            <h3 class="modal-title" id="defaultModalLabel">TASK</h3>
                         </div>
                         <div class="modal-body">
                             <div id="alertdiv" class="row">
                             </div>
                             <div class="row">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="row" id="divTaskOwner" style="display:none">
+                                        <label for="assignto">Task Owner</label>
+                                        <select id="sltTaskOwner" class="form-control show-tick"></select>
+                                    </div>
                                     <div class="row">
                                         <div class="col-md-4">
                                             <label for="taskName">Task Name</label>
                                             <input type="text" id="txtTaskName" class="form-control" placeholder="">
+                                            <input type="text" id="txtTaskId" class="form-control" placeholder="" style="display:none">
                                         </div>
                                         <div class="col-md-4">
-                                            <label for="dueDate">Due Date</label>
-                                            <input type="text" id="txtDueDate" class="form-control datetimepicker" placeholder="">
+                                            <label for="dueDate">Start Date</label>
+                                            <input type="date" id="txtStartDate" class="form-control datetimepicker" placeholder="">
                                         </div>
                                         <div class="col-md-4">
-                                            <label for="reference">Reference</label>
-                                            <input type="text" id="txtReference" class="form-control" placeholder="">
+                                            <label for="reference">Expected Date</label>
+                                            <input type="date" id="txtExpectedDate" class="form-control" placeholder="">
                                         </div>
                                     </div>
                                 </div>
@@ -306,56 +581,47 @@
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <div class="row">
                                         <div class="col-md-4">
-                                            <label for="assignto">Assign To</label>
-                                            <select class="form-control show-tick">
-                                                <option value="">Please select</option>
-                                                <option value="1">Suleman</option>
-                                                <option value="2">Sajid</option>
-                                                <option value="3">Majid</option>                                               
+                                            <label for="assignto">Assign To </label>
+                                            <select id="sltAssignTo" class="form-control show-tick" >                           
                                             </select>
                                         </div>
-                                        <div class="col-md-4">
-                                            <label for="assignto">Assign By</label>
-                                            <select class="form-control show-tick">
-                                                <option value="">Please select</option>
-                                                <option value="10">Farukh</option>
-                                                <option value="20">Mian</option>
-                                                <option value="30">Junaid</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-4" style="visibility:hidden">
                                             <label for="priority">Priority</label>
-                                            <input type="text" id="txtPriority" class="form-control" placeholder="">
+                                            <select id="sltPriority" class="form-control show-tick">
+                                                <option value="">Please select</option>
+                                                <option value="1">Normal</option>
+                                                <option value="2">Medium</option>
+                                                <option value="3">Urgent</option>
+                                            </select>
                                         </div>
-                                    </div>
-                                </div>
-                            </div><br>
-                            <div class="row">
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <div class="row">
                                         <div class="col-md-4">
                                             <label for="status">Status</label>
-                                            <select class="form-control show-tick">
-                                                <option value="">Please select</option>
-                                                <option value="1">Pending</option>
-                                                <option value="2">Completed</option>
-                                                <option value="3">Verified</option>
+                                            <select id="sltStatus" class="form-control show-tick">
+                                                <option value="0">Please select</option>
+                                                <option value="PENDING">Pending</option>
+                                                <option value="COMPLETED">Completed</option>
+                                                <option value="ON_APPROVAL">On Approval</option>
+                                                <option value="IN_PROGRESS">In Progress</option>
                                             </select>
                                         </div>
-                                        <div class="col-md-4">
+                                    </div>
+                                </div>
+                            </div><br>
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="row">
+                                        
+                                        <div class="col-md-12">
                                             <label for="desc">Description</label>
-                                            <textarea rows="2" class="form-control no-resize" id="txtDescription" placeholder=""></textarea>
+                                            <textarea rows="3" class="form-control no-resize" id="txtDescription" placeholder=""></textarea>
                                         </div>
-                                        <div class="col-md-4">
-                                            <label for="attachment">Attachment</label>
-                                            <input type="file" id="fileAttachment" class="form-control" placeholder="">
-                                        </div>
+                                        
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-link waves-effect">SAVE CHANGES</button>
+                            <button id="modalBtn" type="button" class="btn btn-link waves-effect" onclick="modalBtnClick()" value="SAVE">SUBMIT</button>
                             <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
                         </div>
                     </div>
@@ -365,6 +631,7 @@
         </div>
     </section>
     <!-- Jquery Core Js -->
+
     <script src="~/Content/plugins/jquery/jquery.min.js"></script>
     <!-- Jquery DataTable Plugin Js -->
     <script src="~/Content/plugins/jquery-datatable/jquery.dataTables.js"></script>
@@ -384,20 +651,16 @@
     <script src="~/Content/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
     <!-- Waves Effect Plugin Js -->
     <script src="~/Content/plugins/node-waves/waves.js"></script>
-    <!-- Custom Js -->
-    <script src="~/Scripts/js/admin.js"></script>
+    <script src="~/Scripts/main.js"></script>
+    <script src="~/Scripts/task.js"></script>
     <!-- Demo Js -->
+    <script src="~/Scripts/js/admin.js"></script>
     <script src="~/Scripts/js/demo.js"></script>
     <!-- Moment Plugin Js -->
     <script src="~/Content/plugins/momentjs/moment.js"></script>
     <!-- Bootstrap Material Datetime Picker Plugin Js -->
     <script src="~/Content/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js"></script>
-    <!-- JQuery Datetime Picker -->
-    <script src="~Content/plugins/jquery-1.12.4/jquery-1.12.4.js"></script>
-    <script src="~Content/plugins/jquery-ui/jquery-ui.js"></script>
-    <script>$(function() {
-            $("#datepicker").datepicker();
-});</script>
+    
 
 </body>
 </html>

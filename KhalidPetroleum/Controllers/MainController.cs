@@ -32,10 +32,12 @@ namespace KhalidPetroleum.Controllers
         }
 		public ActionResult Checklist()
         {
-            if (Session["User"] != null)
-                return View();
-            else
-                return View("SignIn");
+            return View();
+
+            //if (Session["User"] != null)
+            //    return View();
+            //else
+            //    return View("SignIn");
         }
 		public ActionResult Attendance()
 		{

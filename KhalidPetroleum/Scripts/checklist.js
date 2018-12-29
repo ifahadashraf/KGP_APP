@@ -1,31 +1,111 @@
-﻿$(document).ready(function () {
+﻿var myDropZone = null;
+
+$(document).ready(function () {
     getVehicles();
     getQuestions();
 
+    Dropzone.options.frmFileUpload = {
+        acceptedFiles: "image/*",
+        capture: "camera",
+        init: function () {
+            this.on("addedfile", function (origFile) {
+                var MAX_WIDTH = 800;
+                var MAX_HEIGHT = 600;
+
+                var reader = new FileReader();
+
+                // Convert file to img
+
+                reader.addEventListener("load", function (event) {
+
+                    var origImg = new Image();
+                    origImg.src = event.target.result;
+
+                    origImg.addEventListener("load", function (event) {
+
+                        var width = event.target.width;
+                        var height = event.target.height;
+
+
+                        // Don't resize if it's small enough
+
+                        if (width <= MAX_WIDTH && height <= MAX_HEIGHT) {
+                            dropzone.enqueueFile(origFile);
+                            return;
+                        }
+
+
+                        // Calc new dims otherwise
+
+                        if (width > height) {
+                            if (width > MAX_WIDTH) {
+                                height *= MAX_WIDTH / width;
+                                width = MAX_WIDTH;
+                            }
+                        } else {
+                            if (height > MAX_HEIGHT) {
+                                width *= MAX_HEIGHT / height;
+                                height = MAX_HEIGHT;
+                            }
+                        }
+
+
+                        // Resize
+
+                        var canvas = document.createElement('canvas');
+                        canvas.width = width;
+                        canvas.height = height;
+
+                        var ctx = canvas.getContext("2d");
+                        ctx.drawImage(origImg, 0, 0, width, height);
+
+                        var resizedFile = base64ToFile(canvas.toDataURL(), origFile);
+
+
+                        // Replace original with resized
+
+                        var origFileIndex = myDropZone.files.indexOf(origFile);
+                        myDropZone.files[origFileIndex] = resizedFile;
+
+
+                        // Enqueue added file manually making it available for
+                        // further processing by dropzone
+
+                        myDropZone.enqueueFile(resizedFile);
+                    });
+                });
+
+                reader.readAsDataURL(origFile);
+            });
+        }
+    };
+
     Dropzone.autoDiscover = false;
-    $("#frmFileUpload").dropzone({
+
+    myDropZone = new Dropzone("#frmFileUpload", {
         url: "../../Data/ProcessRequest",
         addRemoveLinks: true,
+        autoQueue: false,
         success: function (file, response) {
             var imgName = response;
             file.previewElement.classList.add("dz-success");
             list_of_images.push(imgName);
         },
-        removedfile : function(file){
+        canceled: function (file) {
+            $('.dz-preview').remove();
+            return true;
+        },
+        removedfile: function (file) {
             $.ajax({
                 url: "../../Data/" + "DeleteFile" + "?filename=" + file.name,
                 method: "GET",
                 success: function (data) {
-                    if (data == "1")
-                    {
-                        $('.dz-preview').remove();
-                        return true;
-                    }
-                    alert(data);
-                    return false;
+                    $(file.previewElement).remove();
+                    removeFromList(file.name);
                 },
                 error: function (data) {
                     alert("Err : " + data);
+                    file.previewElement.classList.add("dz-error");
                     return false;
                 }
             });
@@ -34,9 +114,13 @@
             file.previewElement.classList.add("dz-error");
         }
     });
+    
+
 });
 
 var list_of_images = [];
+
+var list_of_vehicles = [];
 
 function getVehicles() {
     getVehiclesApi(function (data) {
@@ -45,9 +129,10 @@ function getVehicles() {
         if (arr.length > 0)
         {
             $('#txtVechileNo').html('');
-            $('#txtVechileNo').append('<option>-Select Vehicle-</option>');
+            $('#txtVechileNo').append('<option value="-1">-Select Vehicle-</option>');
 
             $.each(arr, function (index, item) {
+                list_of_vehicles.push(item);
                 $('#txtVechileNo').append('<option value="'+item.VehicleNumber+'">'+item.VehicleNumber+'</option>');
             });
         }
@@ -69,6 +154,8 @@ function getQuestions() {
                                                 '</td>'+
                                             '</tr>');
             });
+
+            $('.page-loader-wrapper').css('display', 'none');
         }
     });
 }
@@ -79,7 +166,21 @@ function submitCheckList()
     var vehicle = $('#txtVechileNo').val();
     var captainName = $('#txtCaptainName').val();
     var openingMeter = $('#txtOpeningMeter').val();
+    var currentReading = findReading(vehicle);
 
+    if (date == '') {
+        alert("Please enter a date");
+        return
+    }
+    else if (vehicle == "-1"){
+        alert("Please select a vehicle");
+        return
+    }
+        
+    else if (parseInt(openingMeter) <= parseInt(currentReading)) {
+        alert("Wrong opening meter\n\nValue should be greater than current reading");
+        return
+    }
 
     var checkList = [];
 
@@ -94,24 +195,110 @@ function submitCheckList()
         });
     });
 
+    var tasks = [];
+
+    for (var i = 1; i <= 5; i++) {
+        var val = $('#task_' + i).val();
+        if (val != '') {
+            tasks.push(val);
+        }
+    }
+
     var json = {
         "Date": date,
         "DriverName": captainName,
         "OpeningReading": parseInt(openingMeter),
         "VehicleNumber": vehicle,
         "ListOfImages" : list_of_images,
-        "list":checkList
+        "list": checkList,
+        "tasks" : tasks
     };
 
-    submitChecklistApi(json, function (data) {
-        if(data == "1")
-        {
-            alert("Report submitted successfully !");
-        }
-        else
-        {
-            alert("Something went wrong. Contact Admin.");
+    if (list_of_images.length == myDropZone.files.length)
+    {
+        swal({
+            title: "Are you sure ?",
+            text: "Make sure you have entered each data carefully.",
+            type: "info",
+            showCancelButton: true,
+            closeOnConfirm: false,
+            showLoaderOnConfirm: true,
+        }, function () {
+            submitChecklistApi(json, function (data) {
+                if (data == "1") {
+                    swal({
+                        title: "Success",
+                        text: "Report submitted",
+                        type: "success",
+                        confirmButtonText: "Ok"
+                    }, function (isConfirm) {
+                        if (isConfirm) {
+                            window.location.href = window.location.href;
+                        }
+                    });
+                }
+                else {
+                    swal("Error", data, "error");
+                }
+            });
+        });
+    }
+    else {
+        alert("Images still uploading. Try again");
+    }
+}
+
+
+function base64ToFile(dataURI, origFile) {
+    var byteString, mimestring;
+
+    if (dataURI.split(',')[0].indexOf('base64') !== -1) {
+        byteString = atob(dataURI.split(',')[1]);
+    } else {
+        byteString = decodeURI(dataURI.split(',')[1]);
+    }
+
+    mimestring = dataURI.split(',')[0].split(':')[1].split(';')[0];
+
+    var content = new Array();
+    for (var i = 0; i < byteString.length; i++) {
+        content[i] = byteString.charCodeAt(i);
+    }
+
+    var newFile = new File(
+      [new Uint8Array(content)], origFile.name, { type: mimestring }
+    );
+
+
+    // Copy props set by the dropzone in the original file
+
+    var origProps = [
+      "upload", "status", "previewElement", "previewTemplate", "accepted"
+    ];
+
+    $.each(origProps, function (i, p) {
+        newFile[p] = origFile[p];
+    });
+
+    return newFile;
+}
+
+
+function findReading(number) {
+    var val = '';
+    $.each(list_of_vehicles, function (index, item) {
+        if (item.VehicleNumber == number) {
+            val = item.VehicleCurrentReading;
+            return;
         }
     });
 
+    return val;
+}
+
+function removeFromList(filename) {
+    for (var i = 0; i < list_of_images.length; i++) {
+        if (list_of_images[i].indexOf(filename) != -1)
+            list_of_images.splice(i, 1);
+    }
 }

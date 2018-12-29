@@ -19,7 +19,7 @@ namespace KhalidPetroleum.Models
         public bool Status { get; set; }
         public long CheckListQuestionID { get; set; }
     
-        public virtual DailyCheckList DailyCheckList { get; set; }
         public virtual Question Question { get; set; }
+        public virtual DailyCheckList DailyCheckList { get; set; }
     }
 }

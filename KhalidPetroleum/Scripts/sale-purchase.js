@@ -3,9 +3,6 @@
     getDepots();
     getDrivers();
     getUnloadSites();
-    window.setTimeout(function () {
-        addNewSalesRow()
-    }, 5000);
 
     $('input[type=file]').change(function () {
         alert("hola");
@@ -31,6 +28,7 @@ var listOfReading = [];
 var listOfRowIds = [];
 var listOfDepotNames = [];
 var listOfUnloadSites = [];
+var skip = false;
 
 //*********************************************JS FUNCTIONS**********************************************//
 
@@ -57,7 +55,7 @@ function addNewSalesRow() {
                                     '<div class="form-group">' +
                                         '<div class="form-line">' +
                                             '<input id="inp'+currentTime+'" type="text" style="display:none" hidden/>'+
-                                            '<select id="txtUnloadSite" class="form-control" onchange="setHidden(this,\'inp'+currentTime+'\')"><option>-Select Site-</option>';
+                                            '<select id="txtUnloadSite" class="form-control" onchange="setHidden(this,\'inp'+currentTime+'\')"><option value="-1">-Select Site-</option>';
                                                 $.each(listOfUnloadSites,function(index,item){
                                                     html += '<option value="' + item.SiteID + '">' + item.SiteID +' - '+ item.SiteName + '</option>';
                                                 });
@@ -97,7 +95,7 @@ function addNewSalesRow() {
                             '<div class="form-group">' +
                                 '<div class="form-line">' +
                                     '<input id="inp' + currentTime + '" type="text" style="display:none" hidden/>' +
-                                    '<select id="txtUnloadSite" class="form-control" onchange="setHidden(this,\'inp' + currentTime + '\')"><option>-Select Site-</option>';
+                                    '<select id="txtUnloadSite" class="form-control" onchange="setHidden(this,\'inp' + currentTime + '\')"><option value="-1">-Select Site-</option>';
                                         $.each(listOfUnloadSites,function(index,item){
                                             html += '<option value="' + item.SiteID + '">' + item.SiteID +' - '+ item.SiteName + '</option>';
                                         });
@@ -246,7 +244,7 @@ function getDepots(){
         var arr = JSON.parse(data);
         if (arr.length > 0) {
             $('#txtDepotCode').html('');
-            $('#txtDepotCode').append('<option>-Select Depot-</option>');
+            $('#txtDepotCode').append('<option value="-1">-Select Depot-</option>');
 
             $.each(arr, function (index, item) {
                 listOfDepotNames.push(item.DepotName);
@@ -257,42 +255,44 @@ function getDepots(){
 }
 
 function getDrivers() {
-    getDriversApi(function (data) {
+    getUsersApi(function (data) {
         var arr = JSON.parse(data);
         if (arr.length > 0) {
+
             $('#txtDrivers').html('');
-            $('#txtDrivers').append('<option>-Select Driver-</option>');
+            $('#txtDrivers').append('<option value="-1">Please select</option>');
+
+            $('#txtVCM').html('');
+            $('#txtVCM').append('<option value="-1">Please select</option>');
 
             $.each(arr, function (index, item) {
-                $('#txtDrivers').append('<option value="' + item.UserID + '">' + item.UserName + '</option>');
+                if (item.UserType == "CAPTAIN")
+                    $('#txtDrivers').append('<option value="' + item.UserID + '">' + item.UserName + '</option>');
+                else if(item.UserType == "VCM")
+                    $('#txtVCM').append('<option value="' + item.UserID + '">' + item.UserName + '</option>');
             });
+
+            $('.page-loader-wrapper').css('display', 'none');
+
         }
     });
 }
 
 function getUnloadSites() {
-    var d = new $.Deferred();
     getUnloadSitesApi(function (data) {
         var arr = JSON.parse(data);
         if (arr.length > 0) {
             $.each(arr, function (index, item) {
                 listOfUnloadSites.push(item);
             });
-            d.resolve();
+            addNewSalesRow();
         }
     });
-    return d.promise();
 }
 
 function submitDailyReport() {
 
-    $('input[type="number"]').each(function () {
-        var nan = $(this).val();
-        if (isNaN(nan) || !jQuery.isNumeric(nan)) {
-            $(this).val(0)
-        }
-    });
-
+    
     //Basic info
     var date = $('#txtDate').val();
     var vehicleNo = $('#txtVechileNo').val();
@@ -324,18 +324,22 @@ function submitDailyReport() {
     var closeMeter = $('#txtClosingMeter').val();
 
     if(date == "" ){
-        alert("Please select a date.")
+        alert("Please select a date")
         return
     }
-    else if (vehicleNo == -1 || vehicleNo == "-1") {
-        alert("Please select a vehicle.")
+    else if (vehicleNo == "-1") {
+        alert("Please select a vehicle")
         return
     }
-    else if(isNaN(depotCode)){
-        alert("Please select a depot.")
+    else if (vcm == "-1") {
+        alert("Please select a vehicle")
         return
     }
-    else if (isNaN(drivers)) {
+    else if(depotCode == "-1"){
+        alert("Please select a depot")
+        return
+    }
+    else if (drivers == "-1") {
         alert("Please select a driver.")
         return
     }
@@ -343,35 +347,85 @@ function submitDailyReport() {
         alert("Opening and closing meter are mandatory.")
         return
     }
+    else if (sup == "" && hsd == "") {
+        alert("Kindly enter quantity SUP or HSD");
+        return
+    }
+    else if (sup == "") {
+        if (hsdRate == "" || hsdQuantity == "") {
+            alert("Kindly difference rate and quantity of HSD");
+            return
+        }
+    }
+    else if (hsd == "") {
+        if (supRate == "" || supQuantity == "") {
+            alert("Kindly difference rate and quantity of SUP");
+            return
+        }
+    }
+    else if (sup != "" && hsd != "") {
+        if (hsdRate == "" || hsdQuantity == "" || supRate == "" || supQuantity == "") {
+            alert("Kindly difference rate and quantity of HSD and SUP");
+            return
+        }
+    }
 
     listOfSales = [];
 
     $.each(listOfRowIds, function (index, item) {
         var obj = {};
         var i = 0;
+        skip = false;
         $('#' + item + ' input').each(function () {
             if(i == 0)
             {
+                if ($(this).val() == "") {
+                    listOfSales = [];
+                    skip = true;
+                    return;
+                }
                 obj["DeliveryNo"] = $(this).val();
             }
             else if (i == 1)
             {
+                if ($(this).val() == "") {
+                    listOfSales = [];
+                    skip = true;
+                    return;
+                }
                 obj["Quantity"] = $(this).val();
             }
             else if (i == 2)
             {
+                if (isNaN(parseInt($(this).val())) || $(this).val() == "-1") {
+                    listOfSales = [];
+                    skip = true;
+                    return;
+                }
                 obj["SiteID"] = parseInt($(this).val());
             }
             else if (i == 3)
             {
+                if (this.files.length == 0) {
+                    listOfSales = [];
+                    skip = true;
+                    return;
+                }
                 readImage(this).done(function (base64Data) {
                     obj["SaleReceiptImage"] = base64Data;
                 });;
             }
             i++;
         });
+        if (skip)
+            return;
         listOfSales.push(obj);
     });
+
+    if (skip) {
+        alert("A SALE field is empty or insufficient images attached");
+        return
+    }
 
     var json = {
         "Date": date,

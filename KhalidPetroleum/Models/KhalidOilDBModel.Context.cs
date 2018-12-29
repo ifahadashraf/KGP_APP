@@ -29,7 +29,6 @@ namespace KhalidPetroleum.Models
     
         public virtual DbSet<Attendance> Attendances { get; set; }
         public virtual DbSet<CheckList_Question> CheckList_Question { get; set; }
-        public virtual DbSet<DailyCheckList> DailyCheckLists { get; set; }
         public virtual DbSet<DailyReport> DailyReports { get; set; }
         public virtual DbSet<DailyReportSale> DailyReportSales { get; set; }
         public virtual DbSet<Depot> Depots { get; set; }
@@ -39,6 +38,8 @@ namespace KhalidPetroleum.Models
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<DailyCheckListImage> DailyCheckListImages { get; set; }
+        public virtual DbSet<Task> Tasks { get; set; }
+        public virtual DbSet<DailyCheckList> DailyCheckLists { get; set; }
     
         public virtual ObjectResult<Nullable<decimal>> ADD_DAILY_CHECKLIST(string vehicleno, Nullable<System.DateTime> date)
         {
@@ -108,6 +109,37 @@ namespace KhalidPetroleum.Models
                 new ObjectParameter("report_id", typeof(long));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_SALES_BY_REPORT_ID_Result>("GET_SALES_BY_REPORT_ID", report_idParameter);
+        }
+    
+        public virtual ObjectResult<GET_ALL_TASKS_Result> GET_ALL_TASKS()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_ALL_TASKS_Result>("GET_ALL_TASKS");
+        }
+    
+        public virtual ObjectResult<GET_ALL_TASKS_BY_OWNER_ID_Result> GET_ALL_TASKS_BY_OWNER_ID(Nullable<long> id)
+        {
+            var idParameter = id.HasValue ?
+                new ObjectParameter("id", id) :
+                new ObjectParameter("id", typeof(long));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_ALL_TASKS_BY_OWNER_ID_Result>("GET_ALL_TASKS_BY_OWNER_ID", idParameter);
+        }
+    
+        public virtual ObjectResult<GET_VEHICLE_CHECKLISTS_Result> GET_VEHICLE_CHECKLISTS(string from, string to, string vehicle_number)
+        {
+            var fromParameter = from != null ?
+                new ObjectParameter("from", from) :
+                new ObjectParameter("from", typeof(string));
+    
+            var toParameter = to != null ?
+                new ObjectParameter("to", to) :
+                new ObjectParameter("to", typeof(string));
+    
+            var vehicle_numberParameter = vehicle_number != null ?
+                new ObjectParameter("vehicle_number", vehicle_number) :
+                new ObjectParameter("vehicle_number", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_VEHICLE_CHECKLISTS_Result>("GET_VEHICLE_CHECKLISTS", fromParameter, toParameter, vehicle_numberParameter);
         }
     }
 }
