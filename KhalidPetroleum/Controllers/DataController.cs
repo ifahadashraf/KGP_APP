@@ -579,8 +579,7 @@ namespace KhalidPetroleum.Controllers
         private bool isDateFound(DateTime ft, List<CheckListModel> list){
             foreach (var obj in list)
             {
-                if (obj.Date == ft)
-                {
+                if (obj.Date == ft){
                     return true;
                 }
             }
