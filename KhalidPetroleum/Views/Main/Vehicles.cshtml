@@ -269,50 +269,73 @@
                         <div class="modal-body">
                             <div id="alertdiv" class="row">
                             </div>
-                            <div class="row">
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <label>First Name</label>
-                                            <input type="text" id=txtEditFirstName class="form-control" placeholder="">
+                            <form>
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label for="depotName">Number</label>
+                                                <div class="form-group">
+                                                    <input type="text" id="txtVehicleNumber1" class="form-control" placeholder="i.e. LEN-9848">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="depotName">Model</label>
+                                                <div class="form-group">
+                                                    <div class="form-line">
+                                                        <input type="number" id="txtVehicleModel1" min="0" max="9999" class="form-control" placeholder="i.e. 2011">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="depotName">Vehicle Type</label>
+                                                <div class="form-group">
+                                                    <div class="form-line">
+                                                        <select id="txtVehicleType1" class="form-control show-tick">
+                                                            <option value="">Please select</option>
+                                                            <option value="TANKER">TANKER</option>
+                                                            <option value="CAR">CAR</option>
+                                                            <option value="BIKE">BIKE</option>
+                                                            <option value="GENERATOR">GENERATOR</option>
+                                                            <option value="OTHER">OTHER</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="col-md-3">
-                                            <label>Last Name</label>
-                                            <input type="text" id=txtEditLasttName class="form-control" placeholder="">
-                                        </div>
-                                        <div class="col-md-3">
-                                            <label>Email</label>
-                                            <input type="text" id=txtEditEmail class="form-control" placeholder="">
-                                        </div>
-                                        <div class="col-md-3">
-                                            <label>Phone</label>
-                                            <input type="text" id=txtEditPhoneNumber class="form-control" placeholder="">
-                                        </div>
-                                    </div><br>
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <label>Mobile</label>
-                                            <input type="text" id=txtEditMobile class="form-control" placeholder="">
-                                        </div>
-                                        <div class="col-md-3">
-                                            <label>Address1</label>
-                                            <input type="text" id=txtEditAddress1 class="form-control" placeholder="">
-                                        </div>
-                                        <div class="col-md-3">
-                                            <label>Address2</label>
-                                            <input type="text" id=txtEditAddress2 class="form-control" placeholder="">
-                                        </div>
-                                        <div class="col-md-3">
-                                            <label>City</label>
-                                            <input type="text" id=txtEditCity class="form-control" placeholder="">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label for="txtVehicleCompany">Company</label>
+                                                <div class="form-group">
+                                                    <div class="form-line">
+                                                        <input type="text" id="txtVehicleCompany1" class="form-control" placeholder="i.e. TOYOTA">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="txtVehicleOwner">Owner</label>
+                                                <div class="form-group">
+                                                    <div class="form-line">
+                                                        <input type="text" id="txtVehicleOwner1" class="form-control" placeholder="i.e. XYZ">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="txtVehicleReading">Current Reading</label>
+                                                <div class="form-group">
+                                                    <div class="form-line">
+                                                        <input type="text" id="txtVehicleReading1" min="0" class="form-control" placeholder="i.e. 999999">
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </form>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-link waves-effect">SAVE CHANGES</button>
-                            <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+                            <button type="button" class="btn btn-link waves-effect" onclick="updateVehicle()">Update</button>
+                            <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">Close</button>
                         </div>
                     </div>
                 </div>

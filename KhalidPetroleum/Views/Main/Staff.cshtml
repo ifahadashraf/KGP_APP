@@ -149,26 +149,26 @@
                             <form>
                                 <div class="row">
                                     <div class="col-md-3">
-                                        <label>First Name</label>
+                                        <label>Full Name</label>
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <input type="text" id="txtFirstName" class="form-control" placeholder="First Name">
+                                                <input type="text" id="txtFullName" class="form-control" placeholder="Full Name">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
-                                        <label>Last Name</label>
+                                        <label>Username</label>
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <input type="text" id="txtLastName" class="form-control" placeholder="Last Name">
+                                                <input type="text" id="txtUserusername" class="form-control" placeholder="Username">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
-                                        <label>Email</label>
+                                        <label>Password</label>
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <input type="text" id="txtEmail" class="form-control" placeholder="i.e. abc@domain.com">
+                                                <input type="password" id="txtPassword" class="form-control" placeholder="i.e. ******">
                                             </div>
                                         </div>
                                     </div>
@@ -191,6 +191,14 @@
                                         </div>
                                     </div>
                                     <div class="col-md-3">
+                                        <label>Email</label>
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="text" id="txtEmail" class="form-control" placeholder="i.e. abc@domain.com">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
                                         <label>Date of Birth</label>
                                         <div class="form-group">
                                             <div class="form-line">
@@ -198,7 +206,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="col-md-2">
                                         <label>Gender</label>
                                         <div class="form-group">
                                             <div class="form-line">
@@ -210,7 +218,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="col-md-2">
                                         <label>Staff Type</label>
                                         <div class="form-group">
                                             <div class="form-line">
@@ -218,6 +226,10 @@
                                                     <option value="-1">-Select staff type-</option>
                                                     <option value="FCM">FCM</option>
                                                     <option value="VCM">VCM</option>
+                                                    <option value="BDM">BDM</option>
+                                                    <option value="TM">TM</option>
+                                                    <option value="CRO">CRO</option>
+                                                    <option value="MISC">MISC</option>
                                                     <option value="CAPTAIN">CAPTAIN</option>
                                                     <option value="MECHANIC">MECHANIC</option>
                                                     <option value="ACCOUNTS-MANAGER">ACCOUNTS-MANAGER</option>
@@ -295,7 +307,7 @@
 
             <!--Modal Start-->
             <div class="modal fade" id="mdModal" tabindex="-1" role="dialog">
-                <div class="modal-dialog" role="document">
+                <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content modal-col-light-blue">
                         <div class="modal-header">
                             <h3 class="modal-title" id="defaultModalLabel">EDIT DETAILS</h3>
@@ -303,50 +315,115 @@
                         <div class="modal-body">
                             <div id="alertdiv" class="row">
                             </div>
-                            <div class="row">
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <label>First Name</label>
-                                            <input type="text" id=txtEditFirstName class="form-control" placeholder="">
+                            <div>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <label>Full Name</label>
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="text" id="txtFullName1" class="form-control" placeholder="Full Name">
+                                            </div>
                                         </div>
-                                        <div class="col-md-3">
-                                            <label>Last Name</label>
-                                            <input type="text" id=txtEditLasttName class="form-control" placeholder="">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label>Username</label>
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="text" id="txtUserusername1" class="form-control" placeholder="Username">
+                                            </div>
                                         </div>
-                                        <div class="col-md-3">
-                                            <label>Email</label>
-                                            <input type="text" id=txtEditEmail class="form-control" placeholder="">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label>Password</label>
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="password" id="txtPassword1" class="form-control" placeholder="i.e. ******">
+                                            </div>
                                         </div>
-                                        <div class="col-md-3">
-                                            <label>Phone</label>
-                                            <input type="text" id=txtEditPhoneNumber class="form-control" placeholder="">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label>Phone Number</label>
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="text" id="txtPhoneNumber1" class="form-control" placeholder="i.e. 03XX-1234567">
+                                            </div>
                                         </div>
-                                    </div><br>
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <label>Mobile</label>
-                                            <input type="text" id=txtEditMobile class="form-control" placeholder="">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <label>CNIC</label>
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="text" id="txtCNIC1" class="form-control" placeholder="i.e. 12345-1234567-8">
+                                            </div>
                                         </div>
-                                        <div class="col-md-3">
-                                            <label>Address1</label>
-                                            <input type="text" id=txtEditAddress1 class="form-control" placeholder="">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label>Email</label>
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="text" id="txtEmail1" class="form-control" placeholder="i.e. abc@domain.com">
+                                            </div>
                                         </div>
-                                        <div class="col-md-3">
-                                            <label>Address2</label>
-                                            <input type="text" id=txtEditAddress2 class="form-control" placeholder="">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label>Date of Birth</label>
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="date" id="txtDOB1" class="form-control" placeholder="">
+                                            </div>
                                         </div>
-                                        <div class="col-md-3">
-                                            <label>City</label>
-                                            <input type="text" id=txtEditCity class="form-control" placeholder="">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label>Gender</label>
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <select id="txtGender1" class="form-control">
+                                                    <option value="-1">-Select Gender-</option>
+                                                    <option value="1">Male</option>
+                                                    <option value="0">Female</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label>Staff Type</label>
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <select id="txtStaffType1" class="form-control">
+                                                    <option value="-1">-Select staff type-</option>
+                                                    <option value="FCM">FCM</option>
+                                                    <option value="VCM">VCM</option>
+                                                    <option value="BDM">BDM</option>
+                                                    <option value="TM">TM</option>
+                                                    <option value="CRO">CRO</option>
+                                                    <option value="MISC">MISC</option>
+                                                    <option value="CAPTAIN">CAPTAIN</option>
+                                                    <option value="MECHANIC">MECHANIC</option>
+                                                    <option value="ACCOUNTS-MANAGER">ACCOUNTS-MANAGER</option>
+                                                    <option value="OPERATIONS-MANAGER">OPERATIONS-MANAGER</option>
+                                                    <option value="ASST-OPERATIONS-MANAGER">ASST-OPERATIONS-MANAGER</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <label>Address</label>
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="text" id="txtAddress1" class="form-control" placeholder="">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-link waves-effect">SAVE CHANGES</button>
-                            <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+                            <button type="button" class="btn btn-link waves-effect" onclick="updateStaff()">Update</button>
+                            <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">Close</button>
                         </div>
                     </div>
                 </div>

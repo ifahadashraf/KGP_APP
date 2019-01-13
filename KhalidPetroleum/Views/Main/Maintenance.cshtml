@@ -2,7 +2,9 @@
 <html>
 <head>
     @{var rights = Session["Rights"] as KhalidPetroleum.Models.Role;
-      var user = Session["User"] as KhalidPetroleum.Models.User;}
+    var user = Session["User"] as KhalidPetroleum.Models.User;
+    var outerIndex = 0;
+    var innerInex = 0;}
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <title>Vehicle Management System</title>
@@ -13,6 +15,8 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
     <!-- Bootstrap Core Css -->
     <link href="~/Content/plugins/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <!-- JQuery DataTable Css -->
+    <link href="~/Content/plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css" rel="stylesheet">
     <!-- Bootstrap Material Datetime Picker Css -->
     <link href="~/Content/plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css" rel="stylesheet" />
     <!-- Waves Effect Css -->
@@ -21,21 +25,32 @@
     <link href="~/Content/plugins/animate-css/animate.css" rel="stylesheet" />
     <!-- Custom Css -->
     <link href="~/Css/style.css" rel="stylesheet">
-    <!-- Wait Me Css -->
-    <link href="~/Content/plugins/waitme/waitMe.css" rel="stylesheet" />
-    <!-- Bootstrap Select Css -->
-    <link href="~/Content/plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
     <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
     <link href="~/Css/themes/all-themes.css" rel="stylesheet" />
 </head>
 <body class="theme-blue">
+    <div class="page-loader-wrapper">
+        <div class="loader">
+            <div class="preloader">
+                <div class="spinner-layer pl-blue">
+                    <div class="circle-clipper left">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="circle-clipper right">
+                        <div class="circle"></div>
+                    </div>
+                </div>
+            </div>
+            <p>Please wait...</p>
+        </div>
+    </div>
     <!-- Top Bar -->
     <nav class="navbar">
         <div class="container-fluid">
             <div class="navbar-header">
                 <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
                 <a href="javascript:void(0);" class="bars"></a>
-                <a class="navbar-brand">Khalid Group of Petroleum | Maintenance Record</a>
+                <a class="navbar-brand">Khalid Group of Petroleum | Maintenance</a>
             </div>
             <div class="collapse navbar-collapse" id="navbar-collapse">
                 <ul class="nav navbar-nav navbar-right">
@@ -127,265 +142,162 @@
                             <span>Stats</span>
                         </a>
                     </li>
-
                 </ul>
             </div>
+            <!-- #Menu -->
+            <!-- Footer -->
+            <!-- #Footer -->
         </aside>
         <!-- #END# Left Sidebar -->
     </section>
     <section class="content">
         <div class="container-fluid">
             <div class="block-header">
-                <h2></h2>
+                <h2>Maintenance</h2>
             </div>
-            <div class="row clearfix">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <div class="card">
-                        <div class="header">
-                            <h2>
-                                VEHICLE DETAILS
-                            </h2>
-                        </div>
-                        <div class="body">
-                            <form>
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <label for="datePicker">Date</label>
-                                        <div class="form-group">
-                                            <div class="form-line">
-                                                <input type="text" id="txtDate" class="datepicker form-control" placeholder="Please choose a date">
-                                            </div>
+
+            <div class="row">
+                <div class="col-xs-12 ol-sm-12 col-md-12 col-lg-12">
+                    <div class="panel-group" id="accordion_9" role="tablist" aria-multiselectable="true">
+                        @foreach (KeyValuePair<string, List<KhalidPetroleum.Models.Task>> item in ViewBag.Tasks)
+                        {
+                            <div class="panel panel-col-blue">
+                                <div class="panel-heading" role="tab" id="@("outer_" + outerIndex)">
+                                    <h4 class="panel-title">
+                                        <a role="button" data-toggle="collapse" data-parent="#accordion_9" href="#@("inner_" + outerIndex)"
+                                           aria-expanded="false" aria-controls="@("inner_" + outerIndex)">
+                                            @item.Key
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="@("inner_" + outerIndex)" class="panel-collapse collapse" role="tabpanel" aria-labelledby="@("outer_" + outerIndex)">
+                                    <div class="panel-body">
+                                        <div class="body table-responsive">
+                                            <table class="table table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>StartDate</th>
+                                                        <th>Est.Date</th>
+                                                        <th class="col-lg-2">TaskName</th>
+                                                        <th>TaskOwner</th>
+                                                        <th>AssignedTo</th>
+                                                        <th>Description</th>
+                                                        <th>UpdatedOn</th>
+                                                        <th>Status</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var task in item.Value)
+                                                    {
+                                                        var color = "red";
+                                                        if (task.TaskStatus == "IN_PROGRESS"){color = "yellow";}
+                                                        else if (task.TaskStatus == "ON_APPROVAL") { color = "orange"; }
+                                                        else if (task.TaskStatus == "APPROVED") { color = "greenyellow"; }
+                                                        else if (task.TaskStatus == "COMPLETED") { color = "greenyellow"; }
+                                                        
+                                                        <tr>
+                                                            <td>@task.StartDate.ToString("dd/MM/yyyy")</td>
+                                                            <td>@(((DateTime)task.EstimatedDate).ToString("dd/MM/yyyy"))</td>
+                                                            <td>@task.TaskName</td>
+                                                            <td>@task.TaskOwner</td>
+                                                            <td>@task.AssignedTo</td>
+                                                            <td>@task.Details</td>
+                                                            <td>@(((DateTime)task.LastUpdate).ToString("dd/MM/yyyy hh:mm tt"))</td>
+                                                            <td style="color: white; background-color: @color">@task.TaskStatus</td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
                                         </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label for="vehicleNo">Vehicle Number</label>
-                                        <div class="form-group">
-                                            <div class="form-line">
-                                                <select class="form-control show-tick">
-                                                    <option value="">Please select</option>
-                                                    <option value="1">LEP-727</option>
-                                                    <option value="2">LE-1098</option>
-                                                    <option value="3">JP-090</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <label for="newVehicle">Add New Vehicle</label>
-                                        <div class="form-group">
-                                            <div class="button-demo js-modal-buttons">
-                                                <button type="button" class="btn bg-light-blue waves-effect" data-toggle="modal" data-target="#mdModal">+ Add New</button>
-                                            </div>
-                                        </div>
-                                    </div><br><br><br>
-                                    <div align="right" style="padding-right:15px">
-                                        <button type="button" class="btn btn-primary m-t-15 waves-effect">SEARCH</button>
+
                                     </div>
                                 </div>
-                             </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row clearfix">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <div class="card">
-                        <div class="header">
-                            <h2>
-                                MAINTENANCE
-                            </h2>
-                        </div>
-                        <div class="body">
-                            <form>
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <label>Lube Change Date</label>
-                                        <div class="form-group">
-                                            <div class="form-line">
-                                                <input type="text" id="txtLubeChangeDate" class="datepicker form-control" placeholder="">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label>Oil Name</label>
-                                        <div class="form-group">
-                                            <div class="form-line">
-                                                <input type="text" id="txtOilName" class="form-control" placeholder="">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label>Quantity</label>
-                                        <div class="form-group">
-                                            <div class="form-line">
-                                                <input type="text" id="txtOilQuantity" class="form-control" placeholder="">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label>Opening Meter Reading</label>
-                                        <div class="form-group">
-                                            <div class="form-line">
-                                                <input type="number" id="txtOpeningReading" class="form-control" placeholder="">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <label>Oil Change Required</label>
-                                        <div class="form-group">
-                                            <div class="form-line">
-                                                <input type="number" id="txtOilChangeRequired" class="form-control" placeholder="">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label>Next Change</label>
-                                        <div class="form-group">
-                                            <div class="form-line focused">
-                                                <input type="text" id="txtNextChange" class="form-control" placeholder="" disabled>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label>Current Reading</label>
-                                        <div class="form-group">
-                                            <div class="form-line">
-                                                <input type="number" id="txtCurrentReading" class="form-control" placeholder="">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label>Completed Mileage</label>
-                                        <div class="form-group">
-                                            <div class="form-line focused">
-                                                <input type="text" id="txtCompletedMileage" class="form-control" placeholder="" disabled>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <label>Over(+) / Under(-)</label>
-                                        <div class="form-group">
-                                            <div class="form-line focused">
-                                                <input type="number" id="txtOverUnder" class="form-control" placeholder="" disabled>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label>Person to Remind</label>
-                                        <div class="form-group">
-                                            <select class="form-control show-tick form-line">
-                                                <option value="">Please select</option>
-                                                <option value="1">Arslan</option>
-                                                <option value="2">Mian</option>
-                                                <option value="3">Bilal</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <label for="newVehicle">Add New Person</label>
-                                        <div class="form-group">
-                                            <div class="button-demo js-modal-buttons">
-                                                <button type="button" class="btn bg-light-blue waves-effect" data-toggle="modal" data-target="#mdModal1">+ Add New</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label>Comments</label>
-                                        <div class="form-group">
-                                            <div class="form-line focused">
-                                                <textarea rows="2" class="form-control no-resize" id="txtComments" placeholder=""></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div align="right">
-                                    <button type="button" class="btn btn-primary m-t-15 waves-effect">SUBMIT</button>
-                                </div>
-                            </form>
-                        </div>
+                            </div>
+                                                    outerIndex++;
+                        }
                     </div>
                 </div>
             </div>
 
+
             <!--Modal Start-->
             <div class="modal fade" id="mdModal" tabindex="-1" role="dialog">
-                <div class="modal-dialog" role="document">
+                <div class="modal-dialog " role="document">
                     <div class="modal-content modal-col-light-blue">
                         <div class="modal-header">
-                            <h3 class="modal-title" id="defaultModalLabel">ADD NEW VEHICLE</h3>
+                            <h3 class="modal-title" id="defaultModalLabel">TASK</h3>
                         </div>
                         <div class="modal-body">
                             <div id="alertdiv" class="row">
                             </div>
                             <div class="row">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="row" id="divTaskOwner" style="display:none">
+                                        <label for="assignto">Task Owner</label>
+                                        <select id="sltTaskOwner" class="form-control show-tick"></select>
+                                    </div>
                                     <div class="row">
-                                        <div class="col-md-3">
-                                            <label for="depotName">Number</label>
-                                            <input type="text" id="txtVehicleNumber" class="form-control" placeholder="">
+                                        <div class="col-md-4">
+                                            <label for="taskName">Task Name</label>
+                                            <input type="text" id="txtTaskName" class="form-control" placeholder="">
+                                            <input type="text" id="txtTaskId" class="form-control" placeholder="" style="display:none">
                                         </div>
-                                        <div class="col-md-3">
-                                            <label for="depotName">Model</label>
-                                            <input type="text" id=txtVehicleModel class="form-control" placeholder="">
+                                        <div class="col-md-4">
+                                            <label for="dueDate">Start Date</label>
+                                            <input type="date" id="txtStartDate" class="form-control datetimepicker" placeholder="">
                                         </div>
-                                        <div class="col-md-3">
-                                            <label for="depotName">Vehicle Type</label>
-                                            <select class="form-control show-tick">
+                                        <div class="col-md-4">
+                                            <label for="reference">Expected Date</label>
+                                            <input type="date" id="txtExpectedDate" class="form-control" placeholder="">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><br>
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label for="assignto">Assign To </label>
+                                            <select id="sltAssignTo" class="form-control show-tick"></select>
+                                        </div>
+                                        <div class="col-md-4" style="visibility:hidden">
+                                            <label for="priority">Priority</label>
+                                            <select id="sltPriority" class="form-control show-tick">
                                                 <option value="">Please select</option>
-                                                <option value="10">Tanker</option>
-                                                <option value="20">Car</option>
-                                                <option value="30">Bike</option>
-                                                <option value="40">Generator</option>
-                                                <option value="50">Other</option>
+                                                <option value="1">Normal</option>
+                                                <option value="2">Medium</option>
+                                                <option value="3">Urgent</option>
                                             </select>
                                         </div>
-                                        <div class="col-md-3">
-                                            <label for="depotName">Owner</label>
-                                            <input type="text" id="txtVehicleOwner" class="form-control" placeholder="">
+                                        <div class="col-md-4">
+                                            <label for="status">Status</label>
+                                            <select id="sltStatus" class="form-control show-tick">
+                                                <option value="0">Please select</option>
+                                                <option value="PENDING">Pending</option>
+                                                <option value="APPROVED" @((user.UserType == "ACCOUNTS-MANAGER" || user.UserType == "ADMIN" || user.UserType == "CRO") ? string.Empty : "style=display:none")>Approved</option>
+                                                <option value="COMPLETED">Completed</option>
+                                                <option value="ON_APPROVAL">On Approval</option>
+                                                <option value="IN_PROGRESS">In Progress</option>
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-link waves-effect">SAVE CHANGES</button>
-                            <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!--Modal End-->
-            <!--Second Modal-->
-            <div class="modal fade" id="mdModal1" tabindex="-1" role="dialog">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content modal-col-light-blue">
-                        <div class="modal-header">
-                            <h3 class="modal-title" id="defaultModalLabel">ADD NEW PERSON</h3>
-                        </div>
-                        <div class="modal-body">
-                            <div id="alertdiv" class="row">
-                            </div>
+                            </div><br>
                             <div class="row">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <div class="row">
-                                        <div class="col-md-5">
-                                            <label for="depotCode">Name</label>
-                                            <input type="text" id="txtPersonName" class="form-control" placeholder="">
+
+                                        <div class="col-md-12">
+                                            <label for="desc">Description</label>
+                                            <textarea rows="3" class="form-control no-resize" id="txtDescription" placeholder=""></textarea>
                                         </div>
-                                        <div class="col-md-5">
-                                            <label for="depotName">Number</label>
-                                            <input type="number" id="txtPersonNumber" class="form-control" placeholder="">
-                                        </div>
+
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-link waves-effect">SAVE CHANGES</button>
+                            <button id="modalBtn" type="button" class="btn btn-link waves-effect" onclick="modalBtnClick()" value="SAVE">SUBMIT</button>
                             <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
                         </div>
                     </div>
@@ -394,9 +306,19 @@
             <!--Modal End-->
         </div>
     </section>
-
     <!-- Jquery Core Js -->
+
     <script src="~/Content/plugins/jquery/jquery.min.js"></script>
+    <!-- Jquery DataTable Plugin Js -->
+    <script src="~/Content/plugins/jquery-datatable/jquery.dataTables.js"></script>
+    <script src="~/Content/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
+    <script src="~/Content/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>
+    <script src="~/Content/plugins/jquery-datatable/extensions/export/buttons.flash.min.js"></script>
+    <script src="~/Content/plugins/jquery-datatable/extensions/export/jszip.min.js"></script>
+    <script src="~/Content/plugins/jquery-datatable/extensions/export/pdfmake.min.js"></script>
+    <script src="~/Content/plugins/jquery-datatable/extensions/export/vfs_fonts.js"></script>
+    <script src="~/Content/plugins/jquery-datatable/extensions/export/buttons.html5.min.js"></script>
+    <script src="~/Content/plugins/jquery-datatable/extensions/export/buttons.print.min.js"></script>
     <!-- Bootstrap Core Js -->
     <script src="~/Content/plugins/bootstrap/js/bootstrap.js"></script>
     <!-- Select Plugin Js -->
@@ -405,16 +327,16 @@
     <script src="~/Content/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
     <!-- Waves Effect Plugin Js -->
     <script src="~/Content/plugins/node-waves/waves.js"></script>
+    <script src="~/Scripts/main.js"></script>
+    <script src="~/Scripts/task.js"></script>
     <!-- Demo Js -->
-    <script src="~/Scripts/js/demo.js"></script>
-    <!-- Custom Js -->
     <script src="~/Scripts/js/admin.js"></script>
-    <script src="~/Scripts/js/pages/forms/basic-form-elements.js"></script>
+    <script src="~/Scripts/js/demo.js"></script>
     <!-- Moment Plugin Js -->
     <script src="~/Content/plugins/momentjs/moment.js"></script>
     <!-- Bootstrap Material Datetime Picker Plugin Js -->
     <script src="~/Content/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js"></script>
-    <!-- Autosize Plugin Js -->
-    <script src="~/Content/plugins/autosize/autosize.js"></script>
+
+
 </body>
 </html>

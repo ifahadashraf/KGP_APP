@@ -79,7 +79,8 @@ function getUsers() {
         if (arr.length > 0) {
             $('#sltUsers').html('');
             $.each(arr, function (index, item) {
-                $('#sltUsers').append('<option value="'+item.UserID+'">'+item.UserName+'</option>');
+                if (item.Userusername != "" && item.Userusername != null)
+                    $('#sltUsers').append('<option value="'+item.UserID+'">'+item.UserName+'</option>');
             });
         }
     });

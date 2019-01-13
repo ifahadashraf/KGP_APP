@@ -23,5 +23,7 @@ namespace KhalidPetroleum.Models
         public Nullable<long> AssignedTo { get; set; }
         public Nullable<System.DateTime> LastUpdate { get; set; }
         public string TaskStatus { get; set; }
+        public Nullable<int> TaskType { get; set; }
+        public string VehicleNumber { get; set; }
     }
 }

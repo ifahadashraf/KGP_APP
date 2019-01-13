@@ -24,10 +24,10 @@
         <AssociationConnector Association="KhalidOilDBModel.FK_DailyReports_Users" />
         <AssociationConnector Association="KhalidOilDBModel.FK_UserRole" />
         <EntityTypeShape EntityType="KhalidOilDBModel.DailyCheckListImage" Width="1.5" PointX="8.375" PointY="0.75" />
-        <EntityTypeShape EntityType="KhalidOilDBModel.Task" Width="1.5" PointX="10.375" PointY="0.75" />
         <EntityTypeShape EntityType="KhalidOilDBModel.DailyCheckList" Width="1.5" PointX="6" PointY="12.125" />
         <AssociationConnector Association="KhalidOilDBModel.FK_CheckList_Question_DailyCheckLists" />
         <AssociationConnector Association="KhalidOilDBModel.FK_DailyCheckLists_Vehicles" />
+        <EntityTypeShape EntityType="KhalidOilDBModel.Task" Width="1.5" PointX="10.375" PointY="0.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

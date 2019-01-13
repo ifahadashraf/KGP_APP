@@ -95,19 +95,26 @@ namespace KhalidPetroleum.Controllers
 
                 var OM = db.Users.Where(x => x.UserType == "OPERATIONS-MANAGER").ToList();
 
+                var taskStr = "";
                 foreach (String task in vehicle.tasks)
+                {
+                    taskStr += task + " | ";
+                }
+
+                if (taskStr != "")
                 {
                     db.Tasks.Add(new Task
                     {
                         TaskName = "Task <" + vehicle.VehicleNumber + ">",
-                        Details = task,
+                        Details = taskStr,
                         StartDate = vehicle.Date,
                         EstimatedDate = vehicle.Date.AddDays(1),
                         TaskOwner = OM[0].UserID,
                         TaskStatus = "PENDING",
-                        LastUpdate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Pakistan Standard Time"))
+                        LastUpdate = vehicle.Date
                     });
                 }
+                
 
                 db.SaveChanges();
                 return "1";
@@ -471,15 +478,6 @@ namespace KhalidPetroleum.Controllers
         [System.Web.Http.HttpGet]
         public string GetTasksByUserId(long id)
         {
-            //if (id == 3)
-            //{
-                
-            //}
-            //else
-            //{
-            //    var list = db.GET_ALL_TASKS_BY_OWNER_ID(id).ToList<GET_ALL_TASKS_BY_OWNER_ID_Result>();
-            //    return JsonConvert.SerializeObject(list);
-            //}
             var list = db.GET_ALL_TASKS().ToList<GET_ALL_TASKS_Result>();
             return JsonConvert.SerializeObject(list);
             
@@ -548,7 +546,7 @@ namespace KhalidPetroleum.Controllers
                     checklist.ListOfImages = new List<string>();
                     checklist.Date = obj.Date;
                     checklist.VehicleNumber = vehicleNumber;
-                    if(obj.Reading != null)
+                    if(obj.Reading != null && obj.Reading != "")
                         checklist.OpeningReading = long.Parse(obj.Reading);
                     for (int i = startingIndex; i < list.Count; i++)
                     {
@@ -585,6 +583,52 @@ namespace KhalidPetroleum.Controllers
                 }
             }
             return false;
+        }
+        [System.Web.Http.HttpPost]
+        public string UpdateVehicle() {
+            try
+            {
+                StreamReader reader = new StreamReader(Request.InputStream);
+                string requestFromPost = reader.ReadToEnd();
+
+                var vehicle = JsonConvert.DeserializeObject<Vehicle>(requestFromPost);
+                var obj = db.Vehicles.Where(x => x.VehicleNumber == vehicle.VehicleNumber).ToList()[0];
+                db.Entry(obj).CurrentValues.SetValues(vehicle);
+                db.SaveChanges();
+                return "1";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
+
+        [System.Web.Http.HttpPost]
+        public string UpdateStaff()
+        {
+            try
+            {
+                StreamReader reader = new StreamReader(Request.InputStream);
+                string requestFromPost = reader.ReadToEnd();
+
+                var user = JsonConvert.DeserializeObject<User>(requestFromPost);
+                var obj = db.Users.Where(x => x.Userusername == user.Userusername).ToList()[0];
+                obj.UserName = user.UserName;
+                obj.UserCNIC = user.UserCNIC;
+                obj.UserDOB = user.UserDOB;
+                obj.UserEmail = user.UserEmail;
+                obj.UserGender = user.UserGender;
+                obj.UserPhoneNumber = user.UserPhoneNumber;
+                obj.UserType = user.UserType;
+                obj.Userusername = user.Userusername;
+                obj.UserPassword = user.UserPassword;
+                db.SaveChanges();
+                return "1";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
         }
     }
 }

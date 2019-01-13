@@ -38,8 +38,8 @@ namespace KhalidPetroleum.Models
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<DailyCheckListImage> DailyCheckListImages { get; set; }
-        public virtual DbSet<Task> Tasks { get; set; }
         public virtual DbSet<DailyCheckList> DailyCheckLists { get; set; }
+        public virtual DbSet<Task> Tasks { get; set; }
     
         public virtual ObjectResult<Nullable<decimal>> ADD_DAILY_CHECKLIST(string vehicleno, Nullable<System.DateTime> date)
         {

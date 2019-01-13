@@ -2,6 +2,8 @@
     getUsers();
 });
 
+var staffList = [];
+
 function getUsers() {
 
     var table = $('#userTable').DataTable();
@@ -12,6 +14,7 @@ function getUsers() {
 
         if (arr.length > 0) {
             $.each(arr, function (index, item) {
+                staffList.push(item);
                 table.row.add([
                     index + 1,
                     item.UserName,
@@ -22,7 +25,7 @@ function getUsers() {
                     ((item.UserGender == true) ? 'MALE' : 'FEMALE'),
                     item.UserType,
                     item.RoleName,
-                    '<button type="button" class="btn bg-light-blue waves-effect">Edit</button>'
+                    '<button type="button" class="btn bg-light-blue waves-effect" onclick="editStaff('+index+')">Edit</button>'
                 ]).draw();
             });
         }
@@ -30,8 +33,9 @@ function getUsers() {
 }
 
 function addUser() {
-    var fname = $('#txtFirstName').val(); 
-    var lname = $('#txtLastName').val(); 
+    var fname = $('#txtFullName').val();
+    var username = $('#txtUserusername').val();
+    var pass = $('#txtPassword').val();
     var email = $('#txtEmail').val();
     var phone = $('#txtPhoneNumber').val();
     var cnic = $('#txtCNIC').val();
@@ -44,8 +48,8 @@ function addUser() {
     var emailRegex = new RegExp(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
     var phoneRegex = new RegExp(/(03[0-9][0-9])\-\d{7}/);
 
-    if (fname == "" || lname == "") {
-        alert("First/Last Name cannot be empty");
+    if (fname == "") {
+        alert("Full Name cannot be empty");
         return;
     }
     else if (email != "" && !emailRegex.test(email)) {
@@ -70,7 +74,8 @@ function addUser() {
     }
 
     var json = {
-        "UserName": fname + ' ' + lname,
+        "UserName": fname,
+        "Userusername": username,
         "UserEmail": email,
         "UserPhoneNumber": phone,
         "UserCNIC": cnic,
@@ -78,7 +83,8 @@ function addUser() {
         "UserGender": (gender == '1'),
         "UserType": type,
         "UserAddress": address,
-        "UserStatus":true
+        "UserStatus": true,
+        "UserPassword": pass
     };
 
     addUserApi(json,function (data) {
@@ -89,4 +95,75 @@ function addUser() {
             alert("Something went wrong. Contact Admin.");
         }
     });
+}
+
+function editStaff(index) {
+    var item = staffList[index];
+
+    $('#txtUserusername1').val(item.Userusername);
+    $('#txtPassword1').val(item.UserPassword);
+    $('#txtFullName1').val(item.UserName);
+    $('#txtEmail1').val(item.UserEmail);
+    $('#txtPhoneNumber1').val(item.UserPhoneNumber);
+    $('#txtCNIC1').val(item.UserCNIC);
+    $('#txtDOB1').val((item.UserDOB == null) ? '' : item.UserDOB.split('T')[0]);
+    $('#txtGender1').val((item.UserGender == true) ? '1' : '0');
+    $('#txtStaffType1').val(item.UserType);
+    $('#txtAddress1').val();
+
+    console.log(item);
+
+    $('#mdModal').modal('show');
+
+}
+
+function updateStaff() {
+    var fname = $('#txtFullName1').val();
+    var username = $('#txtUserusername1').val();
+    var pass = $('#txtPassword1').val();
+    var email = $('#txtEmail1').val();
+    var phone = $('#txtPhoneNumber1').val();
+    var cnic = $('#txtCNIC1').val();
+    var dob = $('#txtDOB1').val();
+    var gender = $('#txtGender1').val();
+    var type = $('#txtStaffType1').val();
+    var address = $('#txtAddress1').val();
+
+    var json = {
+        "Userusername": username,
+        "UserPassword": pass,
+        "UserName": fname,
+        "UserEmail": email,
+        "UserPhoneNumber": phone,
+        "UserCNIC": cnic,
+        "UserDOB": dob,
+        "UserGender": (gender == '1'),
+        "UserType": type,
+        "UserAddress": address,
+        "UserStatus": true
+    };
+
+    $('#alertdiv').html('<div class="alert alert-info"><strong>Please wait !</strong>...</div>')
+    updateStaffApi(json, function (data) {
+        if (data == 1) {
+            if (data == "1") {
+                $('#alertdiv').html('<div class="alert alert-success"><strong>Success !</strong> Vehicle has been updated</div>');
+                setTimeout(function () {
+
+                    window.location.href = window.location.href;
+
+                }, 1500);
+            }
+            else {
+                $('#alertdiv').html('<div class="alert alert-danger"><strong>Error !</strong> Something went wrong. Try again later</div>');
+                setTimeout(function () {
+
+                    $('#alertdiv').html('');
+
+                }, 1500);
+            }
+        }
+    });
+
+    console.log(json);
 }

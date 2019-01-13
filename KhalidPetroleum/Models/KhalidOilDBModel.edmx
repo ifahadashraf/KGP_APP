@@ -132,6 +132,8 @@
           <Property Name="AssignedTo" Type="bigint" />
           <Property Name="LastUpdate" Type="datetime" />
           <Property Name="TaskStatus" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="TaskType" Type="int" />
+          <Property Name="VehicleNumber" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="UnloadSites">
           <Key>
@@ -320,8 +322,8 @@
           <Parameter Name="fromDate" Type="date" Mode="In" />
         </Function>
         <Function Name="GET_VEHICLE_CHECKLISTS" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="from" Type="varchar(max)" Mode="In" />
-          <Parameter Name="to" Type="varchar(max)" Mode="In" />
+          <Parameter Name="from" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="to" Type="nvarchar(max)" Mode="In" />
           <Parameter Name="vehicle_number" Type="nvarchar" Mode="In" />
         </Function>
         <EntityContainer Name="KhalidOilDBModelStoreContainer">
@@ -623,7 +625,6 @@
           <Parameter Name="report_id" Mode="In" Type="Int64" />
           </FunctionImport>
           <EntitySet Name="DailyCheckListImages" EntityType="KhalidOilDBModel.DailyCheckListImage" />
-          <EntitySet Name="Tasks" EntityType="KhalidOilDBModel.Task" />
           <FunctionImport Name="GET_ALL_TASKS" ReturnType="Collection(KhalidOilDBModel.GET_ALL_TASKS_Result)" />
           <FunctionImport Name="GET_ALL_TASKS_BY_OWNER_ID" ReturnType="Collection(KhalidOilDBModel.GET_ALL_TASKS_BY_OWNER_ID_Result)">
           <Parameter Name="id" Mode="In" Type="Int64" />
@@ -642,6 +643,7 @@
             <Parameter Name="to" Mode="In" Type="String" />
             <Parameter Name="vehicle_number" Mode="In" Type="String" />
           </FunctionImport>
+          <EntitySet Name="Tasks" EntityType="KhalidOilDBModel.Task" />
           </EntityContainer>
         <ComplexType Name="GET_PARENT_COMPANY_RENT_BY_DATE_Result">
           <Property Type="Int32" Name="ParentCompany" Nullable="false" />
@@ -798,20 +800,6 @@
           <Property Name="DailyCheckListId" Type="Int64" Nullable="false" />
           <Property Name="ImageName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="Task">
-          <Key>
-            <PropertyRef Name="TaskId" />
-          </Key>
-          <Property Name="TaskId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="TaskName" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Details" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="EstimatedDate" Type="DateTime" Precision="0" />
-          <Property Name="TaskOwner" Type="Int64" Nullable="false" />
-          <Property Name="AssignedTo" Type="Int64" />
-          <Property Name="LastUpdate" Type="DateTime" Precision="3" />
-          <Property Name="TaskStatus" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-        </EntityType>
         <ComplexType Name="GET_ALL_TASKS_Result">
           <Property Type="Int64" Name="TaskId" Nullable="false" />
           <Property Type="String" Name="TaskName" Nullable="false" />
@@ -882,6 +870,22 @@
           <Property Type="String" Name="QuestionStatement" Nullable="true" />
           <Property Type="Boolean" Name="Status" Nullable="false" />
         </ComplexType>
+        <EntityType Name="Task">
+          <Key>
+            <PropertyRef Name="TaskId" />
+          </Key>
+          <Property Name="TaskId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TaskName" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Details" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="EstimatedDate" Type="DateTime" Precision="0" />
+          <Property Name="TaskOwner" Type="Int64" Nullable="false" />
+          <Property Name="AssignedTo" Type="Int64" />
+          <Property Name="LastUpdate" Type="DateTime" Precision="3" />
+          <Property Name="TaskStatus" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="TaskType" Type="Int32" />
+          <Property Name="VehicleNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1135,21 +1139,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Tasks">
-            <EntityTypeMapping TypeName="KhalidOilDBModel.Task">
-              <MappingFragment StoreEntitySet="Tasks">
-                <ScalarProperty Name="TaskStatus" ColumnName="TaskStatus" />
-                <ScalarProperty Name="LastUpdate" ColumnName="LastUpdate" />
-                <ScalarProperty Name="AssignedTo" ColumnName="AssignedTo" />
-                <ScalarProperty Name="TaskOwner" ColumnName="TaskOwner" />
-                <ScalarProperty Name="EstimatedDate" ColumnName="EstimatedDate" />
-                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
-                <ScalarProperty Name="Details" ColumnName="Details" />
-                <ScalarProperty Name="TaskName" ColumnName="TaskName" />
-                <ScalarProperty Name="TaskId" ColumnName="TaskId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="GET_ALL_TASKS" FunctionName="KhalidOilDBModel.Store.GET_ALL_TASKS">
             <ResultMapping>
               <ComplexTypeMapping TypeName="KhalidOilDBModel.GET_ALL_TASKS_Result">
@@ -1207,6 +1196,23 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="Tasks">
+            <EntityTypeMapping TypeName="KhalidOilDBModel.Task">
+              <MappingFragment StoreEntitySet="Tasks">
+                <ScalarProperty Name="VehicleNumber" ColumnName="VehicleNumber" />
+                <ScalarProperty Name="TaskType" ColumnName="TaskType" />
+                <ScalarProperty Name="TaskStatus" ColumnName="TaskStatus" />
+                <ScalarProperty Name="LastUpdate" ColumnName="LastUpdate" />
+                <ScalarProperty Name="AssignedTo" ColumnName="AssignedTo" />
+                <ScalarProperty Name="TaskOwner" ColumnName="TaskOwner" />
+                <ScalarProperty Name="EstimatedDate" ColumnName="EstimatedDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="Details" ColumnName="Details" />
+                <ScalarProperty Name="TaskName" ColumnName="TaskName" />
+                <ScalarProperty Name="TaskId" ColumnName="TaskId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
