@@ -156,148 +156,122 @@
                 <h2>Maintenance</h2>
             </div>
 
-            <div class="row">
-                <div class="col-xs-12 ol-sm-12 col-md-12 col-lg-12">
-                    <div class="panel-group" id="accordion_9" role="tablist" aria-multiselectable="true">
-                        @foreach (KeyValuePair<string, List<KhalidPetroleum.Models.Task>> item in ViewBag.Tasks)
-                        {
-                            <div class="panel panel-col-blue">
-                                <div class="panel-heading" role="tab" id="@("outer_" + outerIndex)">
-                                    <h4 class="panel-title">
-                                        <a role="button" data-toggle="collapse" data-parent="#accordion_9" href="#@("inner_" + outerIndex)"
-                                           aria-expanded="false" aria-controls="@("inner_" + outerIndex)">
-                                            @item.Key
-                                        </a>
-                                    </h4>
-                                </div>
-                                <div id="@("inner_" + outerIndex)" class="panel-collapse collapse" role="tabpanel" aria-labelledby="@("outer_" + outerIndex)">
-                                    <div class="panel-body">
-                                        <div class="body table-responsive">
-                                            <table class="table table-hover">
-                                                <thead>
-                                                    <tr>
-                                                        <th>StartDate</th>
-                                                        <th>Est.Date</th>
-                                                        <th class="col-lg-2">TaskName</th>
-                                                        <th>TaskOwner</th>
-                                                        <th>AssignedTo</th>
-                                                        <th>Description</th>
-                                                        <th>UpdatedOn</th>
-                                                        <th>Status</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @foreach (var task in item.Value)
-                                                    {
-                                                        var color = "red";
-                                                        if (task.TaskStatus == "IN_PROGRESS"){color = "yellow";}
-                                                        else if (task.TaskStatus == "ON_APPROVAL") { color = "orange"; }
-                                                        else if (task.TaskStatus == "APPROVED") { color = "greenyellow"; }
-                                                        else if (task.TaskStatus == "COMPLETED") { color = "greenyellow"; }
-                                                        
-                                                        <tr>
-                                                            <td>@task.StartDate.ToString("dd/MM/yyyy")</td>
-                                                            <td>@(((DateTime)task.EstimatedDate).ToString("dd/MM/yyyy"))</td>
-                                                            <td>@task.TaskName</td>
-                                                            <td>@task.TaskOwner</td>
-                                                            <td>@task.AssignedTo</td>
-                                                            <td>@task.Details</td>
-                                                            <td>@(((DateTime)task.LastUpdate).ToString("dd/MM/yyyy hh:mm tt"))</td>
-                                                            <td style="color: white; background-color: @color">@task.TaskStatus</td>
-                                                        </tr>
-                                                    }
-                                                </tbody>
-                                            </table>
-                                        </div>
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>
+                                DETAILS
+                            </h2>
+                        </div>
+                        <div class="body">
+                            <div class="table-responsive">
+                                <table id="checklistsTable" class="table table-bordered table-striped table-hover dataTable js-exportable">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>VehicleNo</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>17/01/2019</td>
+                                            <td>LES-888</td>
+                                            <td>On Approval</td>
+                                        </tr>
+                                        <tr>
+                                            <td>15/01/2019</td>
+                                            <td>CHS-1578</td>
+                                            <td>Completed</td>
+                                        </tr>
+                                        <tr>
+                                            <td>14/01/2019</td>
+                                            <td>LES-8888</td>
+                                            <td>Approved</td>
+                                        </tr>
+                                    </tbody>
 
-                                    </div>
-                                </div>
+                                </table>
                             </div>
-                                                    outerIndex++;
-                        }
+                        </div>
                     </div>
                 </div>
             </div>
 
-
             <!--Modal Start-->
             <div class="modal fade" id="mdModal" tabindex="-1" role="dialog">
-                <div class="modal-dialog " role="document">
-                    <div class="modal-content modal-col-light-blue">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
                         <div class="modal-header">
-                            <h3 class="modal-title" id="defaultModalLabel">TASK</h3>
+                            <label id="modalVNO">TASK</label>
                         </div>
                         <div class="modal-body">
-                            <div id="alertdiv" class="row">
-                            </div>
                             <div class="row">
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <div class="row" id="divTaskOwner" style="display:none">
-                                        <label for="assignto">Task Owner</label>
-                                        <select id="sltTaskOwner" class="form-control show-tick"></select>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <label for="taskName">Task Name</label>
-                                            <input type="text" id="txtTaskName" class="form-control" placeholder="">
-                                            <input type="text" id="txtTaskId" class="form-control" placeholder="" style="display:none">
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label for="dueDate">Start Date</label>
-                                            <input type="date" id="txtStartDate" class="form-control datetimepicker" placeholder="">
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label for="reference">Expected Date</label>
-                                            <input type="date" id="txtExpectedDate" class="form-control" placeholder="">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div><br>
-                            <div class="row">
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <label for="assignto">Assign To </label>
-                                            <select id="sltAssignTo" class="form-control show-tick"></select>
-                                        </div>
-                                        <div class="col-md-4" style="visibility:hidden">
-                                            <label for="priority">Priority</label>
-                                            <select id="sltPriority" class="form-control show-tick">
-                                                <option value="">Please select</option>
-                                                <option value="1">Normal</option>
-                                                <option value="2">Medium</option>
-                                                <option value="3">Urgent</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label for="status">Status</label>
-                                            <select id="sltStatus" class="form-control show-tick">
-                                                <option value="0">Please select</option>
-                                                <option value="PENDING">Pending</option>
-                                                <option value="APPROVED" @((user.UserType == "ACCOUNTS-MANAGER" || user.UserType == "ADMIN" || user.UserType == "CRO") ? string.Empty : "style=display:none")>Approved</option>
-                                                <option value="COMPLETED">Completed</option>
-                                                <option value="ON_APPROVAL">On Approval</option>
-                                                <option value="IN_PROGRESS">In Progress</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div><br>
-                            <div class="row">
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <div class="row">
-
-                                        <div class="col-md-12">
-                                            <label for="desc">Description</label>
-                                            <textarea rows="3" class="form-control no-resize" id="txtDescription" placeholder=""></textarea>
-                                        </div>
-
-                                    </div>
+                                <div class="col-lg-12">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Sr.</th>
+                                                <th>Name</th>
+                                                <th>Approval</th>
+                                                <th>Status</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>1</td>
+                                                <td>Oil change</td>
+                                                <td>
+                                                    <input name="group1" type="radio" id="radio_1" class="with-gap radio-col-red" checked/><label for="radio_1"></label>
+                                                    <input name="group1" type="radio" id="radio_2" class="with-gap radio-col-green" checked/><label for="radio_2"></label>
+                                                </td>
+                                                <td>
+                                                    <select>
+                                                        <option>On Approval</option>
+                                                        <option>Approved</option>
+                                                        <option>In Progress</option>
+                                                        <option>Completed</option>
+                                                    </select>
+                                                </td>
+                                                <td><button type="button" class="btn btn-info" data-toggle="collapse" data-target="#demo">Remarks</button></td>
+                                            </tr>
+                                            <tr id="demo" class="collapse">
+                                                <td colspan="5">
+                                                    <textarea rows="4" class="form-control no-resize bg-grey">Kindly approve this one is urgent.</textarea>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>2</td>
+                                                <td>Oil change is inevitable. Change can't be avoided. I'm letting you know.
+                                                    Simle and wave boys. Smile and wave</td>
+                                                <td>
+                                                    <input name="group2" type="radio" id="radio_11" class="with-gap radio-col-red" checked /><label for="radio_11"></label>
+                                                    <input name="group2" type="radio" id="radio_22" class="with-gap radio-col-green" /><label for="radio_22"></label>
+                                                </td>
+                                                <td>
+                                                    <select>
+                                                        <option>On Approval</option>
+                                                        <option>Approved</option>
+                                                        <option>In Progress</option>
+                                                        <option>Completed</option>
+                                                    </select>
+                                                </td>
+                                                <td><button type="button" class="btn btn-info" data-toggle="collapse" data-target="#demo1">Remarks</button></td>
+                                            </tr>
+                                            <tr id="demo1" class="collapse">
+                                                <td colspan="5">
+                                                    <p>No remarks</p>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button id="modalBtn" type="button" class="btn btn-link waves-effect" onclick="modalBtnClick()" value="SAVE">SUBMIT</button>
+                            <button id="modalBtn" type="button" class="btn btn-link waves-effect" onclick="" value="SAVE">SUBMIT</button>
                             <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
                         </div>
                     </div>
@@ -332,7 +306,8 @@
     <!-- Demo Js -->
     <script src="~/Scripts/js/admin.js"></script>
     <script src="~/Scripts/js/demo.js"></script>
-    <!-- Moment Plugin Js -->
+    <script src="~/Scripts/maintenance.js"></script>
+<!-- Moment Plugin Js -->
     <script src="~/Content/plugins/momentjs/moment.js"></script>
     <!-- Bootstrap Material Datetime Picker Plugin Js -->
     <script src="~/Content/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js"></script>

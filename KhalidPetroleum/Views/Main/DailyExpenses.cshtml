@@ -146,114 +146,116 @@
                     <div class="card">
                         <div class="header">
                             <h2>
-                                EXPENSES DETAILS
-                            </h2>
-                        </div>
-                        <div class="body">
-                            <form>
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <label for="datePicker">Date</label>
-                                        <div class="form-group">
-                                            <div class="form-line">
-                                                <input type="text" id="datepicker" class="form-control" placeholder="Please choose a date">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label for="vehicleNo">Total</label>
-                                        <div class="form-group">
-                                            <div class="form-line">
-                                                <input type="text" id=txtAttendanceTaker class="form-control" placeholder="" disabled>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label for="captainName">New Expense</label>
-                                        <div class="form-group">
-                                            <div class="button-demo js-modal-buttons">
-                                                <button type="button" class="btn bg-light-blue waves-effect" data-toggle="modal" data-target="#mdModal">+ Add New</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row clearfix">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <div class="card">
-                        <div class="header">
-                            <h2>
                                 DETAILS
                             </h2>
                         </div>
                         <div class="body">
                             <div class="table-responsive">
-                                <table class="table table-bordered table-striped table-hover js-basic-example dataTable">
+                                <table id="checklistsTable" class="table table-bordered table-striped table-hover dataTable js-exportable">
                                     <thead>
                                         <tr>
-                                            <th>Sr#</th>
-                                            <th>Purpose</th>
-                                            <th>Amount</th>
                                             <th>Date</th>
+                                            <th>VehicleNo</th>
+                                            <th>Status</th>
                                         </tr>
                                     </thead>
-                                    <tfoot>
-                                        <tr>
-                                            <th>Sr#</th>
-                                            <th>Purpose</th>
-                                            <th>Amount</th>
-                                            <th>Date</th>
-                                        </tr>
-                                    </tfoot>
                                     <tbody>
                                         <tr>
-                                            <th scope="row">1</th>
-                                            <td>Rent</td>
-                                            <td>12000</td>
-                                            <td>23-7-2018</td>
+                                            <td>17/01/2019</td>
+                                            <td>LES-888</td>
+                                            <td>On Approval</td>
                                         </tr>
                                         <tr>
-                                            <th scope="row">2</th>
-                                            <td>Loan</td>
-                                            <td>2000</td>
-                                            <td>23-7-2018</td>
+                                            <td>15/01/2019</td>
+                                            <td>CHS-1578</td>
+                                            <td>Completed</td>
                                         </tr>
                                         <tr>
-                                            <th scope="row">3</th>
-                                            <td>Expense</td>
-                                            <td>500</td>
-                                            <td>23-7-2018</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">4</th>
-                                            <td>Rent</td>
-                                            <td>12000</td>
-                                            <td>23-7-2018</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">5</th>
-                                            <td>Rent</td>
-                                            <td>12000</td>
-                                            <td>23-7-2018</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">6</th>
-                                            <td>Rent</td>
-                                            <td>12000</td>
-                                            <td>23-7-2018</td>
+                                            <td>14/01/2019</td>
+                                            <td>LES-8888</td>
+                                            <td>Approved</td>
                                         </tr>
                                     </tbody>
+
                                 </table>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <!--Modal Start-->
+            <div class="modal fade" id="mdModal" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <label id="modalVNO">TASK</label>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Sr.</th>
+                                                <th>Name</th>
+                                                <th>Approval</th>
+                                                <th>Status</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>1</td>
+                                                <td>Oil change</td>
+                                                <td style="color:green">Approved</td>
+                                                <td>
+                                                    <select>
+                                                        <option>In Progress</option>
+                                                        <option>Completed</option>
+                                                    </select>
+                                                </td>
+                                                <td><button type="button" class="btn btn-info" data-toggle="collapse" data-target="#demo">Remarks</button></td>
+                                            </tr>
+                                            <tr id="demo" class="collapse" style="padding-left:50px; padding-right:50px">
+                                                <td colspan="5">
+                                                    <label>OPM : Kindly approve this one is urgent.</label>
+                                                    <textarea rows="3" class="form-control no-resize" placeholder="Enter any remark..."></textarea>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>2</td>
+                                                <td>Oil change is inevitable. Change can't be avoided. I'm letting you know. Simle and wave boys. Smile and wave</td>
+                                                <td style="color:red">Not Approved</td>
+                                                <td>
+                                                    <select disabled>
+                                                        <option>On Approval</option>
+                                                        <option>Approved</option>
+                                                        <option>In Progress</option>
+                                                        <option>Completed</option>
+                                                    </select>
+                                                </td>
+                                                <td><button type="button" class="btn btn-info" data-toggle="collapse" data-target="#demo1">Remarks</button></td>
+                                            </tr>
+                                            <tr id="demo1" class="collapse">
+                                                <td colspan="5">
+                                                    <label>Admin : This was done in last approval. No need</label>
+                                                    <textarea rows="3" class="form-control no-resize" placeholder="Enter any remark..."></textarea>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button id="modalBtn" type="button" class="btn btn-link waves-effect" onclick="" value="SAVE">SUBMIT</button>
+                            <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--Modal End-->
 
             <!--Modal Start-->
 
@@ -322,7 +324,8 @@
     <script src="~/Scripts/js/admin.js"></script>
     <!-- Demo Js -->
     <script src="~/Scripts/js/demo.js"></script>
-    <!-- Moment Plugin Js -->
+    <script src="~/Scripts/maintenance.js"></script>
+<!-- Moment Plugin Js -->
     <script src="~/Content/plugins/momentjs/moment.js"></script>
     <!-- Bootstrap Material Datetime Picker Plugin Js -->
     <script src="~/Content/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js"></script>

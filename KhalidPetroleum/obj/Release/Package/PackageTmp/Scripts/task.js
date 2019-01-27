@@ -1,4 +1,5 @@
 ﻿var tableAll = $('#tasksTable').DataTable({
+    "order": [[ 0, "desc" ]],
     "pageLength": 10,
     "rowCallback": function (row, data) {
         if (data[8] == "PENDING") {
@@ -13,6 +14,10 @@
             $('td:eq(8)', row).css('background-color', 'orange');
             $('td:eq(8)', row).css('color', 'white');
         }
+        else if (data[8] == "APPROVED") {
+            $('td:eq(8)', row).css('background-color', 'limegreen');
+            $('td:eq(8)', row).css('color', 'white');
+        }
         else {
             $('td:eq(8)', row).css('background-color', 'yellow');
             $('td:eq(8)', row).css('color', 'black');
@@ -21,6 +26,7 @@
 });
 
 var tableMy = $('#my_tasks_tbl').DataTable({
+    "order": [[0, "desc"]],
     "pageLength": 10,
     "rowCallback": function (row, data) {
 
@@ -44,6 +50,7 @@ var tableMy = $('#my_tasks_tbl').DataTable({
 });
 
 var tableMe = $('#assigned_by_me_tbl').DataTable({
+    "order": [[0, "desc"]],
     "pageLength": 10,
     "rowCallback": function (row, data) {
         if (data[8] == "PENDING") {
@@ -66,6 +73,7 @@ var tableMe = $('#assigned_by_me_tbl').DataTable({
 });
 
 var readonlyTable = $('#readonlyTasksTable').DataTable({
+    "order": [[0, "desc"]],
     "pageLength": 10,
     "rowCallback": function (row, data) {
         if (data[8] == "PENDING") {
@@ -399,7 +407,7 @@ function addTask() {
     var startDate = $('#txtStartDate').val();
     var expectedDate = $('#txtExpectedDate').val();
     var assignto = $('#sltAssignTo').val(); 
-    var priority = $('#sltPriority').val();
+    var ttype = $('#sltTaskType').val();
     var status = $('#sltStatus').val();
     var descp = $('#txtDescription').val();
 
@@ -467,6 +475,7 @@ function updateTask() {
         TaskStatus: status
     }
 
+    
     updateTaskApi(body, function (resp) {
         if (resp == "1") {
             $('#alertdiv').html('<div class="alert alert-success"><strong>Success !</strong> Task has been updated</div>')

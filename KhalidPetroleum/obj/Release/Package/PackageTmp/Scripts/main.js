@@ -26,6 +26,8 @@ var GET_TASKS_BY_USER_ID = "GetTasksByUserId";
 var ADD_TASK = "AddTask";
 var UPDATE_TASK = "UpdateTask";
 var GET_VEHICLE_CHECKLISTS = "GetVehicleChecklists";
+var UPDATE_VEHICLE = "UpdateVehicle";
+var UPDATE_STAFF = "UpdateStaff";
 
 //*************END OF CONSTANTS*************//
 
@@ -362,6 +364,34 @@ function getVehicleChecklists(fro, to, vn, cb) {
     $.ajax({
         url: BASE_URL + GET_VEHICLE_CHECKLISTS + "?from=" + fro + "&to=" + to + "&vehicleNumber=" + vn,
         method: "GET",
+        success: function (data) {
+            cb(data);
+        },
+        error: function (data) {
+            cb(data);
+        }
+    });
+}
+
+function updateVehicleApi(body, cb) {
+    $.ajax({
+        url: BASE_URL + UPDATE_VEHICLE,
+        method: "POST",
+        data: JSON.stringify(body),
+        success: function (data) {
+            cb(data);
+        },
+        error: function (data) {
+            cb(data);
+        }
+    });
+}
+
+function updateStaffApi(body, cb) {
+    $.ajax({
+        url: BASE_URL + UPDATE_STAFF,
+        method: "POST",
+        data: JSON.stringify(body),
         success: function (data) {
             cb(data);
         },

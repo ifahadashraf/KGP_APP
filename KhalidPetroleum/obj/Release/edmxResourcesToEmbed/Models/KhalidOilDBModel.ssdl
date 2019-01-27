@@ -127,6 +127,8 @@
     <Property Name="AssignedTo" Type="bigint" />
     <Property Name="LastUpdate" Type="datetime" />
     <Property Name="TaskStatus" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="TaskType" Type="int" />
+    <Property Name="VehicleNumber" Type="nvarchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="UnloadSites">
     <Key>
@@ -315,8 +317,8 @@
     <Parameter Name="fromDate" Type="date" Mode="In" />
   </Function>
   <Function Name="GET_VEHICLE_CHECKLISTS" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-    <Parameter Name="from" Type="varchar(max)" Mode="In" />
-    <Parameter Name="to" Type="varchar(max)" Mode="In" />
+    <Parameter Name="from" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="to" Type="nvarchar(max)" Mode="In" />
     <Parameter Name="vehicle_number" Type="nvarchar" Mode="In" />
   </Function>
   <EntityContainer Name="KhalidOilDBModelStoreContainer">

@@ -37,12 +37,10 @@ namespace KhalidPetroleum.Controllers
         }
         public ActionResult Checklist()
         {
-            return View();
-
-            //if (Session["User"] != null)
-            //    return View();
-            //else
-            //    return View("SignIn");
+            if (Session["User"] != null)
+                return View();
+            else
+                return View("SignIn");
         }
         public ActionResult Attendance()
         {
@@ -91,11 +89,10 @@ namespace KhalidPetroleum.Controllers
         }
         public ActionResult Staff()
         {
-            //if (Session["User"] != null)
-            //    return View();
-            //else
-            ////    return View("SignIn");
-            return View("Staff");
+            if (Session["User"] != null)
+                return View();
+            else
+                return View("SignIn");
         }
         public ActionResult Vehicles()
         {
