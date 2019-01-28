@@ -27,6 +27,36 @@
     <link href="~/Css/style.css" rel="stylesheet">
     <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
     <link href="~/Css/themes/all-themes.css" rel="stylesheet" />
+
+    <style>
+        .loading {
+            position: fixed;
+            z-index: 999;
+            height: 2em;
+            width: 2em;
+            overflow: visible;
+            margin: auto;
+            top: 0;
+            left: 0;
+            bottom: 175px;
+            right: 175px;
+        }
+
+            .loading:before {
+                content: '';
+                display: block;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0,0,0,0.2);
+            }
+
+        .loading-gif {
+            
+        }
+    </style>
 </head>
 <body class="theme-blue">
     <div class="page-loader-wrapper">
@@ -43,6 +73,9 @@
             </div>
             <p>Please wait...</p>
         </div>
+    </div>
+    <div class="loading" style="display: none">
+        <img src="../../Content/images/loading.gif"/>
     </div>
     <!-- Top Bar -->
     <nav class="navbar">
@@ -154,6 +187,7 @@
         <div class="container-fluid">
             <div class="block-header">
                 <h2>Maintenance</h2>
+                <input id="uname" type="text" value="@user.UserName" style="display: none"/>
             </div>
 
             <div class="row clearfix">
@@ -169,27 +203,17 @@
                                 <table id="checklistsTable" class="table table-bordered table-striped table-hover dataTable js-exportable">
                                     <thead>
                                         <tr>
+                                            <th>Id</th>
                                             <th>Date</th>
                                             <th>VehicleNo</th>
+                                            <th>FilledBy</th>
+                                            <th>ApprovedBy</th>
                                             <th>Status</th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>17/01/2019</td>
-                                            <td>LES-888</td>
-                                            <td>On Approval</td>
-                                        </tr>
-                                        <tr>
-                                            <td>15/01/2019</td>
-                                            <td>CHS-1578</td>
-                                            <td>Completed</td>
-                                        </tr>
-                                        <tr>
-                                            <td>14/01/2019</td>
-                                            <td>LES-8888</td>
-                                            <td>Approved</td>
-                                        </tr>
+                                        
                                     </tbody>
 
                                 </table>
@@ -219,7 +243,7 @@
                                                 <th></th>
                                             </tr>
                                         </thead>
-                                        <tbody>
+                                        <tbody id="tasksTable">
                                             <tr>
                                                 <td>1</td>
                                                 <td>Oil change</td>
@@ -271,7 +295,7 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button id="modalBtn" type="button" class="btn btn-link waves-effect" onclick="" value="SAVE">SUBMIT</button>
+                            <button id="modalBtn" type="button" class="btn btn-link waves-effect" onclick="submitApproval()">SUBMIT</button>
                             <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
                         </div>
                     </div>
@@ -302,7 +326,6 @@
     <!-- Waves Effect Plugin Js -->
     <script src="~/Content/plugins/node-waves/waves.js"></script>
     <script src="~/Scripts/main.js"></script>
-    <script src="~/Scripts/task.js"></script>
     <!-- Demo Js -->
     <script src="~/Scripts/js/admin.js"></script>
     <script src="~/Scripts/js/demo.js"></script>

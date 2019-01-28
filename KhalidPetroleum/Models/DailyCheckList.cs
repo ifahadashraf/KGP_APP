@@ -23,6 +23,9 @@ namespace KhalidPetroleum.Models
         public string VehicleNumber { get; set; }
         public System.DateTime Date { get; set; }
         public string Reading { get; set; }
+        public string Status { get; set; }
+        public Nullable<long> FilledBy { get; set; }
+        public Nullable<long> ApprovedBy { get; set; }
     
         public virtual ICollection<CheckList_Question> CheckList_Question { get; set; }
         public virtual Vehicle Vehicle { get; set; }

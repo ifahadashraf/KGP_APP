@@ -14,6 +14,7 @@ namespace KhalidPetroleum.Models
 
     public class CheckListModel
     {
+        public long FilledBy { get; set; }
         public String VehicleNumber { get; set; }
         public System.DateTime Date { get; set; }
         public string DriverName { get; set; }

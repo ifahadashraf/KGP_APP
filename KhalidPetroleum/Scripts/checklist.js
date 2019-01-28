@@ -211,7 +211,8 @@ function submitCheckList()
         "VehicleNumber": vehicle,
         "ListOfImages" : list_of_images,
         "list": checkList,
-        "tasks" : tasks
+        "tasks": tasks,
+        "FilledBy": $('#userId').val()
     };
 
     if (list_of_images.length == myDropZone.files.length)

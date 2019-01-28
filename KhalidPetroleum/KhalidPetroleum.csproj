@@ -161,6 +161,9 @@
     <Compile Include="Models\GET_ALL_USERS_Result.cs">
       <DependentUpon>KhalidOilDBModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\GET_CHECKLISTS_Result.cs">
+      <DependentUpon>KhalidOilDBModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\GET_DAILY_REPORT_BY_DATE_Result.cs">
       <DependentUpon>KhalidOilDBModel.tt</DependentUpon>
     </Compile>
@@ -216,6 +219,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Content Include="Content\images\animation-bg.jpg" />
+    <Content Include="Content\images\loading.gif" />
     <Content Include="Content\images\screenshot.png" />
     <Content Include="Content\images\thumbs-up.png" />
     <Content Include="Content\images\user-img-background.jpg" />

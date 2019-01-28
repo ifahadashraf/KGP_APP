@@ -62,7 +62,8 @@ namespace KhalidPetroleum.Controllers
                 {
                     VehicleNumber = vehicle.VehicleNumber,
                     Date = DateTime.Now,
-                    Reading = ""+vehicle.OpeningReading
+                    Reading = "" + vehicle.OpeningReading,
+                    FilledBy = vehicle.FilledBy
                 });
 
                 db.SaveChanges();
@@ -95,26 +96,21 @@ namespace KhalidPetroleum.Controllers
 
                 var OM = db.Users.Where(x => x.UserType == "OPERATIONS-MANAGER").ToList();
 
-                var taskStr = "";
                 foreach (String task in vehicle.tasks)
-                {
-                    taskStr += task + " | ";
-                }
-
-                if (taskStr != "")
                 {
                     db.Tasks.Add(new Task
                     {
-                        TaskName = "Task <" + vehicle.VehicleNumber + ">",
-                        Details = taskStr,
+                        TaskName = task,
+                        Details = "",
                         StartDate = vehicle.Date,
                         EstimatedDate = vehicle.Date.AddDays(1),
                         TaskOwner = OM[0].UserID,
                         TaskStatus = "PENDING",
-                        LastUpdate = vehicle.Date
+                        LastUpdate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Pakistan Standard Time")),
+                        DailyChecklistId = checkListID,
+                        IsApproved = false
                     });
                 }
-                
 
                 db.SaveChanges();
                 return "1";
@@ -630,5 +626,46 @@ namespace KhalidPetroleum.Controllers
                 return ex.Message;
             }
         }
+
+        [System.Web.Http.HttpGet]
+        public String GetChecklists()
+        {
+            var list = db.GET_CHECKLISTS().ToList<GET_CHECKLISTS_Result>();
+            return JsonConvert.SerializeObject(list);
+        }
+
+        [System.Web.Http.HttpGet]
+        public string GetTasksByChecklistId(long Id)
+        {
+            var list = db.Tasks.Where(x => x.DailyChecklistId == Id).ToList();
+            return JsonConvert.SerializeObject(list);
+        }
+
+        [System.Web.Http.HttpPost]
+        public string SubmitApproval()
+        {
+            try
+            {
+                StreamReader reader = new StreamReader(Request.InputStream);
+                string requestFromPost = reader.ReadToEnd();
+
+                var list = JsonConvert.DeserializeObject<List<Task>>(requestFromPost);
+
+                foreach (var item in list)
+                {
+                    var task = db.Tasks.Where(x => x.TaskId == item.TaskId).ToList()[0];
+                    db.Entry(task).CurrentValues.SetValues(item);
+                }
+
+                db.SaveChanges();
+                
+                return "1";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
+
     }
 }

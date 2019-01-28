@@ -141,5 +141,10 @@ namespace KhalidPetroleum.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_VEHICLE_CHECKLISTS_Result>("GET_VEHICLE_CHECKLISTS", fromParameter, toParameter, vehicle_numberParameter);
         }
+    
+        public virtual ObjectResult<GET_CHECKLISTS_Result> GET_CHECKLISTS()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_CHECKLISTS_Result>("GET_CHECKLISTS");
+        }
     }
 }

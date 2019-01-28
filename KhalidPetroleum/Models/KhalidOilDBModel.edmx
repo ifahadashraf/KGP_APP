@@ -41,6 +41,9 @@
           <Property Name="VehicleNumber" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Date" Type="datetime" Nullable="false" />
           <Property Name="Reading" Type="nvarchar(max)" />
+          <Property Name="Status" Type="nvarchar(max)" />
+          <Property Name="FilledBy" Type="bigint" />
+          <Property Name="ApprovedBy" Type="bigint" />
         </EntityType>
         <EntityType Name="DailyReports">
           <Key>
@@ -134,6 +137,8 @@
           <Property Name="TaskStatus" Type="nvarchar(max)" Nullable="false" />
           <Property Name="TaskType" Type="int" />
           <Property Name="VehicleNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="DailyChecklistId" Type="bigint" />
+          <Property Name="IsApproved" Type="bit" />
         </EntityType>
         <EntityType Name="UnloadSites">
           <Key>
@@ -305,6 +310,7 @@
           <Parameter Name="id" Type="bigint" Mode="In" />
         </Function>
         <Function Name="GET_ALL_USERS" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="GET_CHECKLISTS" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="GET_DAILY_REPORT_BY_DATE" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="from" Type="date" Mode="In" />
           <Parameter Name="to" Type="date" Mode="In" />
@@ -629,7 +635,13 @@
           <FunctionImport Name="GET_ALL_TASKS_BY_OWNER_ID" ReturnType="Collection(KhalidOilDBModel.GET_ALL_TASKS_BY_OWNER_ID_Result)">
           <Parameter Name="id" Mode="In" Type="Int64" />
           </FunctionImport>
+          <FunctionImport Name="GET_VEHICLE_CHECKLISTS" ReturnType="Collection(KhalidOilDBModel.GET_VEHICLE_CHECKLISTS_Result)">
+            <Parameter Name="from" Mode="In" Type="String" />
+            <Parameter Name="to" Mode="In" Type="String" />
+            <Parameter Name="vehicle_number" Mode="In" Type="String" />
+          </FunctionImport>
           <EntitySet Name="DailyCheckLists" EntityType="KhalidOilDBModel.DailyCheckList" />
+          <EntitySet Name="Tasks" EntityType="KhalidOilDBModel.Task" />
           <AssociationSet Name="FK_CheckList_Question_DailyCheckLists" Association="KhalidOilDBModel.FK_CheckList_Question_DailyCheckLists">
             <End Role="DailyCheckList" EntitySet="DailyCheckLists" />
             <End Role="CheckList_Question" EntitySet="CheckList_Question" />
@@ -638,12 +650,7 @@
             <End Role="Vehicle" EntitySet="Vehicles" />
             <End Role="DailyCheckList" EntitySet="DailyCheckLists" />
           </AssociationSet>
-          <FunctionImport Name="GET_VEHICLE_CHECKLISTS" ReturnType="Collection(KhalidOilDBModel.GET_VEHICLE_CHECKLISTS_Result)">
-            <Parameter Name="from" Mode="In" Type="String" />
-            <Parameter Name="to" Mode="In" Type="String" />
-            <Parameter Name="vehicle_number" Mode="In" Type="String" />
-          </FunctionImport>
-          <EntitySet Name="Tasks" EntityType="KhalidOilDBModel.Task" />
+          <FunctionImport Name="GET_CHECKLISTS" ReturnType="Collection(KhalidOilDBModel.GET_CHECKLISTS_Result)" />
           </EntityContainer>
         <ComplexType Name="GET_PARENT_COMPANY_RENT_BY_DATE_Result">
           <Property Type="Int32" Name="ParentCompany" Nullable="false" />
@@ -826,6 +833,15 @@
           <Property Type="String" Name="OwnerName" Nullable="true" />
           <Property Type="String" Name="AssigneeName" Nullable="true" />
         </ComplexType>
+        <ComplexType Name="GET_VEHICLE_CHECKLISTS_Result">
+          <Property Type="Int64" Name="CheckListID" Nullable="false" />
+          <Property Type="String" Name="VehicleNumber" Nullable="false" MaxLength="50" />
+          <Property Type="DateTime" Name="Date" Nullable="false" Precision="23" />
+          <Property Type="String" Name="Reading" Nullable="true" />
+          <Property Type="String" Name="ImageName" Nullable="true" />
+          <Property Type="String" Name="QuestionStatement" Nullable="true" />
+          <Property Type="Boolean" Name="Status" Nullable="false" />
+        </ComplexType>
         <EntityType Name="DailyCheckList">
           <Key>
             <PropertyRef Name="CheckListID" />
@@ -834,8 +850,29 @@
           <Property Name="VehicleNumber" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Reading" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="FilledBy" Type="Int64" />
+          <Property Name="ApprovedBy" Type="Int64" />
           <NavigationProperty Name="CheckList_Question" Relationship="KhalidOilDBModel.FK_CheckList_Question_DailyCheckLists" FromRole="DailyCheckList" ToRole="CheckList_Question" />
           <NavigationProperty Name="Vehicle" Relationship="KhalidOilDBModel.FK_DailyCheckLists_Vehicles" FromRole="DailyCheckList" ToRole="Vehicle" />
+        </EntityType>
+        <EntityType Name="Task">
+          <Key>
+            <PropertyRef Name="TaskId" />
+          </Key>
+          <Property Name="TaskId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TaskName" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Details" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="EstimatedDate" Type="DateTime" Precision="0" />
+          <Property Name="TaskOwner" Type="Int64" Nullable="false" />
+          <Property Name="AssignedTo" Type="Int64" />
+          <Property Name="LastUpdate" Type="DateTime" Precision="3" />
+          <Property Name="TaskStatus" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="TaskType" Type="Int32" />
+          <Property Name="VehicleNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DailyChecklistId" Type="Int64" />
+          <Property Name="IsApproved" Type="Boolean" />
         </EntityType>
         <Association Name="FK_CheckList_Question_DailyCheckLists">
           <End Type="KhalidOilDBModel.DailyCheckList" Role="DailyCheckList" Multiplicity="1" />
@@ -861,31 +898,17 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <ComplexType Name="GET_VEHICLE_CHECKLISTS_Result">
+        <ComplexType Name="GET_CHECKLISTS_Result">
           <Property Type="Int64" Name="CheckListID" Nullable="false" />
           <Property Type="String" Name="VehicleNumber" Nullable="false" MaxLength="50" />
           <Property Type="DateTime" Name="Date" Nullable="false" Precision="23" />
           <Property Type="String" Name="Reading" Nullable="true" />
-          <Property Type="String" Name="ImageName" Nullable="true" />
-          <Property Type="String" Name="QuestionStatement" Nullable="true" />
-          <Property Type="Boolean" Name="Status" Nullable="false" />
+          <Property Type="String" Name="Status" Nullable="true" />
+          <Property Type="Int64" Name="FilledBy" Nullable="true" />
+          <Property Type="Int64" Name="ApprovedBy" Nullable="true" />
+          <Property Type="String" Name="FillerName" Nullable="true" />
+          <Property Type="String" Name="ApproverName" Nullable="true" />
         </ComplexType>
-        <EntityType Name="Task">
-          <Key>
-            <PropertyRef Name="TaskId" />
-          </Key>
-          <Property Name="TaskId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="TaskName" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Details" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="EstimatedDate" Type="DateTime" Precision="0" />
-          <Property Name="TaskOwner" Type="Int64" Nullable="false" />
-          <Property Name="AssignedTo" Type="Int64" />
-          <Property Name="LastUpdate" Type="DateTime" Precision="3" />
-          <Property Name="TaskStatus" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="TaskType" Type="Int32" />
-          <Property Name="VehicleNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1173,16 +1196,6 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <EntitySetMapping Name="DailyCheckLists">
-            <EntityTypeMapping TypeName="KhalidOilDBModel.DailyCheckList">
-              <MappingFragment StoreEntitySet="DailyCheckLists">
-                <ScalarProperty Name="Reading" ColumnName="Reading" />
-                <ScalarProperty Name="Date" ColumnName="Date" />
-                <ScalarProperty Name="VehicleNumber" ColumnName="VehicleNumber" />
-                <ScalarProperty Name="CheckListID" ColumnName="CheckListID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="GET_VEHICLE_CHECKLISTS" FunctionName="KhalidOilDBModel.Store.GET_VEHICLE_CHECKLISTS">
             <ResultMapping>
               <ComplexTypeMapping TypeName="KhalidOilDBModel.GET_VEHICLE_CHECKLISTS_Result">
@@ -1196,9 +1209,24 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="DailyCheckLists">
+            <EntityTypeMapping TypeName="KhalidOilDBModel.DailyCheckList">
+              <MappingFragment StoreEntitySet="DailyCheckLists">
+                <ScalarProperty Name="ApprovedBy" ColumnName="ApprovedBy" />
+                <ScalarProperty Name="FilledBy" ColumnName="FilledBy" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Reading" ColumnName="Reading" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="VehicleNumber" ColumnName="VehicleNumber" />
+                <ScalarProperty Name="CheckListID" ColumnName="CheckListID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Tasks">
             <EntityTypeMapping TypeName="KhalidOilDBModel.Task">
               <MappingFragment StoreEntitySet="Tasks">
+                <ScalarProperty Name="IsApproved" ColumnName="IsApproved" />
+                <ScalarProperty Name="DailyChecklistId" ColumnName="DailyChecklistId" />
                 <ScalarProperty Name="VehicleNumber" ColumnName="VehicleNumber" />
                 <ScalarProperty Name="TaskType" ColumnName="TaskType" />
                 <ScalarProperty Name="TaskStatus" ColumnName="TaskStatus" />
@@ -1213,6 +1241,21 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="GET_CHECKLISTS" FunctionName="KhalidOilDBModel.Store.GET_CHECKLISTS">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="KhalidOilDBModel.GET_CHECKLISTS_Result">
+                <ScalarProperty Name="CheckListID" ColumnName="CheckListID" />
+                <ScalarProperty Name="VehicleNumber" ColumnName="VehicleNumber" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Reading" ColumnName="Reading" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="FilledBy" ColumnName="FilledBy" />
+                <ScalarProperty Name="ApprovedBy" ColumnName="ApprovedBy" />
+                <ScalarProperty Name="FillerName" ColumnName="FillerName" />
+                <ScalarProperty Name="ApproverName" ColumnName="ApproverName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
