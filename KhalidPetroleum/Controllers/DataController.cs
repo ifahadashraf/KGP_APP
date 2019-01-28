@@ -63,7 +63,8 @@ namespace KhalidPetroleum.Controllers
                     VehicleNumber = vehicle.VehicleNumber,
                     Date = DateTime.Now,
                     Reading = "" + vehicle.OpeningReading,
-                    FilledBy = vehicle.FilledBy
+                    FilledBy = vehicle.FilledBy,
+                    Status = "ON_APPROVAL"
                 });
 
                 db.SaveChanges();
@@ -653,6 +654,11 @@ namespace KhalidPetroleum.Controllers
 
                 foreach (var item in list)
                 {
+                    if ((bool)item.IsApproved)
+                    {
+                        var ck = db.DailyCheckLists.Where(x => x.CheckListID == item.DailyChecklistId).ToList()[0];
+                        ck.Status = "APPROVED";
+                    }
                     var task = db.Tasks.Where(x => x.TaskId == item.TaskId).ToList()[0];
                     db.Entry(task).CurrentValues.SetValues(item);
                 }

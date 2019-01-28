@@ -7,15 +7,15 @@ var tasksList = [];
         "order": [[ 0, "desc" ]],
         "pageLength": 10,
         "rowCallback": function (row, data) {
-            if (data[5] == "On Approval") {
+            if (data[5] == "ON_APPROVAL") {
                 $('td:eq(5)', row).css('background-color', 'orange');
                 $('td:eq(5)', row).css('color', 'white');
             }
-            else if (data[5] == "Completed") {
+            else if (data[5] == "COMPLETED") {
                 $('td:eq(5)', row).css('background-color', 'green');
                 $('td:eq(5)', row).css('color', 'white');
             }
-            else {
+            else if (data[5] == "APPROVED") {
                 $('td:eq(5)', row).css('background-color', 'lime');
                 $('td:eq(5)', row).css('color', 'white');
             }
@@ -50,7 +50,7 @@ function getChecklists() {
         $.each(arr, function (index, item) {
 
             var date = new Date(item.Date);
-            dateStr = date.getDate() + '/' + (date.getMonth()+1) + '/' + date.getYear();
+            dateStr = date.getDate() + '/' + (date.getMonth()+1) + '/' + (date.getYear() - 100);
 
             checklistsTable.row.add([
                 item.CheckListID,
@@ -72,6 +72,8 @@ function getMaintenanceTasks(vno, date, id) {
 
     $('#modalVNO').text(vno + ' (' + date + ')');
 
+    var userId = $('#uid').val();
+
     getMaintenanceTasksApi(id, function (data) {
         $('.loading').css('display', 'none');
         var arr = JSON.parse(data);
@@ -80,26 +82,56 @@ function getMaintenanceTasks(vno, date, id) {
         $.each(arr, function (index, item) {
 
             var html = '<tr>' +
-                '<td>'+item.TaskId+'</td>'+
-                '<td>'+item.TaskName+'</td>';
+
+                '<td>' + item.TaskId + '</td>' +
+
+                '<td>' + item.TaskName + '</td>';
 
             if (item.IsApproved) {
-                html += '<td><input name="group' + index + '" type="radio" id="radio_' + index + '1" class="with-gap radio-col-green" value="1" checked/><label for="radio_' + index + '1"></label>' +
+                html += '<td class="pl"><input name="group' + index + '" type="radio" id="radio_' + index + '1" class="with-gap radio-col-green" value="1" checked/><label for="radio_' + index + '1"></label>' +
                         '<input name="group' + index + '" type="radio" id="radio_' + index + '2" class="with-gap radio-col-red" value="0"/><label for="radio_' + index + '2"></label></td>';
             }
             else{
-                html += '<td><input name="group' + index + '" type="radio" id="radio_' + index + '1" class="with-gap radio-col-green" value="1"/><label for="radio_' + index + '1"></label>' +
+                html += '<td class="pl"><input name="group' + index + '" type="radio" id="radio_' + index + '1" class="with-gap radio-col-green" value="1"/><label for="radio_' + index + '1"></label>' +
                         '<input name="group' + index + '" type="radio" id="radio_' + index + '2" class="with-gap radio-col-red" value="0" checked/><label for="radio_' + index + '2"></label></td>';
             }
-            html += '<td>'+
-                        '<select>'+
-                            '<option>On Approval</option>'+
-                            '<option>Approved</option>'+
-                            '<option>In Progress</option>'+
-                            '<option>Completed</option>'+
-                        '</select>'+
-                    '</td>'+
-                '<td><button type="button" class="btn btn-info" data-toggle="collapse" data-target="#demo'+index+'">Remarks</button></td></tr>';
+
+            if (item.IsApproved)
+                html += '<td class="pd" style="color: green">Approved</td>';
+            else
+                html += '<td class="pd" style="color: red">Denied</td>';
+
+            var v1, v2, v3, v4, v5, disb = '';
+            if (item.TaskStatus == "PENDING")
+                v1 = "selected";
+            else if (item.TaskStatus == "ON_APPROVAL")
+                v2 = "selected";
+            else if (item.TaskStatus == "IN_PROGRESS")
+                v3 = "selected";
+            else if (item.TaskStatus == "COMPLETED")
+                v4 = "selected";
+            
+            if (userId != 3 && !item.IsApproved) {
+                disb = 'disabled';
+            }
+
+                html += '<td>'+
+                            '<select id="slt'+index+'" '+disb+'>'+
+                                '<option value="PENDING" ' + v1 + '>Pending</option>' +
+                                '<option value="IN_PROGRESS"  ' + v3 + '>In Progress</option>' +
+                                '<option value="COMPLETED"  ' + v4 + '>Completed</option>' +
+                            '</select>'+
+                        '</td>';
+            //else
+            //    html += '<td>'+
+            //                '<select>'+
+            //                    '<option>In Progress</option>'+
+            //                    '<option>Completed</option>'+
+            //                '</select>'+
+            //            '</td>';
+
+            html += '<td><button type="button" class="btn btn-info" data-toggle="collapse" data-target="#demo' + index + '">Remarks</button></td></tr>';
+
 
             html += '<tr id="demo' + index + '" class="collapse"><td colspan="5">';
 
@@ -117,6 +149,16 @@ function getMaintenanceTasks(vno, date, id) {
 
         });
 
+        if (userId == 3) {
+            $('.pl').css('display', 'block');
+            $('.pd').css('display', 'none');
+        }
+        else {
+            $('.pl').css('display', 'none');
+            $('.pd').css('display', 'block');
+        }
+            
+
         $('#mdModal').modal('show');
     })
 }
@@ -132,6 +174,7 @@ function submitApproval() {
         tasksList[index].IsApproved = isApproved;
         if (remark != '')
             tasksList[index].Details += ';' + $('#uname').val() + ' : ' + remark;
+        tasksList[index].TaskStatus = $('#slt' + index).val()
     });
 
     submitApprovalApi(tasksList, function (data) {

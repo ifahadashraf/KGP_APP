@@ -187,6 +187,7 @@
         <div class="container-fluid">
             <div class="block-header">
                 <h2>Maintenance</h2>
+                <input id="uid" type="text" value="@user.UserID" style="display: none" />
                 <input id="uname" type="text" value="@user.UserName" style="display: none"/>
             </div>
 
@@ -238,7 +239,8 @@
                                             <tr>
                                                 <th>Sr.</th>
                                                 <th>Name</th>
-                                                <th>Approval</th>
+                                                <th class="pl">Approval</th>
+                                                <th class="pd">IsApproved</th>
                                                 <th>Status</th>
                                                 <th></th>
                                             </tr>
