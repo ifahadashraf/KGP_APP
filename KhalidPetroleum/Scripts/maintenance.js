@@ -19,6 +19,10 @@ var tasksList = [];
                 $('td:eq(5)', row).css('background-color', 'lime');
                 $('td:eq(5)', row).css('color', 'white');
             }
+            else if (data[5] == "IN_PROGRESS") {
+                $('td:eq(5)', row).css('background-color', 'yellow');
+                $('td:eq(5)', row).css('color', 'black');
+            }
         }
     });
 

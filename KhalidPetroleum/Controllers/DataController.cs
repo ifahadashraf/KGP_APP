@@ -109,7 +109,8 @@ namespace KhalidPetroleum.Controllers
                         TaskStatus = "PENDING",
                         LastUpdate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Pakistan Standard Time")),
                         DailyChecklistId = checkListID,
-                        IsApproved = false
+                        IsApproved = false,
+                        TaskType = 2
                     });
                 }
 
@@ -490,6 +491,7 @@ namespace KhalidPetroleum.Controllers
 
                 Task newTask = JsonConvert.DeserializeObject<Task>(requestFromPost);
                 newTask.LastUpdate = DateTime.Now;
+                newTask.TaskType = 1;
                 db.Tasks.Add(newTask);
                 db.SaveChanges();
 
@@ -651,17 +653,33 @@ namespace KhalidPetroleum.Controllers
                 string requestFromPost = reader.ReadToEnd();
 
                 var list = JsonConvert.DeserializeObject<List<Task>>(requestFromPost);
-
+                int declineCount = 0, completeCount = 0, approvedCount = 0, progressCount = 0;
+                var temp = list[0];
+                var ck = db.DailyCheckLists.Where(x => x.CheckListID == (long)temp.DailyChecklistId).ToList()[0];
                 foreach (var item in list)
                 {
                     if ((bool)item.IsApproved)
-                    {
-                        var ck = db.DailyCheckLists.Where(x => x.CheckListID == item.DailyChecklistId).ToList()[0];
-                        ck.Status = "APPROVED";
-                    }
+                        approvedCount++;
+                    else
+                        declineCount++;
+
+                    if ((bool)item.IsApproved && item.TaskStatus == "COMPLETED")
+                        completeCount++;
+                    if ((bool)item.IsApproved && item.TaskStatus == "IN_PROGRESS")
+                        progressCount++;
+
                     var task = db.Tasks.Where(x => x.TaskId == item.TaskId).ToList()[0];
                     db.Entry(task).CurrentValues.SetValues(item);
                 }
+                if (approvedCount > 0)
+                    ck.Status = "APPROVED";
+                if (progressCount > 0)
+                    ck.Status = "IN_PROGRESS";
+                if(completeCount == approvedCount)
+                    ck.Status = "COMPLETED";
+                if (declineCount == list.Count)
+                    ck.Status = "DECLINED";
+
 
                 db.SaveChanges();
                 
