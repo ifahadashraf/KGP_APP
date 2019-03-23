@@ -28,6 +28,10 @@ var UPDATE_TASK = "UpdateTask";
 var GET_VEHICLE_CHECKLISTS = "GetVehicleChecklists";
 var UPDATE_VEHICLE = "UpdateVehicle";
 var UPDATE_STAFF = "UpdateStaff";
+var GET_CHECKLISTS = "GetChecklists";
+var GET_MAINTENANCE_TASKS = "GetTasksByChecklistId";
+var SUBMIT_APPROVAL = "SubmitApproval";
+var GET_DAILY_REPORT_SALES = "GetDailyReportSales";
 
 //*************END OF CONSTANTS*************//
 
@@ -400,5 +404,59 @@ function updateStaffApi(body, cb) {
         }
     });
 }
+
+function getChecklistsApi(cb) {
+    $.ajax({
+        url: BASE_URL + GET_CHECKLISTS,
+        method: "GET",
+        success: function (data) {
+            cb(data);
+        },
+        error: function (data) {
+            cb(data);
+        }
+    });
+}
+
+function getMaintenanceTasksApi(id, cb) {
+    $.ajax({
+        url: BASE_URL + GET_MAINTENANCE_TASKS + "?id="+id,
+        method: "GET",
+        success: function (data) {
+            cb(data);
+        },
+        error: function (data) {
+            cb(data);
+        }
+    });
+}
+
+function submitApprovalApi(body, cb) {
+    $.ajax({
+        url: BASE_URL + SUBMIT_APPROVAL,
+        method: "POST",
+        data: JSON.stringify(body),
+        success: function (data) {
+            cb(data);
+        },
+        error: function (data) {
+            cb(data);
+        }
+    });
+}
+
+function getDailyReportSalesApi(id, cb) {
+    $.ajax({
+        url: BASE_URL + GET_DAILY_REPORT_SALES + "?reportId=" + id,
+        method: "GET",
+        success: function (data) {
+            cb(data);
+        },
+        error: function (data) {
+            cb(data);
+        }
+    });
+}
+
 
 //*******************END******************//

@@ -19,6 +19,7 @@ namespace KhalidPetroleum.Models
         public System.DateTime Date { get; set; }
         public string DriverName { get; set; }
         public Nullable<long> OpeningReading { get; set; }
+        public string UserName { get; set; }
         public List<CheckListArray> list { get; set; }
         public List<String> ListOfImages { get; set; }
         public List<String> tasks { get; set; }

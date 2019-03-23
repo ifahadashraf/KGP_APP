@@ -177,7 +177,7 @@ function submitCheckList()
         return
     }
         
-    else if (parseInt(openingMeter) <= parseInt(currentReading)) {
+    else if (parseInt(openingMeter) < parseInt(currentReading)) {
         alert("Wrong opening meter\n\nValue should be greater than current reading");
         return
     }
@@ -211,7 +211,8 @@ function submitCheckList()
         "VehicleNumber": vehicle,
         "ListOfImages" : list_of_images,
         "list": checkList,
-        "tasks" : tasks
+        "tasks": tasks,
+        "FilledBy": $('#userId').val()
     };
 
     if (list_of_images.length == myDropZone.files.length)

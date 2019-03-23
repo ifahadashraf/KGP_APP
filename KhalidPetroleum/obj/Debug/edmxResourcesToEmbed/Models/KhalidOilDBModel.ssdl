@@ -36,6 +36,9 @@
     <Property Name="VehicleNumber" Type="nvarchar" MaxLength="50" Nullable="false" />
     <Property Name="Date" Type="datetime" Nullable="false" />
     <Property Name="Reading" Type="nvarchar(max)" />
+    <Property Name="Status" Type="nvarchar(max)" />
+    <Property Name="FilledBy" Type="bigint" />
+    <Property Name="ApprovedBy" Type="bigint" />
   </EntityType>
   <EntityType Name="DailyReports">
     <Key>
@@ -129,6 +132,8 @@
     <Property Name="TaskStatus" Type="nvarchar(max)" Nullable="false" />
     <Property Name="TaskType" Type="int" />
     <Property Name="VehicleNumber" Type="nvarchar" MaxLength="50" />
+    <Property Name="DailyChecklistId" Type="bigint" />
+    <Property Name="IsApproved" Type="bit" />
   </EntityType>
   <EntityType Name="UnloadSites">
     <Key>
@@ -300,6 +305,7 @@
     <Parameter Name="id" Type="bigint" Mode="In" />
   </Function>
   <Function Name="GET_ALL_USERS" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="GET_CHECKLISTS" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
   <Function Name="GET_DAILY_REPORT_BY_DATE" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="from" Type="date" Mode="In" />
     <Parameter Name="to" Type="date" Mode="In" />

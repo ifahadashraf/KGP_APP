@@ -1,9 +1,11 @@
 ﻿$(document).ready(function () {
-    
+
 });
 
 $(document).on("click", ".expand_report", function () {
-    var report = list_reports[(this.id)].report; 
+
+    var report = list_reports[(this.id)].report;
+
     $("#depotName").html(report.DepotName);
     $("#depotCode").html(report.DepotCode);
 
@@ -34,7 +36,7 @@ $(document).on("click", ".expand_report", function () {
             $('#check_machi_hsd').html('<input type="checkbox" id="supPump" checked><label for="remember_me_3"> </label>');
         }
     }
-    
+
 
     $('#SUPDifferenceRate').html(report.SUPDifferenceRate);
     $('#SUPDifferenceQuantity').html(report.SUPDifferenceQuantity);
@@ -75,13 +77,25 @@ $(document).on("click", ".expand_report", function () {
         $('#total_gain').html('-');
     }
 
-    $.each(list_reports[(this.id)].sales, function (index, item) {
+    for (var i = 0; i < 4; i++) {
+        $('#dno_' + i).html('');
+        $('#qty_' + i).html('');
+        $('#site_' + i).html('');
+    }
 
-        $('#dno_' + index).html(item.DeliveryNo);
-        $('#qty_' + index).html(item.Quantity);
-        $('#site_' + index).html(item.SiteName);
+    getDailyReportSalesApi(report.DailyReportID, function (data) {
+
+        $.each(JSON.parse(data), function (index, item) {
+
+            $('#dno_' + index).html(item.DeliveryNo);
+            $('#qty_' + index).html(item.Quantity);
+            $('#site_' + index).html(item.SiteName);
+
+        });
 
     });
+
+    
 });
 
 var list_reports = [];
@@ -109,9 +123,11 @@ function getDailyReports() {
                     table.clear().draw();
                     $.each(arr, function (index, item) {
                         list_reports.push(item);
+                        var date = new Date(item.report.Date);
+                        dateStr = (date.getDate() <= 9 ? "0" + date.getDate() : date.getDate()) + '/' + ((date.getMonth() + 1) <= 9 ? "0" + (date.getMonth() + 1) : (date.getMonth() + 1)) + '/' + (date.getYear() - 100);
                         table.row.add([
                             item.report.DailyReportID,
-                            item.report.Date.split('T')[0],
+                            dateStr,
                             item.report.VehicleNumber,
                             item.report.UserName,
                             item.report.DepotID,
@@ -146,22 +162,22 @@ function viewSales(id) {
     });
 }
 
+var isLoaded = false;
+
 function makeTiles(id) {
     $('#aniimated-thumbnials').html('');
     getReportImagesApi(id,function (data) {
         var arr = JSON.parse(data);
         if (arr.length > 0) {
+            var itemsProcessed = 0;
             $.each(arr, function (index, item) {
                 $('#aniimated-thumbnials').
                     append('<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">'+
-                                '<a href="../../Content/images/'+item.SaleReceiptImage+'" data-sub-html="Demo Description">'+
+                                '<a href="../../Content/images/' + item.SaleReceiptImage + '" data-sub-html="Demo Description" target="_blank">' +
                                     '<img class="img-responsive thumbnail" src="../../Content/images/' + item.SaleReceiptImage + '">' +
                                 '</a>'+
                            '</div>');
-            });
-            $('#aniimated-thumbnials').lightGallery({
-                thumbnail: true,
-                selector: 'a'
+                itemsProcessed++;
             });
         }
         else {

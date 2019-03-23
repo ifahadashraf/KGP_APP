@@ -61,7 +61,7 @@ namespace KhalidPetroleum.Controllers
                 db.DailyCheckLists.Add(new DailyCheckList
                 {
                     VehicleNumber = vehicle.VehicleNumber,
-                    Date = DateTime.Now,
+                    Date = vehicle.Date,
                     Reading = "" + vehicle.OpeningReading,
                     FilledBy = vehicle.FilledBy,
                     Status = "ON_APPROVAL"
@@ -336,11 +336,18 @@ namespace KhalidPetroleum.Controllers
 
             foreach (GET_DAILY_REPORT_BY_DATE_Result report in list)
             {
-                var sales = db.GET_SALES_BY_REPORT_ID(report.DailyReportID).ToList<GET_SALES_BY_REPORT_ID_Result>();
-                resp.Add(new DailyReportModel(report, sales));
+                
+                resp.Add(new DailyReportModel(report));
             }
 
             return JsonConvert.SerializeObject(resp);
+        }
+
+        [System.Web.Http.HttpGet]
+        public string GetDailyReportSales(long reportId)
+        {
+            var sales = db.GET_SALES_BY_REPORT_ID(reportId).ToList<GET_SALES_BY_REPORT_ID_Result>();
+            return JsonConvert.SerializeObject(sales);
         }
 
         [System.Web.Http.HttpPost]
@@ -544,6 +551,7 @@ namespace KhalidPetroleum.Controllers
                     checklist.list = new List<CheckListArray>();
                     checklist.ListOfImages = new List<string>();
                     checklist.Date = obj.Date;
+                    checklist.UserName = obj.UserName;
                     checklist.VehicleNumber = vehicleNumber;
                     if(obj.Reading != null && obj.Reading != "")
                         checklist.OpeningReading = long.Parse(obj.Reading);

@@ -125,6 +125,11 @@ namespace KhalidPetroleum.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_ALL_TASKS_BY_OWNER_ID_Result>("GET_ALL_TASKS_BY_OWNER_ID", idParameter);
         }
     
+        public virtual ObjectResult<GET_CHECKLISTS_Result> GET_CHECKLISTS()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_CHECKLISTS_Result>("GET_CHECKLISTS");
+        }
+    
         public virtual ObjectResult<GET_VEHICLE_CHECKLISTS_Result> GET_VEHICLE_CHECKLISTS(string from, string to, string vehicle_number)
         {
             var fromParameter = from != null ?
@@ -140,11 +145,6 @@ namespace KhalidPetroleum.Models
                 new ObjectParameter("vehicle_number", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_VEHICLE_CHECKLISTS_Result>("GET_VEHICLE_CHECKLISTS", fromParameter, toParameter, vehicle_numberParameter);
-        }
-    
-        public virtual ObjectResult<GET_CHECKLISTS_Result> GET_CHECKLISTS()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_CHECKLISTS_Result>("GET_CHECKLISTS");
         }
     }
 }

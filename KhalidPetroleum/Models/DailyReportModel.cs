@@ -16,5 +16,10 @@ namespace KhalidPetroleum.Models
             this.sales = sales;
         }
 
+        public DailyReportModel(GET_DAILY_REPORT_BY_DATE_Result report)
+        {
+            this.report = report;
+        }
+
     }
 }

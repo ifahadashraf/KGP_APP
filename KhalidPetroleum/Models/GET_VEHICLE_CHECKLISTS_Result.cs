@@ -13,10 +13,11 @@ namespace KhalidPetroleum.Models
     
     public partial class GET_VEHICLE_CHECKLISTS_Result
     {
-        public long CheckListID { get; set; }
+        public long ChecklistId { get; set; }
         public string VehicleNumber { get; set; }
         public System.DateTime Date { get; set; }
         public string Reading { get; set; }
+        public string UserName { get; set; }
         public string ImageName { get; set; }
         public string QuestionStatement { get; set; }
         public bool Status { get; set; }

@@ -200,6 +200,29 @@ function readImage(inputElement) {
     return deferred.promise();
 }
 
+function compressImage(inputElement) {
+
+    var deferred = $.Deferred();
+
+    var files = inputElement.files;
+    if (files && files[0]) {
+        canvasResize(files[0], {
+            width: 400,
+            height: 0,
+            crop: false,
+            quality: 90,
+            callback: function (data, width, height) {
+                deferred.resolve(data);
+            }
+        });
+    } else {
+        deferred.resolve(undefined);
+    }
+
+    return deferred.promise();
+
+}
+
 function setTotalKM()
 {
     var close = $('#txtClosingMeter').val();
@@ -291,7 +314,6 @@ function getUnloadSites() {
 }
 
 function submitDailyReport() {
-
     
     //Basic info
     var date = $('#txtDate').val();
@@ -411,7 +433,8 @@ function submitDailyReport() {
                     skip = true;
                     return;
                 }
-                readImage(this).done(function (base64Data) {
+                //compressImage(this);
+                compressImage(this).done(function (base64Data) {
                     obj["SaleReceiptImage"] = base64Data;
                 });;
             }
@@ -455,16 +478,15 @@ function submitDailyReport() {
         "DailyReportSales": listOfSales
     };
 
-    window.setTimeout(function () {
-
-        swal({
-            title: "Are you sure ?",
-            text: "Make sure you have entered each data carefully.",
-            type: "info",
-            showCancelButton: true,
-            closeOnConfirm: false,
-            showLoaderOnConfirm: true,
-        }, function () {
+    swal({
+        title: "Are you sure ?",
+        text: "Make sure you have entered each data carefully.",
+        type: "info",
+        showCancelButton: true,
+        closeOnConfirm: false,
+        showLoaderOnConfirm: true,
+    }, function () {
+        window.setTimeout(function () {
             submitDailyReportApi(json, function (data) {
                 if (data == "1") {
                     swal({
@@ -482,11 +504,13 @@ function submitDailyReport() {
                     swal("Error", data, "error");
                 }
             });
-        });
+        }, 1000);
         
-        
-         
-    }, 500);
+    });
+}
+
+function sendReport() {
+
 }
 
 //*********************************************END CALL FUNCTIONS**********************************************//

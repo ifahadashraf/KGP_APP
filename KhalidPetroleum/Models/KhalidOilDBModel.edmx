@@ -635,11 +635,6 @@
           <FunctionImport Name="GET_ALL_TASKS_BY_OWNER_ID" ReturnType="Collection(KhalidOilDBModel.GET_ALL_TASKS_BY_OWNER_ID_Result)">
           <Parameter Name="id" Mode="In" Type="Int64" />
           </FunctionImport>
-          <FunctionImport Name="GET_VEHICLE_CHECKLISTS" ReturnType="Collection(KhalidOilDBModel.GET_VEHICLE_CHECKLISTS_Result)">
-            <Parameter Name="from" Mode="In" Type="String" />
-            <Parameter Name="to" Mode="In" Type="String" />
-            <Parameter Name="vehicle_number" Mode="In" Type="String" />
-          </FunctionImport>
           <EntitySet Name="DailyCheckLists" EntityType="KhalidOilDBModel.DailyCheckList" />
           <EntitySet Name="Tasks" EntityType="KhalidOilDBModel.Task" />
           <AssociationSet Name="FK_CheckList_Question_DailyCheckLists" Association="KhalidOilDBModel.FK_CheckList_Question_DailyCheckLists">
@@ -651,6 +646,11 @@
             <End Role="DailyCheckList" EntitySet="DailyCheckLists" />
           </AssociationSet>
           <FunctionImport Name="GET_CHECKLISTS" ReturnType="Collection(KhalidOilDBModel.GET_CHECKLISTS_Result)" />
+          <FunctionImport Name="GET_VEHICLE_CHECKLISTS" ReturnType="Collection(KhalidOilDBModel.GET_VEHICLE_CHECKLISTS_Result)">
+            <Parameter Name="from" Mode="In" Type="String" />
+            <Parameter Name="to" Mode="In" Type="String" />
+            <Parameter Name="vehicle_number" Mode="In" Type="String" />
+          </FunctionImport>
           </EntityContainer>
         <ComplexType Name="GET_PARENT_COMPANY_RENT_BY_DATE_Result">
           <Property Type="Int32" Name="ParentCompany" Nullable="false" />
@@ -833,15 +833,6 @@
           <Property Type="String" Name="OwnerName" Nullable="true" />
           <Property Type="String" Name="AssigneeName" Nullable="true" />
         </ComplexType>
-        <ComplexType Name="GET_VEHICLE_CHECKLISTS_Result">
-          <Property Type="Int64" Name="CheckListID" Nullable="false" />
-          <Property Type="String" Name="VehicleNumber" Nullable="false" MaxLength="50" />
-          <Property Type="DateTime" Name="Date" Nullable="false" Precision="23" />
-          <Property Type="String" Name="Reading" Nullable="true" />
-          <Property Type="String" Name="ImageName" Nullable="true" />
-          <Property Type="String" Name="QuestionStatement" Nullable="true" />
-          <Property Type="Boolean" Name="Status" Nullable="false" />
-        </ComplexType>
         <EntityType Name="DailyCheckList">
           <Key>
             <PropertyRef Name="CheckListID" />
@@ -908,6 +899,16 @@
           <Property Type="Int64" Name="ApprovedBy" Nullable="true" />
           <Property Type="String" Name="FillerName" Nullable="true" />
           <Property Type="String" Name="ApproverName" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="GET_VEHICLE_CHECKLISTS_Result">
+          <Property Type="Int64" Name="ChecklistId" Nullable="false" />
+          <Property Type="String" Name="VehicleNumber" Nullable="false" MaxLength="50" />
+          <Property Type="DateTime" Name="Date" Nullable="false" Precision="23" />
+          <Property Type="String" Name="Reading" Nullable="true" />
+          <Property Type="String" Name="UserName" Nullable="true" />
+          <Property Type="String" Name="ImageName" Nullable="true" />
+          <Property Type="String" Name="QuestionStatement" Nullable="true" />
+          <Property Type="Boolean" Name="Status" Nullable="false" />
         </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
@@ -1196,19 +1197,6 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="GET_VEHICLE_CHECKLISTS" FunctionName="KhalidOilDBModel.Store.GET_VEHICLE_CHECKLISTS">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="KhalidOilDBModel.GET_VEHICLE_CHECKLISTS_Result">
-                <ScalarProperty Name="CheckListID" ColumnName="CheckListID" />
-                <ScalarProperty Name="VehicleNumber" ColumnName="VehicleNumber" />
-                <ScalarProperty Name="Date" ColumnName="Date" />
-                <ScalarProperty Name="Reading" ColumnName="Reading" />
-                <ScalarProperty Name="ImageName" ColumnName="ImageName" />
-                <ScalarProperty Name="QuestionStatement" ColumnName="QuestionStatement" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <EntitySetMapping Name="DailyCheckLists">
             <EntityTypeMapping TypeName="KhalidOilDBModel.DailyCheckList">
               <MappingFragment StoreEntitySet="DailyCheckLists">
@@ -1253,6 +1241,20 @@
                 <ScalarProperty Name="ApprovedBy" ColumnName="ApprovedBy" />
                 <ScalarProperty Name="FillerName" ColumnName="FillerName" />
                 <ScalarProperty Name="ApproverName" ColumnName="ApproverName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GET_VEHICLE_CHECKLISTS" FunctionName="KhalidOilDBModel.Store.GET_VEHICLE_CHECKLISTS">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="KhalidOilDBModel.GET_VEHICLE_CHECKLISTS_Result">
+                <ScalarProperty Name="ChecklistId" ColumnName="ChecklistId" />
+                <ScalarProperty Name="VehicleNumber" ColumnName="VehicleNumber" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Reading" ColumnName="Reading" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="ImageName" ColumnName="ImageName" />
+                <ScalarProperty Name="QuestionStatement" ColumnName="QuestionStatement" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
