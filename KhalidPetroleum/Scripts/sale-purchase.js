@@ -29,6 +29,7 @@ var listOfRowIds = [];
 var listOfDepotNames = [];
 var listOfUnloadSites = [];
 var skip = false;
+var totalQuantity = 0;
 
 //*********************************************JS FUNCTIONS**********************************************//
 
@@ -210,7 +211,7 @@ function compressImage(inputElement) {
             width: 400,
             height: 0,
             crop: false,
-            quality: 90,
+            quality: 100,
             callback: function (data, width, height) {
                 deferred.resolve(data);
             }
@@ -316,6 +317,14 @@ function getUnloadSites() {
     });
 }
 
+function isQuantityEqual(){
+    
+    var supQuantity = $('#txtSUP').val() == "" ? 0 : parseInt($('#txtSUP').val());
+    var hsdQuantity = $('#txtHSD').val() == "" ? 0 : parseInt($('#txtHSD').val());;
+
+    return totalQuantity == (supQuantity + hsdQuantity);
+}
+
 function submitDailyReport() {
     
     //Basic info
@@ -396,11 +405,13 @@ function submitDailyReport() {
     }
 
     listOfSales = [];
+    totalQuantity = 0;
 
     $.each(listOfRowIds, function (index, item) {
         var obj = {};
         var i = 0;
         skip = false;
+        
         $('#' + item + ' input').each(function () {
             if(i == 0)
             {
@@ -419,6 +430,7 @@ function submitDailyReport() {
                     return;
                 }
                 obj["Quantity"] = $(this).val();
+                totalQuantity = totalQuantity + parseInt($(this).val());
             }
             else if (i == 2)
             {
@@ -450,6 +462,10 @@ function submitDailyReport() {
 
     if (skip) {
         alert("A SALE field is empty or insufficient images attached");
+        return
+    }
+    else if (!isQuantityEqual()) {
+        alert("Purchased and Sold quantites must be equal");
         return
     }
 

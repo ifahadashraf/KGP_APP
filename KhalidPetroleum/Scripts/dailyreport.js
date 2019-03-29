@@ -60,12 +60,12 @@ $(document).on("click", ".expand_report", function () {
     $('#OpeningMeter').html(report.OpeningMeter);
     $('#ClosingMeter').html(report.ClosingMeter);
     $('#total_kms').html(report.ClosingMeter - report.OpeningMeter);
-    $('#avg').html((report.ClosingMeter - report.OpeningMeter) / report.FilledFuelQuantity);
+    $('#avg').html(((report.ClosingMeter - report.OpeningMeter) / report.FilledFuelQuantity).toFixed(2));
     var expenses = report.ToolExpense + report.MunshiExpense + report.ParkingExpense + report.MealExpense + report.OtherExpense + (report.FilledFuelRate * report.FilledFuelQuantity);
     var recovery = (report.SUPDifferenceRate * report.SUPDifferenceQuantity) + (report.HSDDifferenceRate * report.HSDDifferenceQuantity);
 
     if (recovery - expenses > 0) {
-        $('#total_gain').html(recovery - expenses);
+        $('#total_gain').html((recovery - expenses).toFixed(2));
         $('#total_loss').html('-');
     }
     else if (recovery - expenses == 0) {
@@ -73,7 +73,7 @@ $(document).on("click", ".expand_report", function () {
         $('#total_loss').html(0);
     }
     else {
-        $('#total_loss').html(expenses - recovery);
+        $('#total_loss').html((expenses - recovery).toFixed(2));
         $('#total_gain').html('-');
     }
 
@@ -102,7 +102,10 @@ var list_reports = [];
 
 function getDailyReports() {
 
-    var table = $('#reportTable').DataTable();
+    var table = $('#reportTable').DataTable({
+        "order": [[0, "desc"]],
+        "bDestroy": true
+    });
 
     var from = $('#txtFromDate').val();
     var to = $('#txtToDate').val();

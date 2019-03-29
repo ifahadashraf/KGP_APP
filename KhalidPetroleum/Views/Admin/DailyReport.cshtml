@@ -284,138 +284,138 @@
                     <div class="modal-content">
                         
                         <div class="modal-body">
-                            <div id="alertdiv" class="row">
-                            </div>
-                            <div id="table">
-                                <table align="center" border="1">
-                                    <tr>
-                                        <th class="col-lg-6" colspan="4"><h4>Purchase</h4></th>
-                                        <th class="col-lg-6" colspan="3"><h4>Sale</h4></th>
-                                    </tr>
-                                    <tr>
-                                        <th class="col-lg-6" colspan="4"><h5>Depot Detail</h5></th>
-                                        <th class="col-lg-2" colspan="1"><h5>DeliveryNo</h5></th>
-                                        <th class="col-lg-2" colspan="1"><h5>Quantity</h5></th>
-                                        <th class="col-lg-2" colspan="1"><h5>UnloadSite</h5></th>
-                                    </tr>
-                                    <tr>
-                                        <td class="col-lg-2" colspan="2"><b>Code</b></td>
-                                        <td id="depotCode" class="col-lg-4" colspan="2"></td>
-                                        <td id="dno_0" class="col-lg-2" colspan="1"></td>
-                                        <td id="qty_0" class="col-lg-2" colspan="1"></td>
-                                        <td id="site_0" class="col-lg-2" colspan="1"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="col-lg-2" colspan="2"><b>Name</b></td>
-                                        <td id="depotName" class="col-lg-4" colspan="2"></td>
-                                        <td id="dno_1" class="col-lg-2" colspan="1"></td>
-                                        <td id="qty_1" class="col-lg-2" colspan="1"></td>
-                                        <td id="site_1" class="col-lg-2" colspan="1"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="col-lg-2" colspan="2"><b>Total Quantity</b></td>
-                                        <td class="col-lg-2" colspan="1"><b>Sup</b></td>
-                                        <td class="col-lg-2" colspan="1"><b>HSD</b></td>
-                                        <td id="dno_2" class="col-lg-2" colspan="1"></td>
-                                        <td id="qty_2" class="col-lg-2" colspan="1"></td>
-                                        <td id="site_2" class="col-lg-2" colspan="1"></td>
-                                    </tr>
-                                    <tr>
-                                        <td id="totalQty" class="col-lg-2" colspan="2"></td>
-                                        <td id="purchasedSUP" class="col-lg-2"></td>
-                                        <td id="purchasedHSD" class="col-lg-2"></td>
-                                        <td id="dno_3" class="col-lg-2"></td>
-                                        <td id="qty_3" class="col-lg-2"></td>
-                                        <td id="site_3" class="col-lg-2"></td>
-                                    </tr>
-                                    <tr>
-                                        <th class="col-lg-8" colspan="5"><h5>Difference</h5></th>
-                                        <th class="col-lg-1" colspan="1"><h5>Paid</h5></th>
-                                        <th class="col-lg-1" colspan="1"><h5>Received</h5></th>
-                                    </tr>
-                                    <tr>
-                                        <td class="col-lg-1"><b></b></td>
-                                        <td class="col-lg-1"><b>Pump</b></td>
-                                        <td class="col-lg-2"><b>MachiKey</b></td>
-                                        <td class="col-lg-2"><b>Rate</b></td>
-                                        <td class="col-lg-2"><b>Quantity</b></td>
-                                        <td class="col-lg-2"></td>
-                                        <td class="col-lg-2"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="col-lg-1"><b>Sup</b></td>
-                                        <td id="check_pump_sup" class="col-lg-1"></td>
-                                        <td id="check_machi_sup" class="col-lg-2"></td>
-                                        <td id="SUPDifferenceRate" class="col-lg-2"></td>
-                                        <td id="SUPDifferenceQuantity" class="col-lg-2"></td>
-                                        <td class="col-lg-2"></td>
-                                        <td id="sup_diff_recieved" class="col-lg-2"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="col-lg-1"><b>Hsd</b></td>
-                                        <td id="check_pump_hsd" class="col-lg-1"></td>
-                                        <td id="check_machi_hsd" class="col-lg-2"></td>
-                                        <td id="HSDDifferenceRate" class="col-lg-2"></td>
-                                        <td id="HSDDifferenceQuantity" class="col-lg-2"></td>
-                                        <td class="col-lg-2"></td>
-                                        <td id="hsd_diff_recieved" class="col-lg-2"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="col-lg-1"><b>Tool Exp</b></td>
-                                        <td class="col-lg-1"><b>Munchi</b></td>
-                                        <td class="col-lg-2"><b>Parking Exp</b></td>
-                                        <td class="col-lg-1"><b>Meals</b></td>
-                                        <td class="col-lg-1"><b>Others</b></td>
-                                        <td class="col-lg-2"></td>
-                                        <td class="col-lg-2"></td>
-                                    </tr>
-                                    <tr>
-                                        <td id="tool" class="col-lg-1"></td>
-                                        <td id="munshi" class="col-lg-1"></td>
-                                        <td id="parking" class="col-lg-2"></td>
-                                        <td id="meal" class="col-lg-2"></td>
-                                        <td id="other" class="col-lg-2"></td>
-                                        <td id="expense_paid" class="col-lg-2"></td>
-                                        <td class="col-lg-2"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="col-lg-2" colspan="3"><b>Fuel</b></td>
-                                        <td class="col-lg-2" colspan="1"><b>Rate</b></td>
-                                        <td class="col-lg-2" colspan="1"><b>Quantity</b></td>
-                                        <td class="col-lg-2" colspan="1"></td>
-                                        <td class="col-lg-2" colspan="1"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="col-lg-2" colspan="3">Hsd</td>
-                                        <td id="FilledFuelRate" class="col-lg-2" colspan="1"></td>
-                                        <td id="FilledFuelRate" class="col-lg-2" colspan="1"></td>
-                                        <td id="expense_fuel" class="col-lg-2" colspan="1"></td>
-                                        <td class="col-lg-2" colspan="1"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="col-lg-2" colspan="3">Lube</td>
-                                        <td class="col-lg-2" colspan="1"></td>
-                                        <td class="col-lg-2" colspan="1"></td>
-                                        <td class="col-lg-2" colspan="1"></td>
-                                        <td class="col-lg-2" colspan="1"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="col-lg-2" colspan="2"><b>Opening Meter</b></td>
-                                        <td class="col-lg-2" colspan="1"><b>Closing Meter</b></td>
-                                        <td class="col-lg-2" colspan="1"><b>Kilometers</b></td>
-                                        <td class="col-lg-2" colspan="1"><b>Average</b></td>
-                                        <td class="col-lg-2" colspan="1"><b>Loss</b></td>
-                                        <td class="col-lg-2" colspan="1"><b>Gain</b></td>
-                                    </tr>
-                                    <tr>
-                                        <td id="OpeningMeter" class="col-lg-2" colspan="2"></td>
-                                        <td id="ClosingMeter" class="col-lg-2" colspan="1"></td>
-                                        <td id="total_kms" class="col-lg-2" colspan="1"></td>
-                                        <td id="avg" class="col-lg-2" colspan="1"></td>
-                                        <td id="total_loss" class="col-lg-2 rd" colspan="1"><b></b></td>
-                                        <td id="total_gain" class="col-lg-2 gr" colspan="1"><b></b></td>
-                                    </tr>
-                                </table>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <table class="table-responsive" align="center" border="1">
+                                        <tr>
+                                            <th class="col-lg-6" colspan="4"><h4>Purchase</h4></th>
+                                            <th class="col-lg-6" colspan="3"><h4>Sale</h4></th>
+                                        </tr>
+                                        <tr>
+                                            <th class="col-lg-6" colspan="4"><h5>Depot Detail</h5></th>
+                                            <th class="col-lg-2" colspan="1"><h5>DeliveryNo</h5></th>
+                                            <th class="col-lg-2" colspan="1"><h5>Quantity</h5></th>
+                                            <th class="col-lg-2" colspan="1"><h5>UnloadSite</h5></th>
+                                        </tr>
+                                        <tr>
+                                            <td class="col-lg-2" colspan="2"><b>Code</b></td>
+                                            <td id="depotCode" class="col-lg-4" colspan="2"></td>
+                                            <td id="dno_0" class="col-lg-2" colspan="1"></td>
+                                            <td id="qty_0" class="col-lg-2" colspan="1"></td>
+                                            <td id="site_0" class="col-lg-2" colspan="1"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="col-lg-2" colspan="2"><b>Name</b></td>
+                                            <td id="depotName" class="col-lg-4" colspan="2"></td>
+                                            <td id="dno_1" class="col-lg-2" colspan="1"></td>
+                                            <td id="qty_1" class="col-lg-2" colspan="1"></td>
+                                            <td id="site_1" class="col-lg-2" colspan="1"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="col-lg-2" colspan="2"><b>Total Quantity</b></td>
+                                            <td class="col-lg-2" colspan="1"><b>Sup</b></td>
+                                            <td class="col-lg-2" colspan="1"><b>HSD</b></td>
+                                            <td id="dno_2" class="col-lg-2" colspan="1"></td>
+                                            <td id="qty_2" class="col-lg-2" colspan="1"></td>
+                                            <td id="site_2" class="col-lg-2" colspan="1"></td>
+                                        </tr>
+                                        <tr>
+                                            <td id="totalQty" class="col-lg-2" colspan="2"></td>
+                                            <td id="purchasedSUP" class="col-lg-2"></td>
+                                            <td id="purchasedHSD" class="col-lg-2"></td>
+                                            <td id="dno_3" class="col-lg-2"></td>
+                                            <td id="qty_3" class="col-lg-2"></td>
+                                            <td id="site_3" class="col-lg-2"></td>
+                                        </tr>
+                                        <tr>
+                                            <th class="col-lg-8" colspan="5"><h5>Difference</h5></th>
+                                            <th class="col-lg-1" colspan="1"><h5>Paid</h5></th>
+                                            <th class="col-lg-1" colspan="1"><h5>Received</h5></th>
+                                        </tr>
+                                        <tr>
+                                            <td class="col-lg-1"><b></b></td>
+                                            <td class="col-lg-1"><b>Pump</b></td>
+                                            <td class="col-lg-2"><b>MachiKey</b></td>
+                                            <td class="col-lg-2"><b>Rate</b></td>
+                                            <td class="col-lg-2"><b>Quantity</b></td>
+                                            <td class="col-lg-2"></td>
+                                            <td class="col-lg-2"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="col-lg-1"><b>Sup</b></td>
+                                            <td id="check_pump_sup" class="col-lg-1"></td>
+                                            <td id="check_machi_sup" class="col-lg-2"></td>
+                                            <td id="SUPDifferenceRate" class="col-lg-2"></td>
+                                            <td id="SUPDifferenceQuantity" class="col-lg-2"></td>
+                                            <td class="col-lg-2"></td>
+                                            <td id="sup_diff_recieved" class="col-lg-2"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="col-lg-1"><b>Hsd</b></td>
+                                            <td id="check_pump_hsd" class="col-lg-1"></td>
+                                            <td id="check_machi_hsd" class="col-lg-2"></td>
+                                            <td id="HSDDifferenceRate" class="col-lg-2"></td>
+                                            <td id="HSDDifferenceQuantity" class="col-lg-2"></td>
+                                            <td class="col-lg-2"></td>
+                                            <td id="hsd_diff_recieved" class="col-lg-2"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="col-lg-1"><b>Tool Exp</b></td>
+                                            <td class="col-lg-1"><b>Munchi</b></td>
+                                            <td class="col-lg-2"><b>Parking Exp</b></td>
+                                            <td class="col-lg-1"><b>Meals</b></td>
+                                            <td class="col-lg-1"><b>Others</b></td>
+                                            <td class="col-lg-2"></td>
+                                            <td class="col-lg-2"></td>
+                                        </tr>
+                                        <tr>
+                                            <td id="tool" class="col-lg-1"></td>
+                                            <td id="munshi" class="col-lg-1"></td>
+                                            <td id="parking" class="col-lg-2"></td>
+                                            <td id="meal" class="col-lg-2"></td>
+                                            <td id="other" class="col-lg-2"></td>
+                                            <td id="expense_paid" class="col-lg-2"></td>
+                                            <td class="col-lg-2"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="col-lg-2" colspan="3"><b>Fuel</b></td>
+                                            <td class="col-lg-2" colspan="1"><b>Rate</b></td>
+                                            <td class="col-lg-2" colspan="1"><b>Quantity</b></td>
+                                            <td class="col-lg-2" colspan="1"></td>
+                                            <td class="col-lg-2" colspan="1"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="col-lg-2" colspan="3">Hsd</td>
+                                            <td id="FilledFuelRate" class="col-lg-2" colspan="1"></td>
+                                            <td id="FilledFuelQuantity" class="col-lg-2" colspan="1"></td>
+                                            <td id="expense_fuel" class="col-lg-2" colspan="1"></td>
+                                            <td class="col-lg-2" colspan="1"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="col-lg-2" colspan="3">Lube</td>
+                                            <td class="col-lg-2" colspan="1"></td>
+                                            <td class="col-lg-2" colspan="1"></td>
+                                            <td class="col-lg-2" colspan="1"></td>
+                                            <td class="col-lg-2" colspan="1"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="col-lg-2" colspan="2"><b>Opening Meter</b></td>
+                                            <td class="col-lg-2" colspan="1"><b>Closing Meter</b></td>
+                                            <td class="col-lg-2" colspan="1"><b>Kilometers</b></td>
+                                            <td class="col-lg-2" colspan="1"><b>Average</b></td>
+                                            <td class="col-lg-2" colspan="1"><b>Loss</b></td>
+                                            <td class="col-lg-2" colspan="1"><b>Gain</b></td>
+                                        </tr>
+                                        <tr>
+                                            <td id="OpeningMeter" class="col-lg-2" colspan="2"></td>
+                                            <td id="ClosingMeter" class="col-lg-2" colspan="1"></td>
+                                            <td id="total_kms" class="col-lg-2" colspan="1"></td>
+                                            <td id="avg" class="col-lg-2" colspan="1"></td>
+                                            <td id="total_loss" class="col-lg-2 rd" colspan="1"><b></b></td>
+                                            <td id="total_gain" class="col-lg-2 gr" colspan="1"><b></b></td>
+                                        </tr>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                         <div class="modal-footer">
