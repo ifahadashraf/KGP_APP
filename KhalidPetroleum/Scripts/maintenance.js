@@ -120,7 +120,7 @@ function getMaintenanceTasks(vno, date, id) {
             else if (item.TaskStatus == "COMPLETED")
                 v4 = "selected";
             
-            if (userId != 3 && !item.IsApproved) {
+            if ((userId != 3) && !item.IsApproved) {
                 disb = 'disabled';
             }
 
@@ -158,7 +158,7 @@ function getMaintenanceTasks(vno, date, id) {
 
         });
 
-        if (userId == 3) {
+        if (userId == 3 || userId == 15) {
             $('.pl').css('display', 'block');
             $('.pd').css('display', 'none');
         }

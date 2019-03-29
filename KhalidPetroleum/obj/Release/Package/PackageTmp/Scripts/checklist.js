@@ -132,8 +132,10 @@ function getVehicles() {
             $('#txtVechileNo').append('<option value="-1">-Select Vehicle-</option>');
 
             $.each(arr, function (index, item) {
-                list_of_vehicles.push(item);
-                $('#txtVechileNo').append('<option value="'+item.VehicleNumber+'">'+item.VehicleNumber+'</option>');
+                if (item.VehicleType == "TANKER") {
+                    list_of_vehicles.push(item);
+                    $('#txtVechileNo').append('<option value="' + item.VehicleNumber + '">' + item.VehicleNumber + '</option>');
+                }
             });
         }
     });

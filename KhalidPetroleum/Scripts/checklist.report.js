@@ -95,7 +95,10 @@ function getVehicles() {
 			$('#txtVechileNo').append('<option value="-1">-Select Vehicle-</option>');
 
 			$.each(arr, function (index, item) {
-				$('#txtVechileNo').append('<option value="' + item.VehicleNumber + '">' + item.VehicleNumber + '</option>');
+			    if (item.VehicleType == "TANKER") {
+			        $('#txtVechileNo').append('<option value="' + item.VehicleNumber + '">' + item.VehicleNumber + '</option>');
+			    }
+				
 			});
 		}
 	});

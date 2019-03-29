@@ -123,9 +123,11 @@ function getDailyReports() {
                     table.clear().draw();
                     $.each(arr, function (index, item) {
                         list_reports.push(item);
+                        var date = new Date(item.report.Date);
+                        dateStr = (date.getDate() <= 9 ? "0" + date.getDate() : date.getDate()) + '/' + ((date.getMonth() + 1) <= 9 ? "0" + (date.getMonth() + 1) : (date.getMonth() + 1)) + '/' + (date.getYear() - 100);
                         table.row.add([
                             item.report.DailyReportID,
-                            item.report.Date.split('T')[0],
+                            dateStr,
                             item.report.VehicleNumber,
                             item.report.UserName,
                             item.report.DepotID,

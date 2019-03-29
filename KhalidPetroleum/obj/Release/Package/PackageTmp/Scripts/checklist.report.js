@@ -57,7 +57,9 @@ function getChecklistReports() {
 					$.each(arr, function (index, item) {
 					    list_reports.push(item);
 					    var date = new Date(item.Date);
-					    dateStr = date.getDate() + '/' + (date.getMonth() + 1) + '/' + (date.getYear() - 100) + " [" + (date.getHours() <= 9 ? "0" + date.getHours() : date.getHours()) + ":" + (date.getMinutes() <= 9 ? "0" + date.getMinutes() : date.getMinutes()) + ":" + (date.getSeconds() <= 9 ? "0" + date.getSeconds() : date.getSeconds()) + "]";
+					    dateStr = (date.getDate() <= 9 ? "0" + date.getDate() : date.getDate()) + '/' + ((date.getMonth() + 1) <= 9 ? "0" + (date.getMonth() + 1) : (date.getMonth() + 1)) + '/' + (date.getYear() - 100);
+					    //dateStr = date.getDate() + '/' + (date.getMonth() + 1) + '/' + (date.getYear() - 100);
+					    var timeStr = " [" + (date.getHours() <= 9 ? "0" + date.getHours() : date.getHours()) + ":" + (date.getMinutes() <= 9 ? "0" + date.getMinutes() : date.getMinutes()) + ":" + (date.getSeconds() <= 9 ? "0" + date.getSeconds() : date.getSeconds()) + "]";
 						table.row.add([
 							(index+1),
                             dateStr,
@@ -93,7 +95,10 @@ function getVehicles() {
 			$('#txtVechileNo').append('<option value="-1">-Select Vehicle-</option>');
 
 			$.each(arr, function (index, item) {
-				$('#txtVechileNo').append('<option value="' + item.VehicleNumber + '">' + item.VehicleNumber + '</option>');
+			    if (item.VehicleType == "TANKER") {
+			        $('#txtVechileNo').append('<option value="' + item.VehicleNumber + '">' + item.VehicleNumber + '</option>');
+			    }
+				
 			});
 		}
 	});

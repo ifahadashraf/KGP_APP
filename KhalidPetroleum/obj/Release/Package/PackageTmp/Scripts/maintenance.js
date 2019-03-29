@@ -59,7 +59,7 @@ function getChecklists() {
         $.each(arr, function (index, item) {
 
             var date = new Date(item.Date);
-            dateStr = date.getDate() + '/' + (date.getMonth()+1) + '/' + (date.getYear() - 100);
+            dateStr = (date.getDate() <= 9 ? "0" + date.getDate() : date.getDate()) + '/' + ((date.getMonth() + 1) <= 9 ? "0" + (date.getMonth() + 1) : (date.getMonth() + 1)) + '/' + (date.getYear() - 100);
 
             checklistsTable.row.add([
                 item.CheckListID,
@@ -120,7 +120,7 @@ function getMaintenanceTasks(vno, date, id) {
             else if (item.TaskStatus == "COMPLETED")
                 v4 = "selected";
             
-            if (userId != 3 && !item.IsApproved) {
+            if ((userId != 3) && !item.IsApproved) {
                 disb = 'disabled';
             }
 
@@ -158,7 +158,7 @@ function getMaintenanceTasks(vno, date, id) {
 
         });
 
-        if (userId == 3) {
+        if (userId == 3 || userId == 15) {
             $('.pl').css('display', 'block');
             $('.pd').css('display', 'none');
         }
