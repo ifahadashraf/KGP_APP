@@ -121,7 +121,7 @@
                             <span>Roles</span>
                         </a>
                     </li>
-                    <li @((user.UserID == 3 || user.UserType == "CRO" || user.UserType == "ACCOUNTS-MANAGER") ? string.Empty : "style=display:none")>
+                    <li @((bool)rights.MStats ? string.Empty : "style=display:none")>
                         <a href="/Admin/Index">
                             <i class="material-icons">assessment</i>
                             <span>Stats</span>

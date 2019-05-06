@@ -38,6 +38,7 @@ namespace KhalidPetroleum.Models
         public Nullable<int> OpeningMeter { get; set; }
         public Nullable<int> ClosingMeter { get; set; }
         public Nullable<double> PetrolAverage { get; set; }
+        public Nullable<bool> IsVerified { get; set; }
         public string UserName { get; set; }
         public long DepotCode { get; set; }
         public string DepotName { get; set; }

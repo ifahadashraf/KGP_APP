@@ -44,10 +44,11 @@ namespace KhalidPetroleum.Models
         public Nullable<int> OpeningMeter { get; set; }
         public Nullable<int> ClosingMeter { get; set; }
         public Nullable<double> PetrolAverage { get; set; }
+        public Nullable<bool> IsVerified { get; set; }
     
         public virtual Depot Depot { get; set; }
+        public virtual User User { get; set; }
         public virtual Vehicle Vehicle { get; set; }
         public virtual ICollection<DailyReportSale> DailyReportSales { get; set; }
-        public virtual User User { get; set; }
     }
 }

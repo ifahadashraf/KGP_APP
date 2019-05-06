@@ -1,10 +1,12 @@
-﻿$(document).ready(function () {
+﻿var report = null;
 
+$(document).ready(function () {
+    getDailyReports();
 });
 
 $(document).on("click", ".expand_report", function () {
 
-    var report = list_reports[(this.id)].report;
+    report = list_reports[(this.id)].report;
 
     $("#depotName").html(report.DepotName);
     $("#depotCode").html(report.DepotCode);
@@ -95,7 +97,8 @@ $(document).on("click", ".expand_report", function () {
 
     });
 
-    
+
+
 });
 
 var list_reports = [];
@@ -107,62 +110,55 @@ function getDailyReports() {
         "bDestroy": true
     });
 
-    var from = $('#txtFromDate').val();
-    var to = $('#txtToDate').val();
+    var from = '2019-01-01';
+    var to = new Date().toISOString().split('T')[0];
 
-    if (from != "" && to != "") {
-        swal({
-            title: "Sure? It might take 10-15 secs",
-            text: "Wanna fetch report from " + from + " to " + to + " ?",
-            type: "info",
-            showCancelButton: true,
-            closeOnConfirm: false,
-            showLoaderOnConfirm: true,
-        }, function () {
-            getDailyReportsApi(from, to, function (data) {
-                var arr = JSON.parse(data);
+    getDailyReportsApi(from, to, function (data) {
+        var arr = JSON.parse(data);
 
-                if (arr.length > 0) {
-                    table.clear().draw();
-                    $.each(arr, function (index, item) {
-                        if (item.report.IsVerified === true) {
-                            list_reports.push(item);
-                            var date = new Date(item.report.Date);
-                            dateStr = (date.getDate() <= 9 ? "0" + date.getDate() : date.getDate()) + '/' + ((date.getMonth() + 1) <= 9 ? "0" + (date.getMonth() + 1) : (date.getMonth() + 1)) + '/' + (date.getYear() - 100);
-                            table.row.add([
-                                item.report.DailyReportID,
-                                dateStr,
-                                item.report.VehicleNumber,
-                                item.report.UserName,
-                                item.report.DepotID,
-                                item.report.DepotName,
-                                '<div class="row"><div class="col-md-6"><button id="' + (list_reports.length - 1) + '" type="button" class="btn bg-light-blue waves-effect expand_report" data-toggle="modal" data-target="#mdModal" id=' + index + '>Expand</button></div> <div class="col-md-6"><button type="button" class="btn bg-light-blue waves-effect" data-toggle="modal" data-target="#galleryModal" onclick="makeTiles(' + item.report.DailyReportID + ')">Images</button></div></div>'
-                            ]).draw();
-                        }
-                    });
-                    swal({
-                        title: "",
-                        text: "",
-                        timer: 100,
-                        showConfirmButton: false
-                    });
-                }
-                else {
-                    swal("No records found.")
+        if (arr.length > 0) {
+            table.clear().draw();
+            $.each(arr, function (index, item) {
+                if (item.report.IsVerified == null) {
+                    list_reports.push(item);
+                    var date = new Date(item.report.Date);
+                    dateStr = (date.getDate() <= 9 ? "0" + date.getDate() : date.getDate()) + '/' + ((date.getMonth() + 1) <= 9 ? "0" + (date.getMonth() + 1) : (date.getMonth() + 1)) + '/' + (date.getYear() - 100);
+                    table.row.add([
+                        item.report.DailyReportID,
+                        dateStr,
+                        item.report.VehicleNumber,
+                        item.report.UserName,
+                        item.report.DepotID,
+                        item.report.DepotName,
+                        '<div class="row"><div class="col-md-6"><button id="' + (list_reports.length-1)+ '" type="button" class="btn bg-light-blue waves-effect expand_report" data-toggle="modal" data-target="#mdModal" id=' + index + '>Expand</button></div> <div class="col-md-6"><button type="button" class="btn bg-light-blue waves-effect" data-toggle="modal" data-target="#galleryModal" onclick="makeTiles(' + item.report.DailyReportID + ')">Images</button></div></div>'
+                    ]).draw();
                 }
             });
-        });
-    }
-    else {
-        alert("Please select a date.")
-    }
-    
+        }
+    });
+
+    //if (from != "" && to != "") {
+    //    swal({
+    //        title: "Sure? It might take 10-15 secs",
+    //        text: "Wanna fetch report from " + from + " to " + to + " ?",
+    //        type: "info",
+    //        showCancelButton: true,
+    //        closeOnConfirm: false,
+    //        showLoaderOnConfirm: true,
+    //    }, function () {
+            
+    //    });
+    //}
+    //else {
+    //    alert("Please select a date.")
+    //}
+
 }
 
 function viewSales(id) {
     swal({
         title: "Sales Details",
-        text: '<p>'+id+'</p>',
+        text: '<p>' + id + '</p>',
         html: true
     });
 }
@@ -171,16 +167,16 @@ var isLoaded = false;
 
 function makeTiles(id) {
     $('#aniimated-thumbnials').html('');
-    getReportImagesApi(id,function (data) {
+    getReportImagesApi(id, function (data) {
         var arr = JSON.parse(data);
         if (arr.length > 0) {
             var itemsProcessed = 0;
             $.each(arr, function (index, item) {
                 $('#aniimated-thumbnials').
-                    append('<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">'+
+                    append('<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">' +
                                 '<a href="../../Content/images/' + item.SaleReceiptImage + '" data-sub-html="Demo Description" target="_blank">' +
                                     '<img class="img-responsive thumbnail" src="../../Content/images/' + item.SaleReceiptImage + '">' +
-                                '</a>'+
+                                '</a>' +
                            '</div>');
                 itemsProcessed++;
             });
@@ -189,5 +185,24 @@ function makeTiles(id) {
             $('#aniimated-thumbnials').html('<h4>No images attached</h4>');
         }
     });
-    
+
+}
+
+function updateVerficationStatus(status) {
+    $('#alertdiv').html('<div class="alert alert-info"><strong>Please wait</strong>...</div>');
+    $('.modal-footer .btn').prop('disabled', true);
+    updateDailyReportStatusApi(report.DailyReportID, status, function (data) {
+        if (data == "1") {
+            $('#alertdiv').html('<div class="alert alert-success"><strong>Success !</strong> New task has been added</div>')
+            setTimeout(function () {
+
+                window.location.href = window.location.href;
+
+            }, 1500);
+        }
+        else {
+            $('#alertdiv').html('<div class="alert alert-danger"><strong>Error </strong> ' + data + '</div>');
+            $('.modal-footer .btn').prop('disabled', false);
+        }
+    });
 }

@@ -29,17 +29,17 @@ namespace KhalidPetroleum.Models
     
         public virtual DbSet<Attendance> Attendances { get; set; }
         public virtual DbSet<CheckList_Question> CheckList_Question { get; set; }
-        public virtual DbSet<DailyReport> DailyReports { get; set; }
         public virtual DbSet<DailyReportSale> DailyReportSales { get; set; }
         public virtual DbSet<Depot> Depots { get; set; }
         public virtual DbSet<Question> Questions { get; set; }
         public virtual DbSet<UnloadSite> UnloadSites { get; set; }
         public virtual DbSet<Vehicle> Vehicles { get; set; }
-        public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<DailyCheckListImage> DailyCheckListImages { get; set; }
         public virtual DbSet<DailyCheckList> DailyCheckLists { get; set; }
         public virtual DbSet<Task> Tasks { get; set; }
+        public virtual DbSet<DailyReport> DailyReports { get; set; }
+        public virtual DbSet<Role> Roles { get; set; }
     
         public virtual ObjectResult<Nullable<decimal>> ADD_DAILY_CHECKLIST(string vehicleno, Nullable<System.DateTime> date)
         {

@@ -74,7 +74,7 @@ namespace KhalidPetroleum.Controllers
         {
             if (Session["User"] != null)
             {
-                ViewBag.Tasks = GetMaintenanceTasks();
+                //ViewBag.Tasks = GetMaintenanceTasks();
                 return View();
             }
             else

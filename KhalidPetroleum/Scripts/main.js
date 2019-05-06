@@ -32,6 +32,7 @@ var GET_CHECKLISTS = "GetChecklists";
 var GET_MAINTENANCE_TASKS = "GetTasksByChecklistId";
 var SUBMIT_APPROVAL = "SubmitApproval";
 var GET_DAILY_REPORT_SALES = "GetDailyReportSales";
+var UPDATE_DAILY_REPORT_STATUS = "UpdateDailyReportStatus";
 
 //*************END OF CONSTANTS*************//
 
@@ -457,6 +458,20 @@ function getDailyReportSalesApi(id, cb) {
         }
     });
 }
+
+function updateDailyReportStatusApi(id, status, cb) {
+    $.ajax({
+        url: BASE_URL + UPDATE_DAILY_REPORT_STATUS + "?id=" + id + "&status=" + status,
+        method: "GET",
+        success: function (data) {
+            cb(data);
+        },
+        error: function (data) {
+            cb(data);
+        }
+    });
+}
+
 
 
 //*******************END******************//

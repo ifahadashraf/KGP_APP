@@ -699,5 +699,23 @@ namespace KhalidPetroleum.Controllers
             }
         }
 
+        [System.Web.Http.HttpGet]
+        public string UpdateDailyReportStatus(long id, bool status)
+        {
+            try
+            {
+                var report = db.DailyReports.Where(x => x.DailyReportID == id).ToList()[0];
+                report.IsVerified = status;
+                db.SaveChanges();
+                return "1";
+            }
+            catch (Exception e)
+            {
+                return e.Message;
+            }
+            
+
+        }
+
     }
 }

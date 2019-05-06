@@ -21,7 +21,7 @@ namespace KhalidPetroleum.Models
         public long SiteID { get; set; }
         public string SaleReceiptImage { get; set; }
     
-        public virtual DailyReport DailyReport { get; set; }
         public virtual UnloadSite UnloadSite { get; set; }
+        public virtual DailyReport DailyReport { get; set; }
     }
 }

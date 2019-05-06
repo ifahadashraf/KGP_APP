@@ -13,22 +13,42 @@ namespace KhalidPetroleum.Controllers
 
         public ActionResult Index()
         {
-            return View();
+            if (Session["User"] != null)
+                return View();
+            else
+                return View("SignIn");
         }
 
         public ActionResult Rents()
         {
-            return View();
+            if (Session["User"] != null)
+                return View();
+            else
+                return View("SignIn");
         }
 
         public ActionResult DailyReport()
         {
-            return View();
+            if (Session["User"] != null)
+                return View();
+            else
+                return View("SignIn");
         }
 
         public ActionResult ChecklistReport()
         {
-            return View();
+            if (Session["User"] != null)
+                return View();
+            else
+                return View("SignIn");
+        }
+
+        public ActionResult Verification()
+        {
+            if (Session["User"] != null)
+                return View();
+            else
+                return View("SignIn");
         }
 
     }
