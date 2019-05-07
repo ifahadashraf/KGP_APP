@@ -95,6 +95,11 @@ var readonlyTable = $('#readonlyTasksTable').DataTable({
     }
 });
 
+var usersTasksTable = $('#usersTasksTable').DataTable({
+    "order": [[2, "desc"]],
+    "pageLength": 10
+});
+
 var tasks_list = [];
 var users_name_list = [];
 var users_id_list = [];
@@ -120,6 +125,7 @@ var myTasks_assignee = null;
         $('#my_tasks').addClass('in');
     }
 
+    getUserTasks();
     getUsers();
     getTasks();
 
@@ -502,6 +508,34 @@ function modalBtnClick() {
 
 }
 
+function addNewTaskRow() {
+    var id = new Date().getUTCMilliseconds();
+    var html = '<div id='+id+' class="row" style="margin-top: 10px">' +
+                    '<div class="col-lg-3">' +
+                        '<input class="form-control" type="text" />' +
+                    '</div>' +
+                    '<div class="col-lg-3">' +
+                        '<input class="form-control" type="date" />' +
+                    '</div>' +
+                    '<div class="col-lg-2">' +
+                        '<select class="form-control">' +
+                            '<option>Pending</option>' +
+                        '</select>' +
+                    '</div>' +
+                    '<div class="col-lg-3">' +
+                        '<input class="form-control" type="text" />' +
+                    '</div>' +
+                    '<div class="col-lg-1">' +
+                        '<button class="btn btn-default" onclick="removeTaskRow('+id+')">x</button>' +
+                    '</div>' +
+                '</div>';
+    $('#allTasks').append(html);
+}
+
+function removeTaskRow(id) {
+    $('#' + id).remove();
+}
+
 function formatDateTime(date) {
     var hours = date.getHours();
     var minutes = date.getMinutes();
@@ -524,3 +558,17 @@ function formatDate(date) {
     return date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
 }
 
+function getUserTasks() {
+    getUsersActiveTasks(function (data) {
+        var arr = JSON.parse(data);
+        $.each(arr, function (index, item) {
+            usersTasksTable.row.add([
+                            item.UserID,
+                            item.Username,
+                            item.ActiveTasks,
+                            '<button class="btn btn-primary">View</button>'
+                            
+            ]).draw();
+        });
+    });
+}

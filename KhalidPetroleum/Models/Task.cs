@@ -27,5 +27,8 @@ namespace KhalidPetroleum.Models
         public string VehicleNumber { get; set; }
         public Nullable<long> DailyChecklistId { get; set; }
         public Nullable<bool> IsApproved { get; set; }
+        public Nullable<long> RelatedTaskId { get; set; }
+        public Nullable<long> CCGroupId { get; set; }
+        public Nullable<bool> IsGroupTask { get; set; }
     }
 }

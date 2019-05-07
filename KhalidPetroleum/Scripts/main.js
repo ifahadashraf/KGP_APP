@@ -33,6 +33,7 @@ var GET_MAINTENANCE_TASKS = "GetTasksByChecklistId";
 var SUBMIT_APPROVAL = "SubmitApproval";
 var GET_DAILY_REPORT_SALES = "GetDailyReportSales";
 var UPDATE_DAILY_REPORT_STATUS = "UpdateDailyReportStatus";
+var GET_USERS_ACTIVE_TASKS = "GetUserPendingTasks";
 
 //*************END OF CONSTANTS*************//
 
@@ -472,6 +473,18 @@ function updateDailyReportStatusApi(id, status, cb) {
     });
 }
 
+function getUsersActiveTasks(cb) {
+    $.ajax({
+        url: BASE_URL + GET_USERS_ACTIVE_TASKS,
+        method: "GET",
+        success: function (data) {
+            cb(data);
+        },
+        error: function (data) {
+            cb(data);
+        }
+    });
+}
 
 
 //*******************END******************//

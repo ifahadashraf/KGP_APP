@@ -717,5 +717,11 @@ namespace KhalidPetroleum.Controllers
 
         }
 
+        [System.Web.Http.HttpGet]
+        public string GetUserPendingTasks()
+        {
+            return JsonConvert.SerializeObject(db.GET_USERS_ACTIVE_TASKS().ToList<GET_USERS_ACTIVE_TASKS_Result>());
+        }
+
     }
 }

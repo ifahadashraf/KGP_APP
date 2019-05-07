@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="KhalidOilDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="KhalidOilDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Attendances">
           <Key>
             <PropertyRef Name="UserID" />
@@ -145,6 +145,9 @@
           <Property Name="VehicleNumber" Type="nvarchar" MaxLength="50" />
           <Property Name="DailyChecklistId" Type="bigint" />
           <Property Name="IsApproved" Type="bit" />
+          <Property Name="RelatedTaskId" Type="bigint" />
+          <Property Name="CCGroupId" Type="bigint" />
+          <Property Name="IsGroupTask" Type="bit" />
         </EntityType>
         <EntityType Name="UnloadSites">
           <Key>
@@ -333,6 +336,10 @@
           <Parameter Name="toDate" Type="date" Mode="In" />
           <Parameter Name="fromDate" Type="date" Mode="In" />
         </Function>
+        <Function Name="GET_USER_TASKS_BY_USER_ID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="userid" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="GET_USERS_ACTIVE_TASKS" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="GET_VEHICLE_CHECKLISTS" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="from" Type="nvarchar(max)" Mode="In" />
           <Parameter Name="to" Type="nvarchar(max)" Mode="In" />
@@ -587,6 +594,10 @@
             <End Role="Role" EntitySet="Roles" />
             <End Role="User" EntitySet="Users" />
           </AssociationSet>
+          <FunctionImport Name="GET_USER_TASKS_BY_USER_ID">
+            <Parameter Name="userid" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="GET_USERS_ACTIVE_TASKS" ReturnType="Collection(KhalidOilDBModel.GET_USERS_ACTIVE_TASKS_Result)" />
           </EntityContainer>
         <ComplexType Name="GET_PARENT_COMPANY_RENT_BY_DATE_Result">
           <Property Type="Int32" Name="ParentCompany" Nullable="false" />
@@ -724,6 +735,9 @@
           <Property Name="VehicleNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="DailyChecklistId" Type="Int64" />
           <Property Name="IsApproved" Type="Boolean" />
+          <Property Name="RelatedTaskId" Type="Int64" />
+          <Property Name="CCGroupId" Type="Int64" />
+          <Property Name="IsGroupTask" Type="Boolean" />
         </EntityType>
         <Association Name="FK_CheckList_Question_DailyCheckLists">
           <End Type="KhalidOilDBModel.DailyCheckList" Role="DailyCheckList" Multiplicity="1" />
@@ -923,6 +937,11 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <ComplexType Name="GET_USERS_ACTIVE_TASKS_Result">
+          <Property Type="Int64" Name="UserID" Nullable="false" />
+          <Property Type="String" Name="Username" Nullable="true" />
+          <Property Type="Int32" Name="ActiveTasks" Nullable="true" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1176,6 +1195,9 @@
           <EntitySetMapping Name="Tasks">
             <EntityTypeMapping TypeName="KhalidOilDBModel.Task">
               <MappingFragment StoreEntitySet="Tasks">
+                <ScalarProperty Name="IsGroupTask" ColumnName="IsGroupTask" />
+                <ScalarProperty Name="CCGroupId" ColumnName="CCGroupId" />
+                <ScalarProperty Name="RelatedTaskId" ColumnName="RelatedTaskId" />
                 <ScalarProperty Name="IsApproved" ColumnName="IsApproved" />
                 <ScalarProperty Name="DailyChecklistId" ColumnName="DailyChecklistId" />
                 <ScalarProperty Name="VehicleNumber" ColumnName="VehicleNumber" />
@@ -1278,6 +1300,16 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="GET_USER_TASKS_BY_USER_ID" FunctionName="KhalidOilDBModel.Store.GET_USER_TASKS_BY_USER_ID" />
+          <FunctionImportMapping FunctionImportName="GET_USERS_ACTIVE_TASKS" FunctionName="KhalidOilDBModel.Store.GET_USERS_ACTIVE_TASKS">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="KhalidOilDBModel.GET_USERS_ACTIVE_TASKS_Result">
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="ActiveTasks" ColumnName="ActiveTasks" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
