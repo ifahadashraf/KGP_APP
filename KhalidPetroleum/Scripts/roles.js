@@ -54,7 +54,12 @@ function editModal(it) {
         "isHRent": false,
         "isHPettyCash": false,
         "isHCash": false,
-        "isHpayments": false
+        "isHPayments": false,
+        "MStats": false,
+        "SRent": false,
+        "SDailyReport": false,
+        "SChecklistReport": false,
+        "SVerification": false
     }
     var i = 0;
     for (var key in body) {
@@ -134,7 +139,12 @@ function addNewRole() {
         "isHRent" : false,
         "isHPettyCash" : false,
         "isHCash" : false,
-        "isHpayments" : false
+        "isHPayments": false,
+        "MStats": false,
+        "SRent": false,
+        "SDailyReport": false,
+        "SChecklistReport": false,
+        "SVerification": false
     }
     var i = 0;
     for (var key in body) {
@@ -194,7 +204,12 @@ function updateRole() {
         "isHRent": false,
         "isHPettyCash": false,
         "isHCash": false,
-        "isHpayments": false
+        "isHpayments": false,
+        "MStats": false,
+        "SRent": false,
+        "SDailyReport": false,
+        "SChecklistReport": false,
+        "SVerification": false
     }
     var i = 0;
     for (var key in body) {

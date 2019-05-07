@@ -16,8 +16,8 @@ namespace KhalidPetroleum.Models
     {
         public Vehicle()
         {
-            this.DailyReports = new HashSet<DailyReport>();
             this.DailyCheckLists = new HashSet<DailyCheckList>();
+            this.DailyReports = new HashSet<DailyReport>();
         }
     
         public string VehicleNumber { get; set; }
@@ -28,7 +28,7 @@ namespace KhalidPetroleum.Models
         public string VehicleExpectedChange { get; set; }
         public Nullable<bool> Status { get; set; }
     
-        public virtual ICollection<DailyReport> DailyReports { get; set; }
         public virtual ICollection<DailyCheckList> DailyCheckLists { get; set; }
+        public virtual ICollection<DailyReport> DailyReports { get; set; }
     }
 }

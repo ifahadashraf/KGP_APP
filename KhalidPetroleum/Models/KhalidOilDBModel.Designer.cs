@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'D:\WORK\KhalidPetroleum\KhalidPetroleum\Models\KhalidOilDBModel.edmx'. 
+﻿// T4 code generation is enabled for model 'E:\WORK\KGP_APP\KhalidPetroleum\Models\KhalidOilDBModel.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.

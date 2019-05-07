@@ -33,6 +33,11 @@ namespace KhalidPetroleum.Models
         public bool isHPettyCash { get; set; }
         public bool isHCash { get; set; }
         public bool isHPayments { get; set; }
+        public Nullable<bool> MStats { get; set; }
+        public Nullable<bool> SVerification { get; set; }
+        public Nullable<bool> SRent { get; set; }
+        public Nullable<bool> SDailyReport { get; set; }
+        public Nullable<bool> SChecklistReport { get; set; }
     
         public virtual ICollection<User> Users { get; set; }
     }

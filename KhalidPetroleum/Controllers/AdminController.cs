@@ -43,5 +43,13 @@ namespace KhalidPetroleum.Controllers
                 return View("SignIn");
         }
 
+        public ActionResult Verification()
+        {
+            if (Session["User"] != null)
+                return View();
+            else
+                return View("SignIn");
+        }
+
     }
 }
