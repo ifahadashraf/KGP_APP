@@ -594,10 +594,10 @@
             <End Role="Role" EntitySet="Roles" />
             <End Role="User" EntitySet="Users" />
           </AssociationSet>
-          <FunctionImport Name="GET_USER_TASKS_BY_USER_ID">
+          <FunctionImport Name="GET_USERS_ACTIVE_TASKS" ReturnType="Collection(KhalidOilDBModel.GET_USERS_ACTIVE_TASKS_Result)" />
+          <FunctionImport Name="GET_USER_TASKS_BY_USER_ID" ReturnType="Collection(KhalidOilDBModel.GET_USER_TASKS_BY_USER_ID_Result)">
             <Parameter Name="userid" Mode="In" Type="Int64" />
           </FunctionImport>
-          <FunctionImport Name="GET_USERS_ACTIVE_TASKS" ReturnType="Collection(KhalidOilDBModel.GET_USERS_ACTIVE_TASKS_Result)" />
           </EntityContainer>
         <ComplexType Name="GET_PARENT_COMPANY_RENT_BY_DATE_Result">
           <Property Type="Int32" Name="ParentCompany" Nullable="false" />
@@ -941,6 +941,24 @@
           <Property Type="Int64" Name="UserID" Nullable="false" />
           <Property Type="String" Name="Username" Nullable="true" />
           <Property Type="Int32" Name="ActiveTasks" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="GET_USER_TASKS_BY_USER_ID_Result">
+          <Property Type="Int64" Name="TaskId" Nullable="false" />
+          <Property Type="String" Name="TaskName" Nullable="false" />
+          <Property Type="String" Name="Details" Nullable="true" />
+          <Property Type="DateTime" Name="StartDate" Nullable="false" />
+          <Property Type="DateTime" Name="EstimatedDate" Nullable="true" />
+          <Property Type="Int64" Name="TaskOwner" Nullable="false" />
+          <Property Type="Int64" Name="AssignedTo" Nullable="true" />
+          <Property Type="DateTime" Name="LastUpdate" Nullable="true" Precision="23" />
+          <Property Type="String" Name="TaskStatus" Nullable="false" />
+          <Property Type="Int32" Name="TaskType" Nullable="true" />
+          <Property Type="String" Name="VehicleNumber" Nullable="true" MaxLength="50" />
+          <Property Type="Int64" Name="DailyChecklistId" Nullable="true" />
+          <Property Type="Boolean" Name="IsApproved" Nullable="true" />
+          <Property Type="Int64" Name="RelatedTaskId" Nullable="true" />
+          <Property Type="Int64" Name="CCGroupId" Nullable="true" />
+          <Property Type="Boolean" Name="IsGroupTask" Nullable="true" />
         </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
@@ -1300,13 +1318,34 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="GET_USER_TASKS_BY_USER_ID" FunctionName="KhalidOilDBModel.Store.GET_USER_TASKS_BY_USER_ID" />
           <FunctionImportMapping FunctionImportName="GET_USERS_ACTIVE_TASKS" FunctionName="KhalidOilDBModel.Store.GET_USERS_ACTIVE_TASKS">
             <ResultMapping>
               <ComplexTypeMapping TypeName="KhalidOilDBModel.GET_USERS_ACTIVE_TASKS_Result">
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="Username" ColumnName="Username" />
                 <ScalarProperty Name="ActiveTasks" ColumnName="ActiveTasks" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GET_USER_TASKS_BY_USER_ID" FunctionName="KhalidOilDBModel.Store.GET_USER_TASKS_BY_USER_ID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="KhalidOilDBModel.GET_USER_TASKS_BY_USER_ID_Result">
+                <ScalarProperty Name="TaskId" ColumnName="TaskId" />
+                <ScalarProperty Name="TaskName" ColumnName="TaskName" />
+                <ScalarProperty Name="Details" ColumnName="Details" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="EstimatedDate" ColumnName="EstimatedDate" />
+                <ScalarProperty Name="TaskOwner" ColumnName="TaskOwner" />
+                <ScalarProperty Name="AssignedTo" ColumnName="AssignedTo" />
+                <ScalarProperty Name="LastUpdate" ColumnName="LastUpdate" />
+                <ScalarProperty Name="TaskStatus" ColumnName="TaskStatus" />
+                <ScalarProperty Name="TaskType" ColumnName="TaskType" />
+                <ScalarProperty Name="VehicleNumber" ColumnName="VehicleNumber" />
+                <ScalarProperty Name="DailyChecklistId" ColumnName="DailyChecklistId" />
+                <ScalarProperty Name="IsApproved" ColumnName="IsApproved" />
+                <ScalarProperty Name="RelatedTaskId" ColumnName="RelatedTaskId" />
+                <ScalarProperty Name="CCGroupId" ColumnName="CCGroupId" />
+                <ScalarProperty Name="IsGroupTask" ColumnName="IsGroupTask" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

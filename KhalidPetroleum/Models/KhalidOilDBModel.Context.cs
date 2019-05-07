@@ -147,18 +147,18 @@ namespace KhalidPetroleum.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_VEHICLE_CHECKLISTS_Result>("GET_VEHICLE_CHECKLISTS", fromParameter, toParameter, vehicle_numberParameter);
         }
     
-        public virtual int GET_USER_TASKS_BY_USER_ID(Nullable<long> userid)
+        public virtual ObjectResult<GET_USERS_ACTIVE_TASKS_Result> GET_USERS_ACTIVE_TASKS()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_USERS_ACTIVE_TASKS_Result>("GET_USERS_ACTIVE_TASKS");
+        }
+    
+        public virtual ObjectResult<GET_USER_TASKS_BY_USER_ID_Result> GET_USER_TASKS_BY_USER_ID(Nullable<long> userid)
         {
             var useridParameter = userid.HasValue ?
                 new ObjectParameter("userid", userid) :
                 new ObjectParameter("userid", typeof(long));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("GET_USER_TASKS_BY_USER_ID", useridParameter);
-        }
-    
-        public virtual ObjectResult<GET_USERS_ACTIVE_TASKS_Result> GET_USERS_ACTIVE_TASKS()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_USERS_ACTIVE_TASKS_Result>("GET_USERS_ACTIVE_TASKS");
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_USER_TASKS_BY_USER_ID_Result>("GET_USER_TASKS_BY_USER_ID", useridParameter);
         }
     }
 }
