@@ -176,6 +176,12 @@
     <Compile Include="Models\GET_SALES_HISTORY_BY_DATE_Result.cs">
       <DependentUpon>KhalidOilDBModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\GET_USERS_ACTIVE_TASKS_Result.cs">
+      <DependentUpon>KhalidOilDBModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GET_USER_TASKS_BY_USER_ID_Result.cs">
+      <DependentUpon>KhalidOilDBModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\GET_VEHICLE_CHECKLISTS_Result.cs">
       <DependentUpon>KhalidOilDBModel.tt</DependentUpon>
     </Compile>

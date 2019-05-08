@@ -69,6 +69,7 @@
     <Property Name="OpeningMeter" Type="int" />
     <Property Name="ClosingMeter" Type="int" />
     <Property Name="PetrolAverage" Type="float" />
+    <Property Name="IsVerified" Type="bit" />
   </EntityType>
   <EntityType Name="DailyReportSales">
     <Key>
@@ -116,6 +117,11 @@
     <Property Name="isHPettyCash" Type="bit" Nullable="false" />
     <Property Name="isHCash" Type="bit" Nullable="false" />
     <Property Name="isHPayments" Type="bit" Nullable="false" />
+    <Property Name="MStats" Type="bit" />
+    <Property Name="SVerification" Type="bit" />
+    <Property Name="SRent" Type="bit" />
+    <Property Name="SDailyReport" Type="bit" />
+    <Property Name="SChecklistReport" Type="bit" />
   </EntityType>
   <EntityType Name="Tasks">
     <Key>
@@ -134,6 +140,9 @@
     <Property Name="VehicleNumber" Type="nvarchar" MaxLength="50" />
     <Property Name="DailyChecklistId" Type="bigint" />
     <Property Name="IsApproved" Type="bit" />
+    <Property Name="RelatedTaskId" Type="bigint" />
+    <Property Name="CCGroupId" Type="bigint" />
+    <Property Name="IsGroupTask" Type="bit" />
   </EntityType>
   <EntityType Name="UnloadSites">
     <Key>
@@ -322,6 +331,10 @@
     <Parameter Name="toDate" Type="date" Mode="In" />
     <Parameter Name="fromDate" Type="date" Mode="In" />
   </Function>
+  <Function Name="GET_USER_TASKS_BY_USER_ID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="userid" Type="bigint" Mode="In" />
+  </Function>
+  <Function Name="GET_USERS_ACTIVE_TASKS" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
   <Function Name="GET_VEHICLE_CHECKLISTS" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="from" Type="nvarchar(max)" Mode="In" />
     <Parameter Name="to" Type="nvarchar(max)" Mode="In" />

@@ -23,40 +23,6 @@
     <NavigationProperty Name="Question" Relationship="Self.FK_CheckList_Question_Questions" FromRole="CheckList_Question" ToRole="Questions" />
     <NavigationProperty Name="DailyCheckList" Relationship="KhalidOilDBModel.FK_CheckList_Question_DailyCheckLists" FromRole="CheckList_Question" ToRole="DailyCheckList" />
   </EntityType>
-  <EntityType Name="DailyReport">
-    <Key>
-      <PropertyRef Name="DailyReportID" />
-    </Key>
-    <Property Name="DailyReportID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
-    <Property Name="VehicleNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-    <Property Name="DriverID" Type="Int64" Nullable="false" />
-    <Property Name="VCM" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="DepotID" Type="Int64" Nullable="false" />
-    <Property Name="PurchasedSUP" Type="Int32" />
-    <Property Name="PurchasedHSD" Type="Int32" />
-    <Property Name="SUPDropOff" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="SUPDifferenceRate" Type="Double" />
-    <Property Name="SUPDifferenceQuantity" Type="Double" />
-    <Property Name="HSDDropOff" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="HSDDifferenceRate" Type="Double" />
-    <Property Name="HSDDifferenceQuantity" Type="Double" />
-    <Property Name="ToolExpense" Type="Int32" />
-    <Property Name="MunshiExpense" Type="Int32" />
-    <Property Name="ParkingExpense" Type="Int32" />
-    <Property Name="GuardExpense" Type="Int32" />
-    <Property Name="MealExpense" Type="Int32" />
-    <Property Name="OtherExpense" Type="Int32" />
-    <Property Name="FilledFuelRate" Type="Double" />
-    <Property Name="FilledFuelQuantity" Type="Double" />
-    <Property Name="OpeningMeter" Type="Int32" />
-    <Property Name="ClosingMeter" Type="Int32" />
-    <Property Name="PetrolAverage" Type="Double" />
-    <NavigationProperty Name="Depot" Relationship="Self.FK_DailyReports_Depots" FromRole="DailyReports" ToRole="Depots" />
-    <NavigationProperty Name="Vehicle" Relationship="Self.FK_DailyReports_Vehicles" FromRole="DailyReports" ToRole="Vehicles" />
-    <NavigationProperty Name="DailyReportSales" Relationship="Self.FK_DailyReportSales_DailyReports" FromRole="DailyReports" ToRole="DailyReportSales" />
-    <NavigationProperty Name="User" Relationship="KhalidOilDBModel.FK_DailyReports_Users" FromRole="DailyReport" ToRole="User" />
-  </EntityType>
   <EntityType Name="DailyReportSale">
     <Key>
       <PropertyRef Name="DailyReportSalesID" />
@@ -67,8 +33,8 @@
     <Property Name="Quantity" Type="Double" Nullable="false" />
     <Property Name="SiteID" Type="Int64" Nullable="false" />
     <Property Name="SaleReceiptImage" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <NavigationProperty Name="DailyReport" Relationship="Self.FK_DailyReportSales_DailyReports" FromRole="DailyReportSales" ToRole="DailyReports" />
     <NavigationProperty Name="UnloadSite" Relationship="Self.FK_DailyReportSales_UnloadSites" FromRole="DailyReportSales" ToRole="UnloadSites" />
+    <NavigationProperty Name="DailyReport" Relationship="KhalidOilDBModel.FK_DailyReportSales_DailyReports" FromRole="DailyReportSale" ToRole="DailyReport" />
   </EntityType>
   <EntityType Name="Depot">
     <Key>
@@ -78,7 +44,7 @@
     <Property Name="DepotName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
     <Property Name="DepotLocation" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <Property Name="DepotStatus" Type="Boolean" />
-    <NavigationProperty Name="DailyReports" Relationship="Self.FK_DailyReports_Depots" FromRole="Depots" ToRole="DailyReports" />
+    <NavigationProperty Name="DailyReports" Relationship="KhalidOilDBModel.FK_DailyReports_Depots" FromRole="Depot" ToRole="DailyReport" />
   </EntityType>
   <EntityType Name="Question">
     <Key>
@@ -112,8 +78,8 @@
     <Property Name="VehicleCurrentReading" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <Property Name="VehicleExpectedChange" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <Property Name="Status" Type="Boolean" />
-    <NavigationProperty Name="DailyReports" Relationship="Self.FK_DailyReports_Vehicles" FromRole="Vehicles" ToRole="DailyReports" />
     <NavigationProperty Name="DailyCheckLists" Relationship="KhalidOilDBModel.FK_DailyCheckLists_Vehicles" FromRole="Vehicle" ToRole="DailyCheckList" />
+    <NavigationProperty Name="DailyReports" Relationship="KhalidOilDBModel.FK_DailyReports_Vehicles" FromRole="Vehicle" ToRole="DailyReport" />
   </EntityType>
   <Association Name="FK_CheckList_Question_Questions">
     <End Role="Questions" Type="Self.Question" Multiplicity="1" />
@@ -124,42 +90,6 @@
       </Principal>
       <Dependent Role="CheckList_Question">
         <PropertyRef Name="QuestionID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_DailyReports_Depots">
-    <End Role="Depots" Type="Self.Depot" Multiplicity="1" />
-    <End Role="DailyReports" Type="Self.DailyReport" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Depots">
-        <PropertyRef Name="DepotCode" />
-      </Principal>
-      <Dependent Role="DailyReports">
-        <PropertyRef Name="DepotID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_DailyReports_Vehicles">
-    <End Role="Vehicles" Type="Self.Vehicle" Multiplicity="1" />
-    <End Role="DailyReports" Type="Self.DailyReport" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Vehicles">
-        <PropertyRef Name="VehicleNumber" />
-      </Principal>
-      <Dependent Role="DailyReports">
-        <PropertyRef Name="VehicleNumber" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_DailyReportSales_DailyReports">
-    <End Role="DailyReports" Type="Self.DailyReport" Multiplicity="1" />
-    <End Role="DailyReportSales" Type="Self.DailyReportSale" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="DailyReports">
-        <PropertyRef Name="DailyReportID" />
-      </Principal>
-      <Dependent Role="DailyReportSales">
-        <PropertyRef Name="DailyReportID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -178,7 +108,6 @@
   <EntityContainer Name="KhalidOilDBEntities" annotation:LazyLoadingEnabled="true">
     <EntitySet Name="Attendances" EntityType="Self.Attendance" />
     <EntitySet Name="CheckList_Question" EntityType="Self.CheckList_Question" />
-    <EntitySet Name="DailyReports" EntityType="Self.DailyReport" />
     <EntitySet Name="DailyReportSales" EntityType="Self.DailyReportSale" />
     <EntitySet Name="Depots" EntityType="Self.Depot" />
     <EntitySet Name="Questions" EntityType="Self.Question" />
@@ -187,18 +116,6 @@
     <AssociationSet Name="FK_CheckList_Question_Questions" Association="Self.FK_CheckList_Question_Questions">
       <End Role="Questions" EntitySet="Questions" />
       <End Role="CheckList_Question" EntitySet="CheckList_Question" />
-    </AssociationSet>
-    <AssociationSet Name="FK_DailyReports_Depots" Association="Self.FK_DailyReports_Depots">
-      <End Role="Depots" EntitySet="Depots" />
-      <End Role="DailyReports" EntitySet="DailyReports" />
-    </AssociationSet>
-    <AssociationSet Name="FK_DailyReports_Vehicles" Association="Self.FK_DailyReports_Vehicles">
-      <End Role="Vehicles" EntitySet="Vehicles" />
-      <End Role="DailyReports" EntitySet="DailyReports" />
-    </AssociationSet>
-    <AssociationSet Name="FK_DailyReportSales_DailyReports" Association="Self.FK_DailyReportSales_DailyReports">
-      <End Role="DailyReports" EntitySet="DailyReports" />
-      <End Role="DailyReportSales" EntitySet="DailyReportSales" />
     </AssociationSet>
     <AssociationSet Name="FK_DailyReportSales_UnloadSites" Association="Self.FK_DailyReportSales_UnloadSites">
       <End Role="UnloadSites" EntitySet="UnloadSites" />
@@ -217,19 +134,10 @@
       <Parameter Name="toDate" Mode="In" Type="DateTime" />
       <Parameter Name="fromDate" Mode="In" Type="DateTime" />
     </FunctionImport>
-    <EntitySet Name="Roles" EntityType="KhalidOilDBModel.Role" />
     <EntitySet Name="Users" EntityType="KhalidOilDBModel.User" />
     <AssociationSet Name="FK_Attendances_Users" Association="KhalidOilDBModel.FK_Attendances_Users">
       <End Role="User" EntitySet="Users" />
       <End Role="Attendance" EntitySet="Attendances" />
-    </AssociationSet>
-    <AssociationSet Name="FK_DailyReports_Users" Association="KhalidOilDBModel.FK_DailyReports_Users">
-      <End Role="User" EntitySet="Users" />
-      <End Role="DailyReport" EntitySet="DailyReports" />
-    </AssociationSet>
-    <AssociationSet Name="FK_UserRole" Association="KhalidOilDBModel.FK_UserRole">
-      <End Role="Role" EntitySet="Roles" />
-      <End Role="User" EntitySet="Users" />
     </AssociationSet>
     <FunctionImport Name="GET_ALL_USERS" ReturnType="Collection(KhalidOilDBModel.GET_ALL_USERS_Result)" />
     <FunctionImport Name="GET_DAILY_REPORT_BY_DATE" ReturnType="Collection(KhalidOilDBModel.GET_DAILY_REPORT_BY_DATE_Result)">
@@ -260,6 +168,32 @@
       <Parameter Name="to" Mode="In" Type="String" />
       <Parameter Name="vehicle_number" Mode="In" Type="String" />
     </FunctionImport>
+    <EntitySet Name="DailyReports" EntityType="KhalidOilDBModel.DailyReport" />
+    <AssociationSet Name="FK_DailyReports_Depots" Association="KhalidOilDBModel.FK_DailyReports_Depots">
+      <End Role="Depot" EntitySet="Depots" />
+      <End Role="DailyReport" EntitySet="DailyReports" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DailyReports_Users" Association="KhalidOilDBModel.FK_DailyReports_Users">
+      <End Role="User" EntitySet="Users" />
+      <End Role="DailyReport" EntitySet="DailyReports" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DailyReports_Vehicles" Association="KhalidOilDBModel.FK_DailyReports_Vehicles">
+      <End Role="Vehicle" EntitySet="Vehicles" />
+      <End Role="DailyReport" EntitySet="DailyReports" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DailyReportSales_DailyReports" Association="KhalidOilDBModel.FK_DailyReportSales_DailyReports">
+      <End Role="DailyReport" EntitySet="DailyReports" />
+      <End Role="DailyReportSale" EntitySet="DailyReportSales" />
+    </AssociationSet>
+    <EntitySet Name="Roles" EntityType="KhalidOilDBModel.Role" />
+    <AssociationSet Name="FK_UserRole" Association="KhalidOilDBModel.FK_UserRole">
+      <End Role="Role" EntitySet="Roles" />
+      <End Role="User" EntitySet="Users" />
+    </AssociationSet>
+    <FunctionImport Name="GET_USER_TASKS_BY_USER_ID">
+      <Parameter Name="userid" Mode="In" Type="Int64" />
+    </FunctionImport>
+    <FunctionImport Name="GET_USERS_ACTIVE_TASKS" ReturnType="Collection(KhalidOilDBModel.GET_USERS_ACTIVE_TASKS_Result)" />
   </EntityContainer>
   <ComplexType Name="GET_PARENT_COMPANY_RENT_BY_DATE_Result">
     <Property Type="Int32" Name="ParentCompany" Nullable="false" />
@@ -274,26 +208,6 @@
     <Property Type="Double" Name="Total_Rent" Nullable="false" />
     <Property Type="String" Name="SaleReceiptImage" Nullable="true" />
   </ComplexType>
-  <EntityType Name="Role">
-    <Key>
-      <PropertyRef Name="RoleID" />
-    </Key>
-    <Property Name="RoleID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="RoleName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="isMNVehicles" Type="Boolean" Nullable="false" />
-    <Property Name="isMNStaff" Type="Boolean" Nullable="false" />
-    <Property Name="isMNDeliverySites" Type="Boolean" Nullable="false" />
-    <Property Name="isHVehicleChecklist" Type="Boolean" Nullable="false" />
-    <Property Name="isHSalePurchase" Type="Boolean" Nullable="false" />
-    <Property Name="isHAttendance" Type="Boolean" Nullable="false" />
-    <Property Name="isHMaintenance" Type="Boolean" Nullable="false" />
-    <Property Name="isHTaskMng" Type="Boolean" Nullable="false" />
-    <Property Name="isHRent" Type="Boolean" Nullable="false" />
-    <Property Name="isHPettyCash" Type="Boolean" Nullable="false" />
-    <Property Name="isHCash" Type="Boolean" Nullable="false" />
-    <Property Name="isHPayments" Type="Boolean" Nullable="false" />
-    <NavigationProperty Name="Users" Relationship="KhalidOilDBModel.FK_UserRole" FromRole="Role" ToRole="User" />
-  </EntityType>
   <EntityType Name="User">
     <Key>
       <PropertyRef Name="UserID" />
@@ -327,30 +241,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_DailyReports_Users">
-    <End Type="KhalidOilDBModel.User" Role="User" Multiplicity="1" />
-    <End Type="KhalidOilDBModel.DailyReport" Role="DailyReport" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="User">
-        <PropertyRef Name="UserID" />
-      </Principal>
-      <Dependent Role="DailyReport">
-        <PropertyRef Name="DriverID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_UserRole">
-    <End Type="KhalidOilDBModel.Role" Role="Role" Multiplicity="0..1" />
-    <End Type="KhalidOilDBModel.User" Role="User" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Role">
-        <PropertyRef Name="RoleID" />
-      </Principal>
-      <Dependent Role="User">
-        <PropertyRef Name="RoleID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <ComplexType Name="GET_ALL_USERS_Result">
     <Property Type="Int64" Name="UserID" Nullable="false" />
     <Property Type="String" Name="UserName" Nullable="true" />
@@ -366,38 +256,6 @@
     <Property Type="String" Name="Userusername" Nullable="true" MaxLength="50" />
     <Property Type="Int64" Name="RoleID" Nullable="true" />
     <Property Type="String" Name="RoleName" Nullable="false" MaxLength="50" />
-  </ComplexType>
-  <ComplexType Name="GET_DAILY_REPORT_BY_DATE_Result">
-    <Property Type="Int64" Name="DailyReportID" Nullable="false" />
-    <Property Type="DateTime" Name="Date" Nullable="false" />
-    <Property Type="String" Name="VehicleNumber" Nullable="false" MaxLength="50" />
-    <Property Type="Int64" Name="DriverID" Nullable="false" />
-    <Property Type="String" Name="VCM" Nullable="true" MaxLength="50" />
-    <Property Type="Int64" Name="DepotID" Nullable="false" />
-    <Property Type="Int32" Name="PurchasedSUP" Nullable="true" />
-    <Property Type="Int32" Name="PurchasedHSD" Nullable="true" />
-    <Property Type="String" Name="SUPDropOff" Nullable="true" MaxLength="50" />
-    <Property Type="Double" Name="SUPDifferenceRate" Nullable="true" />
-    <Property Type="Double" Name="SUPDifferenceQuantity" Nullable="true" />
-    <Property Type="String" Name="HSDDropOff" Nullable="true" MaxLength="50" />
-    <Property Type="Double" Name="HSDDifferenceRate" Nullable="true" />
-    <Property Type="Double" Name="HSDDifferenceQuantity" Nullable="true" />
-    <Property Type="Int32" Name="ToolExpense" Nullable="true" />
-    <Property Type="Int32" Name="MunshiExpense" Nullable="true" />
-    <Property Type="Int32" Name="ParkingExpense" Nullable="true" />
-    <Property Type="Int32" Name="GuardExpense" Nullable="true" />
-    <Property Type="Int32" Name="MealExpense" Nullable="true" />
-    <Property Type="Int32" Name="OtherExpense" Nullable="true" />
-    <Property Type="Double" Name="FilledFuelRate" Nullable="true" />
-    <Property Type="Double" Name="FilledFuelQuantity" Nullable="true" />
-    <Property Type="Int32" Name="OpeningMeter" Nullable="true" />
-    <Property Type="Int32" Name="ClosingMeter" Nullable="true" />
-    <Property Type="Double" Name="PetrolAverage" Nullable="true" />
-    <Property Type="String" Name="UserName" Nullable="true" />
-    <Property Type="Int64" Name="DepotCode" Nullable="false" />
-    <Property Type="String" Name="DepotName" Nullable="true" />
-    <Property Type="String" Name="DepotLocation" Nullable="true" />
-    <Property Type="Boolean" Name="DepotStatus" Nullable="true" />
   </ComplexType>
   <ComplexType Name="GET_SALES_BY_REPORT_ID_Result">
     <Property Type="Int64" Name="DailyReportSalesID" Nullable="false" />
@@ -473,6 +331,9 @@
     <Property Name="VehicleNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="DailyChecklistId" Type="Int64" />
     <Property Name="IsApproved" Type="Boolean" />
+    <Property Name="RelatedTaskId" Type="Int64" />
+    <Property Name="CCGroupId" Type="Int64" />
+    <Property Name="IsGroupTask" Type="Boolean" />
   </EntityType>
   <Association Name="FK_CheckList_Question_DailyCheckLists">
     <End Type="KhalidOilDBModel.DailyCheckList" Role="DailyCheckList" Multiplicity="1" />
@@ -518,5 +379,163 @@
     <Property Type="String" Name="ImageName" Nullable="true" />
     <Property Type="String" Name="QuestionStatement" Nullable="true" />
     <Property Type="Boolean" Name="Status" Nullable="false" />
+  </ComplexType>
+  <EntityType Name="DailyReport">
+    <Key>
+      <PropertyRef Name="DailyReportID" />
+    </Key>
+    <Property Name="DailyReportID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="VehicleNumber" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="DriverID" Type="Int64" Nullable="false" />
+    <Property Name="VCM" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="DepotID" Type="Int64" Nullable="false" />
+    <Property Name="PurchasedSUP" Type="Int32" />
+    <Property Name="PurchasedHSD" Type="Int32" />
+    <Property Name="SUPDropOff" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="SUPDifferenceRate" Type="Double" />
+    <Property Name="SUPDifferenceQuantity" Type="Double" />
+    <Property Name="HSDDropOff" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="HSDDifferenceRate" Type="Double" />
+    <Property Name="HSDDifferenceQuantity" Type="Double" />
+    <Property Name="ToolExpense" Type="Int32" />
+    <Property Name="MunshiExpense" Type="Int32" />
+    <Property Name="ParkingExpense" Type="Int32" />
+    <Property Name="GuardExpense" Type="Int32" />
+    <Property Name="MealExpense" Type="Int32" />
+    <Property Name="OtherExpense" Type="Int32" />
+    <Property Name="FilledFuelRate" Type="Double" />
+    <Property Name="FilledFuelQuantity" Type="Double" />
+    <Property Name="OpeningMeter" Type="Int32" />
+    <Property Name="ClosingMeter" Type="Int32" />
+    <Property Name="PetrolAverage" Type="Double" />
+    <Property Name="IsVerified" Type="Boolean" />
+    <NavigationProperty Name="Depot" Relationship="KhalidOilDBModel.FK_DailyReports_Depots" FromRole="DailyReport" ToRole="Depot" />
+    <NavigationProperty Name="User" Relationship="KhalidOilDBModel.FK_DailyReports_Users" FromRole="DailyReport" ToRole="User" />
+    <NavigationProperty Name="Vehicle" Relationship="KhalidOilDBModel.FK_DailyReports_Vehicles" FromRole="DailyReport" ToRole="Vehicle" />
+    <NavigationProperty Name="DailyReportSales" Relationship="KhalidOilDBModel.FK_DailyReportSales_DailyReports" FromRole="DailyReport" ToRole="DailyReportSale" />
+  </EntityType>
+  <Association Name="FK_DailyReports_Depots">
+    <End Type="KhalidOilDBModel.Depot" Role="Depot" Multiplicity="1" />
+    <End Type="KhalidOilDBModel.DailyReport" Role="DailyReport" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Depot">
+        <PropertyRef Name="DepotCode" />
+      </Principal>
+      <Dependent Role="DailyReport">
+        <PropertyRef Name="DepotID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DailyReports_Users">
+    <End Type="KhalidOilDBModel.User" Role="User" Multiplicity="1" />
+    <End Type="KhalidOilDBModel.DailyReport" Role="DailyReport" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="DailyReport">
+        <PropertyRef Name="DriverID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DailyReports_Vehicles">
+    <End Type="KhalidOilDBModel.Vehicle" Role="Vehicle" Multiplicity="1" />
+    <End Type="KhalidOilDBModel.DailyReport" Role="DailyReport" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Vehicle">
+        <PropertyRef Name="VehicleNumber" />
+      </Principal>
+      <Dependent Role="DailyReport">
+        <PropertyRef Name="VehicleNumber" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DailyReportSales_DailyReports">
+    <End Type="KhalidOilDBModel.DailyReport" Role="DailyReport" Multiplicity="1" />
+    <End Type="KhalidOilDBModel.DailyReportSale" Role="DailyReportSale" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DailyReport">
+        <PropertyRef Name="DailyReportID" />
+      </Principal>
+      <Dependent Role="DailyReportSale">
+        <PropertyRef Name="DailyReportID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <ComplexType Name="GET_DAILY_REPORT_BY_DATE_Result">
+    <Property Type="Int64" Name="DailyReportID" Nullable="false" />
+    <Property Type="DateTime" Name="Date" Nullable="false" />
+    <Property Type="String" Name="VehicleNumber" Nullable="false" MaxLength="50" />
+    <Property Type="Int64" Name="DriverID" Nullable="false" />
+    <Property Type="String" Name="VCM" Nullable="true" MaxLength="50" />
+    <Property Type="Int64" Name="DepotID" Nullable="false" />
+    <Property Type="Int32" Name="PurchasedSUP" Nullable="true" />
+    <Property Type="Int32" Name="PurchasedHSD" Nullable="true" />
+    <Property Type="String" Name="SUPDropOff" Nullable="true" MaxLength="50" />
+    <Property Type="Double" Name="SUPDifferenceRate" Nullable="true" />
+    <Property Type="Double" Name="SUPDifferenceQuantity" Nullable="true" />
+    <Property Type="String" Name="HSDDropOff" Nullable="true" MaxLength="50" />
+    <Property Type="Double" Name="HSDDifferenceRate" Nullable="true" />
+    <Property Type="Double" Name="HSDDifferenceQuantity" Nullable="true" />
+    <Property Type="Int32" Name="ToolExpense" Nullable="true" />
+    <Property Type="Int32" Name="MunshiExpense" Nullable="true" />
+    <Property Type="Int32" Name="ParkingExpense" Nullable="true" />
+    <Property Type="Int32" Name="GuardExpense" Nullable="true" />
+    <Property Type="Int32" Name="MealExpense" Nullable="true" />
+    <Property Type="Int32" Name="OtherExpense" Nullable="true" />
+    <Property Type="Double" Name="FilledFuelRate" Nullable="true" />
+    <Property Type="Double" Name="FilledFuelQuantity" Nullable="true" />
+    <Property Type="Int32" Name="OpeningMeter" Nullable="true" />
+    <Property Type="Int32" Name="ClosingMeter" Nullable="true" />
+    <Property Type="Double" Name="PetrolAverage" Nullable="true" />
+    <Property Type="Boolean" Name="IsVerified" Nullable="true" />
+    <Property Type="String" Name="UserName" Nullable="true" />
+    <Property Type="Int64" Name="DepotCode" Nullable="false" />
+    <Property Type="String" Name="DepotName" Nullable="true" />
+    <Property Type="String" Name="DepotLocation" Nullable="true" />
+    <Property Type="Boolean" Name="DepotStatus" Nullable="true" />
+  </ComplexType>
+  <EntityType Name="Role">
+    <Key>
+      <PropertyRef Name="RoleID" />
+    </Key>
+    <Property Name="RoleID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="RoleName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="isMNVehicles" Type="Boolean" Nullable="false" />
+    <Property Name="isMNStaff" Type="Boolean" Nullable="false" />
+    <Property Name="isMNDeliverySites" Type="Boolean" Nullable="false" />
+    <Property Name="isHVehicleChecklist" Type="Boolean" Nullable="false" />
+    <Property Name="isHSalePurchase" Type="Boolean" Nullable="false" />
+    <Property Name="isHAttendance" Type="Boolean" Nullable="false" />
+    <Property Name="isHMaintenance" Type="Boolean" Nullable="false" />
+    <Property Name="isHTaskMng" Type="Boolean" Nullable="false" />
+    <Property Name="isHRent" Type="Boolean" Nullable="false" />
+    <Property Name="isHPettyCash" Type="Boolean" Nullable="false" />
+    <Property Name="isHCash" Type="Boolean" Nullable="false" />
+    <Property Name="isHPayments" Type="Boolean" Nullable="false" />
+    <Property Name="MStats" Type="Boolean" />
+    <Property Name="SVerification" Type="Boolean" />
+    <Property Name="SRent" Type="Boolean" />
+    <Property Name="SDailyReport" Type="Boolean" />
+    <Property Name="SChecklistReport" Type="Boolean" />
+    <NavigationProperty Name="Users" Relationship="KhalidOilDBModel.FK_UserRole" FromRole="Role" ToRole="User" />
+  </EntityType>
+  <Association Name="FK_UserRole">
+    <End Type="KhalidOilDBModel.Role" Role="Role" Multiplicity="0..1" />
+    <End Type="KhalidOilDBModel.User" Role="User" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Role">
+        <PropertyRef Name="RoleID" />
+      </Principal>
+      <Dependent Role="User">
+        <PropertyRef Name="RoleID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <ComplexType Name="GET_USERS_ACTIVE_TASKS_Result">
+    <Property Type="Int64" Name="UserID" Nullable="false" />
+    <Property Type="String" Name="Username" Nullable="true" />
+    <Property Type="Int32" Name="ActiveTasks" Nullable="true" />
   </ComplexType>
 </Schema>
