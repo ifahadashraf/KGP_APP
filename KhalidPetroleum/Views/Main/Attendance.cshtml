@@ -128,7 +128,8 @@
                         </a>
                     </li>
 
-                    <li @(rights.isMNDeliverySites ? string.Empty : "style=display:none")>
+                    <li @((bool)rights.isMNQuestions ? string.Empty : "style=display:none")>
+                        <a href="/Main/Questions"><i class="material-icons">view_list</i><span>Questions</span></a></li><li @(rights.isMNDeliverySites ? string.Empty : "style=display:none")>
                         <a href="/Main/DSites">
                             <i class="material-icons">ev_station</i>
                             <span>Delivery Sites</span>

@@ -193,7 +193,7 @@ function updateVerficationStatus(status) {
     $('.modal-footer .btn').prop('disabled', true);
     updateDailyReportStatusApi(report.DailyReportID, status, function (data) {
         if (data == "1") {
-            $('#alertdiv').html('<div class="alert alert-success"><strong>Success !</strong> New task has been added</div>')
+            $('#alertdiv').html('<div class="alert alert-success"><strong>Verified Successfully !</strong></div>')
             setTimeout(function () {
 
                 window.location.href = window.location.href;

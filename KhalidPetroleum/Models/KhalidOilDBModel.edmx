@@ -96,6 +96,24 @@
           <Property Name="DepotLocation" Type="nvarchar(max)" />
           <Property Name="DepotStatus" Type="bit" />
         </EntityType>
+        <EntityType Name="Groups">
+          <Key>
+            <PropertyRef Name="GroupId" />
+          </Key>
+          <Property Name="GroupId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="GroupName" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Created" Type="datetime" Nullable="false" />
+          <Property Name="GroupStatus" Type="bit" Nullable="false" />
+          <Property Name="GroupType" Type="int" />
+        </EntityType>
+        <EntityType Name="GroupUsers">
+          <Key>
+            <PropertyRef Name="GroupId" />
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="GroupId" Type="bigint" Nullable="false" />
+          <Property Name="UserId" Type="bigint" Nullable="false" />
+        </EntityType>
         <EntityType Name="Questions">
           <Key>
             <PropertyRef Name="QuestionID" />
@@ -127,6 +145,9 @@
           <Property Name="SRent" Type="bit" />
           <Property Name="SDailyReport" Type="bit" />
           <Property Name="SChecklistReport" Type="bit" />
+          <Property Name="isMNGroups" Type="bit" />
+          <Property Name="isMNQuestions" Type="bit" />
+          <Property Name="RoleStatus" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Tasks">
           <Key>
@@ -177,6 +198,7 @@
           <Property Name="UserPassword" Type="nvarchar" MaxLength="50" />
           <Property Name="Userusername" Type="nvarchar" MaxLength="50" />
           <Property Name="RoleID" Type="bigint" />
+          <Property Name="SupervisorGroupId" Type="bigint" />
         </EntityType>
         <EntityType Name="Vehicles">
           <Key>
@@ -324,6 +346,10 @@
           <Parameter Name="from" Type="date" Mode="In" />
           <Parameter Name="to" Type="date" Mode="In" />
         </Function>
+        <Function Name="GET_GROUP_TASKS_BY_GROUP_ID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="groupid" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="GET_GROUPS_ACTIVE_TASKS" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="GET_PARENT_COMPANY_RENT_BY_DATE" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="toDate" Type="date" Mode="In" />
           <Parameter Name="fromDate" Type="date" Mode="In" />
@@ -353,6 +379,8 @@
           <EntitySet Name="DailyReports" EntityType="Self.DailyReports" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DailyReportSales" EntityType="Self.DailyReportSales" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Depots" EntityType="Self.Depots" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Groups" EntityType="Self.Groups" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GroupUsers" EntityType="Self.GroupUsers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Questions" EntityType="Self.Questions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Tasks" EntityType="Self.Tasks" Schema="dbo" store:Type="Tables" />
@@ -589,15 +617,21 @@
             <End Role="DailyReport" EntitySet="DailyReports" />
             <End Role="DailyReportSale" EntitySet="DailyReportSales" />
           </AssociationSet>
+          <FunctionImport Name="GET_USERS_ACTIVE_TASKS" ReturnType="Collection(KhalidOilDBModel.GET_USERS_ACTIVE_TASKS_Result)" />
+          <FunctionImport Name="GET_USER_TASKS_BY_USER_ID" ReturnType="Collection(KhalidOilDBModel.GET_USER_TASKS_BY_USER_ID_Result)">
+          <Parameter Name="userid" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="GET_GROUPS_ACTIVE_TASKS" ReturnType="Collection(KhalidOilDBModel.GET_GROUPS_ACTIVE_TASKS_Result)" />
+          <EntitySet Name="Groups" EntityType="KhalidOilDBModel.Group" />
+          <FunctionImport Name="GET_GROUP_TASKS_BY_GROUP_ID" ReturnType="Collection(KhalidOilDBModel.GET_GROUP_TASKS_BY_GROUP_ID_Result)">
+          <Parameter Name="groupid" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <EntitySet Name="GroupUsers" EntityType="KhalidOilDBModel.GroupUser" />
           <EntitySet Name="Roles" EntityType="KhalidOilDBModel.Role" />
           <AssociationSet Name="FK_UserRole" Association="KhalidOilDBModel.FK_UserRole">
             <End Role="Role" EntitySet="Roles" />
             <End Role="User" EntitySet="Users" />
           </AssociationSet>
-          <FunctionImport Name="GET_USERS_ACTIVE_TASKS" ReturnType="Collection(KhalidOilDBModel.GET_USERS_ACTIVE_TASKS_Result)" />
-          <FunctionImport Name="GET_USER_TASKS_BY_USER_ID" ReturnType="Collection(KhalidOilDBModel.GET_USER_TASKS_BY_USER_ID_Result)">
-            <Parameter Name="userid" Mode="In" Type="Int64" />
-          </FunctionImport>
           </EntityContainer>
         <ComplexType Name="GET_PARENT_COMPANY_RENT_BY_DATE_Result">
           <Property Type="Int32" Name="ParentCompany" Nullable="false" />
@@ -631,6 +665,7 @@
           <Property Name="RoleID" Type="Int64" />
           <NavigationProperty Name="Attendances" Relationship="KhalidOilDBModel.FK_Attendances_Users" FromRole="User" ToRole="Attendance" />
           <NavigationProperty Name="DailyReports" Relationship="KhalidOilDBModel.FK_DailyReports_Users" FromRole="User" ToRole="DailyReport" />
+          <Property Name="SupervisorGroupId" Type="Int64" />
           <NavigationProperty Name="Role" Relationship="KhalidOilDBModel.FK_UserRole" FromRole="User" ToRole="Role" />
         </EntityType>
         <Association Name="FK_Attendances_Users">
@@ -900,6 +935,72 @@
           <Property Type="String" Name="DepotLocation" Nullable="true" />
           <Property Type="Boolean" Name="DepotStatus" Nullable="true" />
         </ComplexType>
+        <ComplexType Name="GET_USERS_ACTIVE_TASKS_Result">
+          <Property Type="Int64" Name="UserID" Nullable="false" />
+          <Property Type="String" Name="Username" Nullable="true" />
+          <Property Type="Int32" Name="ActiveTasks" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="GET_USER_TASKS_BY_USER_ID_Result">
+          <Property Type="Int64" Name="TaskId" Nullable="false" />
+          <Property Type="String" Name="TaskName" Nullable="false" />
+          <Property Type="String" Name="Details" Nullable="true" />
+          <Property Type="DateTime" Name="StartDate" Nullable="false" />
+          <Property Type="DateTime" Name="EstimatedDate" Nullable="true" />
+          <Property Type="Int64" Name="TaskOwner" Nullable="false" />
+          <Property Type="Int64" Name="AssignedTo" Nullable="true" />
+          <Property Type="DateTime" Name="LastUpdate" Nullable="true" Precision="23" />
+          <Property Type="String" Name="TaskStatus" Nullable="false" />
+          <Property Type="Int32" Name="TaskType" Nullable="true" />
+          <Property Type="String" Name="VehicleNumber" Nullable="true" MaxLength="50" />
+          <Property Type="Int64" Name="DailyChecklistId" Nullable="true" />
+          <Property Type="Boolean" Name="IsApproved" Nullable="true" />
+          <Property Type="Int64" Name="RelatedTaskId" Nullable="true" />
+          <Property Type="Int64" Name="CCGroupId" Nullable="true" />
+          <Property Type="Boolean" Name="IsGroupTask" Nullable="true" />
+          <Property Type="String" Name="OwnerName" Nullable="true" />
+          <Property Type="String" Name="AssigneeName" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="GET_GROUPS_ACTIVE_TASKS_Result">
+          <Property Type="Int64" Name="GroupId" Nullable="false" />
+          <Property Type="String" Name="GroupName" Nullable="false" />
+          <Property Type="Int32" Name="ActiveTasks" Nullable="true" />
+        </ComplexType>
+        <EntityType Name="Group">
+          <Key>
+            <PropertyRef Name="GroupId" />
+          </Key>
+          <Property Name="GroupId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="GroupName" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Created" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="GroupStatus" Type="Boolean" Nullable="false" />
+          <Property Name="GroupType" Type="Int32" />
+        </EntityType>
+        <ComplexType Name="GET_GROUP_TASKS_BY_GROUP_ID_Result">
+          <Property Type="Int64" Name="TaskId" Nullable="false" />
+          <Property Type="String" Name="TaskName" Nullable="false" />
+          <Property Type="String" Name="Details" Nullable="true" />
+          <Property Type="DateTime" Name="StartDate" Nullable="false" />
+          <Property Type="DateTime" Name="EstimatedDate" Nullable="true" />
+          <Property Type="Int64" Name="TaskOwner" Nullable="false" />
+          <Property Type="Int64" Name="AssignedTo" Nullable="true" />
+          <Property Type="DateTime" Name="LastUpdate" Nullable="true" Precision="23" />
+          <Property Type="String" Name="TaskStatus" Nullable="false" />
+          <Property Type="Int32" Name="TaskType" Nullable="true" />
+          <Property Type="String" Name="VehicleNumber" Nullable="true" MaxLength="50" />
+          <Property Type="Int64" Name="DailyChecklistId" Nullable="true" />
+          <Property Type="Boolean" Name="IsApproved" Nullable="true" />
+          <Property Type="Int64" Name="RelatedTaskId" Nullable="true" />
+          <Property Type="Int64" Name="CCGroupId" Nullable="true" />
+          <Property Type="Boolean" Name="IsGroupTask" Nullable="true" />
+        </ComplexType>
+        <EntityType Name="GroupUser">
+          <Key>
+            <PropertyRef Name="GroupId" />
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="GroupId" Type="Int64" Nullable="false" />
+          <Property Name="UserId" Type="Int64" Nullable="false" />
+        </EntityType>
         <EntityType Name="Role">
           <Key>
             <PropertyRef Name="RoleID" />
@@ -923,6 +1024,9 @@
           <Property Name="SRent" Type="Boolean" />
           <Property Name="SDailyReport" Type="Boolean" />
           <Property Name="SChecklistReport" Type="Boolean" />
+          <Property Name="isMNGroups" Type="Boolean" />
+          <Property Name="isMNQuestions" Type="Boolean" />
+          <Property Name="RoleStatus" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Users" Relationship="KhalidOilDBModel.FK_UserRole" FromRole="Role" ToRole="User" />
         </EntityType>
         <Association Name="FK_UserRole">
@@ -937,29 +1041,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <ComplexType Name="GET_USERS_ACTIVE_TASKS_Result">
-          <Property Type="Int64" Name="UserID" Nullable="false" />
-          <Property Type="String" Name="Username" Nullable="true" />
-          <Property Type="Int32" Name="ActiveTasks" Nullable="true" />
-        </ComplexType>
-        <ComplexType Name="GET_USER_TASKS_BY_USER_ID_Result">
-          <Property Type="Int64" Name="TaskId" Nullable="false" />
-          <Property Type="String" Name="TaskName" Nullable="false" />
-          <Property Type="String" Name="Details" Nullable="true" />
-          <Property Type="DateTime" Name="StartDate" Nullable="false" />
-          <Property Type="DateTime" Name="EstimatedDate" Nullable="true" />
-          <Property Type="Int64" Name="TaskOwner" Nullable="false" />
-          <Property Type="Int64" Name="AssignedTo" Nullable="true" />
-          <Property Type="DateTime" Name="LastUpdate" Nullable="true" Precision="23" />
-          <Property Type="String" Name="TaskStatus" Nullable="false" />
-          <Property Type="Int32" Name="TaskType" Nullable="true" />
-          <Property Type="String" Name="VehicleNumber" Nullable="true" MaxLength="50" />
-          <Property Type="Int64" Name="DailyChecklistId" Nullable="true" />
-          <Property Type="Boolean" Name="IsApproved" Nullable="true" />
-          <Property Type="Int64" Name="RelatedTaskId" Nullable="true" />
-          <Property Type="Int64" Name="CCGroupId" Nullable="true" />
-          <Property Type="Boolean" Name="IsGroupTask" Nullable="true" />
-        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1068,6 +1149,7 @@
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="KhalidOilDBModel.User">
               <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="SupervisorGroupId" ColumnName="SupervisorGroupId" />
                 <ScalarProperty Name="RoleID" ColumnName="RoleID" />
                 <ScalarProperty Name="Userusername" ColumnName="Userusername" />
                 <ScalarProperty Name="UserPassword" ColumnName="UserPassword" />
@@ -1293,31 +1375,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Roles">
-            <EntityTypeMapping TypeName="KhalidOilDBModel.Role">
-              <MappingFragment StoreEntitySet="Roles">
-                <ScalarProperty Name="SChecklistReport" ColumnName="SChecklistReport" />
-                <ScalarProperty Name="SDailyReport" ColumnName="SDailyReport" />
-                <ScalarProperty Name="SRent" ColumnName="SRent" />
-                <ScalarProperty Name="SVerification" ColumnName="SVerification" />
-                <ScalarProperty Name="MStats" ColumnName="MStats" />
-                <ScalarProperty Name="isHPayments" ColumnName="isHPayments" />
-                <ScalarProperty Name="isHCash" ColumnName="isHCash" />
-                <ScalarProperty Name="isHPettyCash" ColumnName="isHPettyCash" />
-                <ScalarProperty Name="isHRent" ColumnName="isHRent" />
-                <ScalarProperty Name="isHTaskMng" ColumnName="isHTaskMng" />
-                <ScalarProperty Name="isHMaintenance" ColumnName="isHMaintenance" />
-                <ScalarProperty Name="isHAttendance" ColumnName="isHAttendance" />
-                <ScalarProperty Name="isHSalePurchase" ColumnName="isHSalePurchase" />
-                <ScalarProperty Name="isHVehicleChecklist" ColumnName="isHVehicleChecklist" />
-                <ScalarProperty Name="isMNDeliverySites" ColumnName="isMNDeliverySites" />
-                <ScalarProperty Name="isMNStaff" ColumnName="isMNStaff" />
-                <ScalarProperty Name="isMNVehicles" ColumnName="isMNVehicles" />
-                <ScalarProperty Name="RoleName" ColumnName="RoleName" />
-                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="GET_USERS_ACTIVE_TASKS" FunctionName="KhalidOilDBModel.Store.GET_USERS_ACTIVE_TASKS">
             <ResultMapping>
               <ComplexTypeMapping TypeName="KhalidOilDBModel.GET_USERS_ACTIVE_TASKS_Result">
@@ -1346,9 +1403,89 @@
                 <ScalarProperty Name="RelatedTaskId" ColumnName="RelatedTaskId" />
                 <ScalarProperty Name="CCGroupId" ColumnName="CCGroupId" />
                 <ScalarProperty Name="IsGroupTask" ColumnName="IsGroupTask" />
+                <ScalarProperty Name="OwnerName" ColumnName="OwnerName" />
+                <ScalarProperty Name="AssigneeName" ColumnName="AssigneeName" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GET_GROUPS_ACTIVE_TASKS" FunctionName="KhalidOilDBModel.Store.GET_GROUPS_ACTIVE_TASKS">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="KhalidOilDBModel.GET_GROUPS_ACTIVE_TASKS_Result">
+                <ScalarProperty Name="GroupId" ColumnName="GroupId" />
+                <ScalarProperty Name="GroupName" ColumnName="GroupName" />
+                <ScalarProperty Name="ActiveTasks" ColumnName="ActiveTasks" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="Groups">
+            <EntityTypeMapping TypeName="KhalidOilDBModel.Group">
+              <MappingFragment StoreEntitySet="Groups">
+                <ScalarProperty Name="GroupType" ColumnName="GroupType" />
+                <ScalarProperty Name="GroupStatus" ColumnName="GroupStatus" />
+                <ScalarProperty Name="Created" ColumnName="Created" />
+                <ScalarProperty Name="GroupName" ColumnName="GroupName" />
+                <ScalarProperty Name="GroupId" ColumnName="GroupId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="GET_GROUP_TASKS_BY_GROUP_ID" FunctionName="KhalidOilDBModel.Store.GET_GROUP_TASKS_BY_GROUP_ID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="KhalidOilDBModel.GET_GROUP_TASKS_BY_GROUP_ID_Result">
+                <ScalarProperty Name="TaskId" ColumnName="TaskId" />
+                <ScalarProperty Name="TaskName" ColumnName="TaskName" />
+                <ScalarProperty Name="Details" ColumnName="Details" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="EstimatedDate" ColumnName="EstimatedDate" />
+                <ScalarProperty Name="TaskOwner" ColumnName="TaskOwner" />
+                <ScalarProperty Name="AssignedTo" ColumnName="AssignedTo" />
+                <ScalarProperty Name="LastUpdate" ColumnName="LastUpdate" />
+                <ScalarProperty Name="TaskStatus" ColumnName="TaskStatus" />
+                <ScalarProperty Name="TaskType" ColumnName="TaskType" />
+                <ScalarProperty Name="VehicleNumber" ColumnName="VehicleNumber" />
+                <ScalarProperty Name="DailyChecklistId" ColumnName="DailyChecklistId" />
+                <ScalarProperty Name="IsApproved" ColumnName="IsApproved" />
+                <ScalarProperty Name="RelatedTaskId" ColumnName="RelatedTaskId" />
+                <ScalarProperty Name="CCGroupId" ColumnName="CCGroupId" />
+                <ScalarProperty Name="IsGroupTask" ColumnName="IsGroupTask" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="GroupUsers">
+            <EntityTypeMapping TypeName="KhalidOilDBModel.GroupUser">
+              <MappingFragment StoreEntitySet="GroupUsers">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="GroupId" ColumnName="GroupId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Roles">
+            <EntityTypeMapping TypeName="KhalidOilDBModel.Role">
+              <MappingFragment StoreEntitySet="Roles">
+                <ScalarProperty Name="RoleStatus" ColumnName="RoleStatus" />
+                <ScalarProperty Name="isMNQuestions" ColumnName="isMNQuestions" />
+                <ScalarProperty Name="isMNGroups" ColumnName="isMNGroups" />
+                <ScalarProperty Name="SChecklistReport" ColumnName="SChecklistReport" />
+                <ScalarProperty Name="SDailyReport" ColumnName="SDailyReport" />
+                <ScalarProperty Name="SRent" ColumnName="SRent" />
+                <ScalarProperty Name="SVerification" ColumnName="SVerification" />
+                <ScalarProperty Name="MStats" ColumnName="MStats" />
+                <ScalarProperty Name="isHPayments" ColumnName="isHPayments" />
+                <ScalarProperty Name="isHCash" ColumnName="isHCash" />
+                <ScalarProperty Name="isHPettyCash" ColumnName="isHPettyCash" />
+                <ScalarProperty Name="isHRent" ColumnName="isHRent" />
+                <ScalarProperty Name="isHTaskMng" ColumnName="isHTaskMng" />
+                <ScalarProperty Name="isHMaintenance" ColumnName="isHMaintenance" />
+                <ScalarProperty Name="isHAttendance" ColumnName="isHAttendance" />
+                <ScalarProperty Name="isHSalePurchase" ColumnName="isHSalePurchase" />
+                <ScalarProperty Name="isHVehicleChecklist" ColumnName="isHVehicleChecklist" />
+                <ScalarProperty Name="isMNDeliverySites" ColumnName="isMNDeliverySites" />
+                <ScalarProperty Name="isMNStaff" ColumnName="isMNStaff" />
+                <ScalarProperty Name="isMNVehicles" ColumnName="isMNVehicles" />
+                <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

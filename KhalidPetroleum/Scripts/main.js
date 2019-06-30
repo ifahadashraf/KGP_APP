@@ -34,6 +34,20 @@ var SUBMIT_APPROVAL = "SubmitApproval";
 var GET_DAILY_REPORT_SALES = "GetDailyReportSales";
 var UPDATE_DAILY_REPORT_STATUS = "UpdateDailyReportStatus";
 var GET_USERS_ACTIVE_TASKS = "GetUserPendingTasks";
+var GET_GROUPS_ACTIVE_TASKS = "GetGroupPendingTasks";
+var GET_USER_PENDING_TASKS = "GetUserPendingTasksByUserId";
+var GET_GROUP_PENDING_TASKS = "GetGroupPendingTasksByGroupId";
+var GET_GROUPS = "GetGroups";
+var SUBMIT_NEW_TASK = "SubmitNewTasks";
+var GET_QUESTIONS = "GetQuestions";
+var ADD_QUESTIONS = "AddQuestion";
+var UPDATE_QUESTION = "UpdateQuestion";
+var SUBMIT_GROUPS = "SubmitGroups";
+var GET_GROUP_MEMBERS = "GetGroupMembers";
+var GET_MY_GROUPS = "GetMyGroups";
+var GET_ALL_TASKS = "GetAllTasks";
+var DELETE_ROLE = "DeleteRole";
+var DELTE_USER = "DeleteUser";
 
 //*************END OF CONSTANTS*************//
 
@@ -486,5 +500,190 @@ function getUsersActiveTasks(cb) {
     });
 }
 
+function getGroupsActiveTasks(cb) {
+    $.ajax({
+        url: BASE_URL + GET_GROUPS_ACTIVE_TASKS,
+        method: "GET",
+        success: function (data) {
+            cb(data);
+        },
+        error: function (data) {
+            cb(data);
+        }
+    });
+}
 
+function getUserPendingTasks(id, cb) {
+    $.ajax({
+        url: BASE_URL + GET_USER_PENDING_TASKS + "?userid=" + id,
+        method: "GET",
+        success: function (data) {
+            cb(data);
+        },
+        error: function (data) {
+            cb(data);
+        }
+    });
+}
+
+
+function getGroupPendingTasks(id, cb) {
+    $.ajax({
+        url: BASE_URL + GET_GROUP_PENDING_TASKS + "?groupid=" + id,
+        method: "GET",
+        success: function (data) {
+            cb(data);
+        },
+        error: function (data) {
+            cb(data);
+        }
+    });
+}
+
+function getGroupsApi(cb) {
+    $.ajax({
+        url: BASE_URL + GET_GROUPS,
+        method: "GET",
+        success: function (data) {
+            cb(data);
+        },
+        error: function (data) {
+            cb(data);
+        }
+    });
+}
+
+function submitNewTasksApi(body, cb) {
+    $.ajax({
+        url: BASE_URL + SUBMIT_NEW_TASK,
+        method: "POST",
+        data: JSON.stringify(body),
+        success: function (data) {
+            cb(data);
+        },
+        error: function (data) {
+            cb(data);
+        }
+    });
+}
+
+function getQuestionsApi(cb) {
+    $.ajax({
+        url: BASE_URL + GET_QUESTIONS,
+        method: "GET",
+        success: function (data) {
+            cb(data);
+        },
+        error: function (data) {
+            cb(data);
+        }
+    });
+}
+
+function addQuestionApi(body, cb) {
+    $.ajax({
+        url: BASE_URL + ADD_QUESTIONS,
+        method: "POST",
+        data: JSON.stringify(body),
+        success: function (data) {
+            cb(data);
+        },
+        error: function (data) {
+            cb(data);
+        }
+    });
+}
+
+function updateQuestionApi(body, cb) {
+    $.ajax({
+        url: BASE_URL + UPDATE_QUESTION,
+        method: "POST",
+        data: JSON.stringify(body),
+        success: function (data) {
+            cb(data);
+        },
+        error: function (data) {
+            cb(data);
+        }
+    });
+}
+
+function submitGroupsApi(body, cb) {
+    $.ajax({
+        url: BASE_URL + SUBMIT_GROUPS,
+        method: "POST",
+        data: JSON.stringify(body),
+        success: function (data) {
+            cb(data);
+        },
+        error: function (data) {
+            cb(data);
+        }
+    });
+}
+
+function getMembersApi(id, cb) {
+    $.ajax({
+        url: BASE_URL + GET_GROUP_MEMBERS + "?groupid=" + id,
+        method: "GET",
+        success: function (data) {
+            cb(data);
+        },
+        error: function (data) {
+            cb(data);
+        }
+    });
+}
+
+function getMyGroups(id, cb) {
+    $.ajax({
+        url: BASE_URL + GET_MY_GROUPS + "?userid=" + id,
+        method: "GET",
+        success: function (data) {
+            cb(data);
+        },
+        error: function (data) {
+            cb(data);
+        }
+    });
+}
+
+function getAllTasks(cb) {
+    $.ajax({
+        url: BASE_URL + GET_ALL_TASKS,
+        method: "GET",
+        success: function (data) {
+            cb(data);
+        },
+        error: function (data) {
+            cb(data);
+        }
+    });
+}
+
+function deleteRoleApi(id, cb) {
+    $.ajax({
+        url: BASE_URL + DELETE_ROLE + "?id=" + id,
+        method: "GET",
+        success: function (data) {
+            cb(data);
+        },
+        error: function (data) {
+            cb(data);
+        }
+    });
+}
+
+function deleteUserApi(id, cb) {
+    $.ajax({
+        url: BASE_URL + DELTE_USER + "?id=" + id,
+        method: "GET",
+        success: function (data) {
+            cb(data);
+        },
+        error: function (data) {
+            cb(data);
+        }
+    });
+}
 //*******************END******************//

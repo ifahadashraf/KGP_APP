@@ -19,6 +19,8 @@
     <link href="~/Content/plugins/node-waves/waves.css" rel="stylesheet" />
     <!-- Animation Css -->
     <link href="~/Content/plugins/animate-css/animate.css" rel="stylesheet" />
+    <!-- Sweetalert Css -->
+    <link href="~/Content/plugins/sweetalert/sweetalert.css" rel="stylesheet" />
     <!-- Custom Css -->
     <link href="~/Css/style.css" rel="stylesheet">
     <!-- Wait Me Css -->
@@ -108,6 +110,14 @@
                         </a>
                     </li>
 
+                    <li @((bool)rights.isMNQuestions ? string.Empty : "style=display:none")>
+                        <a href="/Main/Questions"><i class="material-icons">view_list</i><span>Questions</span></a></li>
+                    <li @((bool)rights.isMNGroups ? string.Empty : "style=display:none")>
+                        <a href="/Main/Groups">
+                            <i class="material-icons">group</i>
+                            <span>Groups</span>
+                        </a>
+                    </li>
                     <li @(rights.isMNDeliverySites ? string.Empty : "style=display:none")>
                         <a href="/Main/DSites">
                             <i class="material-icons">ev_station</i>
@@ -214,6 +224,10 @@
                                 <label for="checkbox_2">Delivery Sites Mng.</label>
                                 <input type="checkbox" id="checkbox_12" class="filled-in chk-col-light-green" checked />
                                 <label for="checkbox_12">Stats</label>
+                                <input type="checkbox" id="checkbox_17" class="filled-in chk-col-light-green" checked />
+                                <label for="checkbox_17">Questions</label>
+                                <input type="checkbox" id="checkbox_18" class="filled-in chk-col-light-green" checked />
+                                <label for="checkbox_18">Groups</label>
                             </div>
                             <h4 class="card-inside-title">Home</h4>
                             <div class="demo-checkbox">
@@ -272,7 +286,7 @@
                             <div class="row">
                                 <div class="col-lg-6">
                                     <label>User</label>
-                                    <select id="sltUsers" class="form-control show-tick">
+                                    <select id="sltUsers" class="form-control show-tick" onchange="changeRole(this)">
                                         <option value="">-- Please select --</option>
                                         <option value="10">10</option>
                                         <option value="20">20</option>
@@ -316,6 +330,8 @@
     <script src="~/Content/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
     <!-- Waves Effect Plugin Js -->
     <script src="~/Content/plugins/node-waves/waves.js"></script>
+    <!-- SweetAlert Plugin Js -->
+    <script src="~/Content/plugins/sweetalert/sweetalert.min.js"></script>
     <!-- Jquery DataTable Plugin Js -->
     <script src="~/Content/plugins/jquery-datatable/jquery.dataTables.js"></script>
     <script src="~/Content/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>

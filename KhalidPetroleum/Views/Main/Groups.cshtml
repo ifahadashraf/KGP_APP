@@ -54,7 +54,6 @@
             }
 
         .loading-gif {
-            
         }
     </style>
 </head>
@@ -75,7 +74,7 @@
         </div>
     </div>
     <div class="loading" style="display: none">
-        <img src="../../Content/images/loading.gif"/>
+        <img src="../../Content/images/loading.gif" />
     </div>
     <!-- Top Bar -->
     <nav class="navbar">
@@ -83,7 +82,7 @@
             <div class="navbar-header">
                 <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
                 <a href="javascript:void(0);" class="bars"></a>
-                <a class="navbar-brand">Khalid Group of Petroleum | Maintenance</a>
+                <a class="navbar-brand">Khalid Group of Petroleum | Groups</a>
             </div>
             <div class="collapse navbar-collapse" id="navbar-collapse">
                 <ul class="nav navbar-nav navbar-right">
@@ -137,7 +136,7 @@
             <div class="menu">
                 <ul class="list">
                     <li class="header">MAIN NAVIGATION</li>
-                    <li class="active">
+                    <li>
                         <a href="/Main/Index">
                             <i class="material-icons">home</i>
                             <span>Home</span>
@@ -158,7 +157,7 @@
 
                     <li @((bool)rights.isMNQuestions ? string.Empty : "style=display:none")>
                         <a href="/Main/Questions"><i class="material-icons">view_list</i><span>Questions</span></a></li>
-                    <li @((bool)rights.isMNGroups ? string.Empty : "style=display:none")>
+                    <li class="active">
                         <a href="/Main/Groups">
                             <i class="material-icons">group</i>
                             <span>Groups</span>
@@ -194,9 +193,9 @@
     <section class="content">
         <div class="container-fluid">
             <div class="block-header">
-                <h2>Maintenance</h2>
+                <h2>Groups</h2>
                 <input id="uid" type="text" value="@user.UserID" style="display: none" />
-                <input id="uname" type="text" value="@user.UserName" style="display: none"/>
+                <input id="uname" type="text" value="@user.UserName" style="display: none" />
             </div>
 
             <div class="row clearfix">
@@ -208,22 +207,19 @@
                             </h2>
                         </div>
                         <div class="body">
+                            <button type="button" class="btn bg-light-blue waves-effect pull-right" data-toggle="modal" data-target="#mdModal">+ Add New</button><br />
                             <div class="table-responsive">
                                 <table id="checklistsTable" class="table table-bordered table-striped table-hover dataTable js-exportable">
                                     <thead>
                                         <tr>
                                             <th>Id</th>
-                                            <th>Date</th>
-                                            <th>VehicleNo</th>
-                                            <th>FilledBy</th>
-                                            <th>ApprovedBy</th>
-                                            <th>Status</th>
+                                            <th>GroupName</th>
+                                            <th>GroupCreated</th>
+                                            <th>GroupStatus</th>
                                             <th></th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        
-                                    </tbody>
+                                    <tbody></tbody>
 
                                 </table>
                             </div>
@@ -237,80 +233,69 @@
                 <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <label id="modalVNO">TASK</label>
+                            <label id="modalVNO">Group</label>
+                            <div id="alertdiv"></div>
                         </div>
-                        <div class="modal-body">
+                        <div class="modal-body gp-modal">
                             <div class="row">
-                                <div id="msgDiv" class="col-sm-12">
-
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label>Group Name</label>
+                                        <input id="txtGroupName" class="form-control" type="text"/>
+                                        <input id="txtGroupId" class="form-control" type="text" style="display:none" />
+                                    </div>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-lg-12">
-                                    <table class="table">
-                                        <thead>
-                                            <tr>
-                                                <th>Sr.</th>
-                                                <th>Request for Demand</th>
-                                                <th class="pl">Approval<br />Yes / No</th>
-                                                <th class="pd">IsApproved</th>
-                                                <th>Status</th>
-                                                <th></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="tasksTable">
-                                            <tr>
-                                                <td>1</td>
-                                                <td>Oil change</td>
-                                                <td>
-                                                    <input name="group1" type="radio" id="radio_1" class="with-gap radio-col-red" checked/><label for="radio_1"></label>
-                                                    <input name="group1" type="radio" id="radio_2" class="with-gap radio-col-green" checked/><label for="radio_2"></label>
-                                                </td>
-                                                <td>
-                                                    <select>
-                                                        <option>On Approval</option>
-                                                        <option>Approved</option>
-                                                        <option>In Progress</option>
-                                                        <option>Completed</option>
-                                                    </select>
-                                                </td>
-                                                <td><button type="button" class="btn btn-info" data-toggle="collapse" data-target="#demo">Remarks</button></td>
-                                            </tr>
-                                            <tr id="demo" class="collapse">
-                                                <td colspan="5">
-                                                    <textarea rows="4" class="form-control no-resize bg-grey">Kindly approve this one is urgent.</textarea>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>Oil change is inevitable. Change can't be avoided. I'm letting you know.
-                                                    Simle and wave boys. Smile and wave</td>
-                                                <td>
-                                                    <input name="group2" type="radio" id="radio_11" class="with-gap radio-col-red" checked /><label for="radio_11"></label>
-                                                    <input name="group2" type="radio" id="radio_22" class="with-gap radio-col-green" /><label for="radio_22"></label>
-                                                </td>
-                                                <td>
-                                                    <select>
-                                                        <option>On Approval</option>
-                                                        <option>Approved</option>
-                                                        <option>In Progress</option>
-                                                        <option>Completed</option>
-                                                    </select>
-                                                </td>
-                                                <td><button type="button" class="btn btn-info" data-toggle="collapse" data-target="#demo1">Remarks</button></td>
-                                            </tr>
-                                            <tr id="demo1" class="collapse">
-                                                <td colspan="5">
-                                                    <p>No remarks</p>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                <div class="col-lg-10">
+                                    <div class="form-group">
+                                        <label>Users</label>
+                                        <select id="sltUsers1" class="form-control">
+                                            <option value="-1">Select user</option>
+                                        </select>
+                                    </div>
                                 </div>
+                                <div class="col-lg-2">
+                                    <div class="form-group">
+                                        <label></label>
+                                        <button class="btn btn-primary" onclick="addNewRow()" style="margin-top: 25px;">+</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="gp-users">
+                                
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button id="modalBtn" type="button" class="btn btn-link waves-effect" onclick="submitApproval()">SUBMIT</button>
+                            <button id="modalBtn" type="button" class="btn btn-link waves-effect" onclick="submitGroup()">SUBMIT</button>
+                            <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--Modal End-->
+
+            <!--Modal Start-->
+            <div class="modal fade" id="mdModal1" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <label id="modalVNO">Groups</label>
+                        </div>
+                        <div class="modal-body">
+                            <table class="table table-bordered table-striped table-hover dataTable js-exportable">
+                                <thead>
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Name</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="membersTable"></tbody>
+
+                            </table>
+                        </div>
+                        <div class="modal-footer">
+                            <button id="modalBtn" type="button" class="btn btn-link waves-effect" onclick="submitGroup()">SUBMIT</button>
                             <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
                         </div>
                     </div>
@@ -321,7 +306,7 @@
     </section>
     <!-- Jquery Core Js -->
 
-    <script src="~/Content/plugins/jquery/jquery.min.js"></script>
+    <script src="../../Content/plugins/jquery/jquery.min.js"></script>
     <!-- Jquery DataTable Plugin Js -->
     <script src="~/Content/plugins/jquery-datatable/jquery.dataTables.js"></script>
     <script src="~/Content/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
@@ -344,8 +329,8 @@
     <!-- Demo Js -->
     <script src="~/Scripts/js/admin.js"></script>
     <script src="~/Scripts/js/demo.js"></script>
-    <script src="~/Scripts/maintenance.js"></script>
-<!-- Moment Plugin Js -->
+    <script src="~/Scripts/groups.js"></script>
+    <!-- Moment Plugin Js -->
     <script src="~/Content/plugins/momentjs/moment.js"></script>
     <!-- Bootstrap Material Datetime Picker Plugin Js -->
     <script src="~/Content/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js"></script>

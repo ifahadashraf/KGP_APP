@@ -11,7 +11,7 @@ namespace KhalidPetroleum.Models
 {
     using System;
     
-    public partial class GET_USER_TASKS_BY_USER_ID_Result
+    public partial class GET_GROUP_TASKS_BY_GROUP_ID_Result
     {
         public long TaskId { get; set; }
         public string TaskName { get; set; }
@@ -29,7 +29,5 @@ namespace KhalidPetroleum.Models
         public Nullable<long> RelatedTaskId { get; set; }
         public Nullable<long> CCGroupId { get; set; }
         public Nullable<bool> IsGroupTask { get; set; }
-        public string OwnerName { get; set; }
-        public string AssigneeName { get; set; }
     }
 }

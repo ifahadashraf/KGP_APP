@@ -1,4 +1,5 @@
 ﻿var myDropZone = null;
+var taskCounter = 5;
 
 $(document).ready(function () {
     getVehicles();
@@ -147,14 +148,16 @@ function getQuestions() {
         if (arr.length > 0) {
             $('#questionsTable').html('');
             $.each(arr, function (index, item) {
-                $('#questionsTable').append('<tr>'+
-                                                '<th scope="row">'+item.QuestionID+'</th>'+
-                                                '<td>'+item.QuestionStatement+'</td>'+
-                                                '<td>'+
-                                                    '<input name="group'+index+'" type="radio" id="radio0'+index+'" class="with-gap radio-col-green" value="1" /><label for="radio0'+index+'"></label>'+
-                                                    '<input name="group'+index+'" type="radio" id="radio1' + index + '" class="with-gap radio-col-red" value="0" checked /><label for="radio1'+index+'"></label>' +
-                                                '</td>'+
+                if (item.Status == true) {
+                    $('#questionsTable').append('<tr>' +
+                                                '<th scope="row">' + item.QuestionID + '</th>' +
+                                                '<td>' + item.QuestionStatement + '</td>' +
+                                                '<td>' +
+                                                    '<input name="group' + index + '" type="radio" id="radio0' + index + '" class="with-gap radio-col-green" value="1" /><label for="radio0' + index + '"></label>' +
+                                                    '<input name="group' + index + '" type="radio" id="radio1' + index + '" class="with-gap radio-col-red" value="0" checked /><label for="radio1' + index + '"></label>' +
+                                                '</td>' +
                                             '</tr>');
+                }
             });
 
             $('.page-loader-wrapper').css('display', 'none');
@@ -164,7 +167,11 @@ function getQuestions() {
 
 function submitCheckList()
 {
-    var date = $('#txtDate').val();
+    var date = new Date($('#txtDate').val());
+    var current = new Date();
+    date.setHours(current.getHours());
+    date.setMinutes(current.getMinutes());
+    date.setSeconds(current.getSeconds());
     var vehicle = $('#txtVechileNo').val();
     var captainName = $('#txtCaptainName').val();
     var openingMeter = $('#txtOpeningMeter').val();
@@ -198,11 +205,9 @@ function submitCheckList()
     });
 
     var tasks = [];
-
-    for (var i = 1; i <= 5; i++) {
-        var val = $('#task_' + i).val();
-        if (val != '') {
-            tasks.push(val);
+    for (var i = 1; i <= taskCounter; i++) {
+        if ($('#task_' + i).val()) {
+            tasks.push($('#task_' + i).val());
         }
     }
 
@@ -304,4 +309,30 @@ function removeFromList(filename) {
         if (list_of_images[i].indexOf(filename) != -1)
             list_of_images.splice(i, 1);
     }
+}
+
+function addNewRow() {
+    taskCounter += 1;
+    var id = new Date().getUTCMilliseconds();
+    var html = '<div id='+id+' class="row clearfix">' +
+                    '<div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">' +
+                        '<label for="email_address_2">'+taskCounter+'.</label>' +
+                    '</div>' +
+                    '<div class="col-lg-8 col-md-8 col-sm-8 col-xs-7">' +
+                        '<div class="form-group">' +
+                            '<div class="form-line">' +
+                                '<input type="text" id="task_'+taskCounter+'" class="form-control" placeholder="">' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">' +
+                        '<button type="button" class="btn btn-primary m-t-15 waves-effect" onclick="removeRow('+id+')">X</button>' +
+                    '</div>' +
+                '</div>';
+    $('#tasksForm').append(html);
+}
+
+function removeRow(id) {
+    taskCounter -= 1;
+    $('#' + id).remove();
 }

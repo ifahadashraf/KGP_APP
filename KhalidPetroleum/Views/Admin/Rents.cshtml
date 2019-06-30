@@ -111,6 +111,14 @@
                         </a>
                     </li>
 
+                    <li @((bool)rights.isMNQuestions ? string.Empty : "style=display:none")>
+                        <a href="/Main/Questions"><i class="material-icons">view_list</i><span>Questions</span></a></li>
+                    <li @((bool)rights.isMNGroups ? string.Empty : "style=display:none")>
+                        <a href="/Main/Groups">
+                            <i class="material-icons">group</i>
+                            <span>Groups</span>
+                        </a>
+                    </li>
                     <li @(rights.isMNDeliverySites ? string.Empty : "style=display:none")>
                         <a href="/Main/DSites">
                             <i class="material-icons">ev_station</i>

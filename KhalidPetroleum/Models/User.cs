@@ -33,6 +33,7 @@ namespace KhalidPetroleum.Models
         public string UserPassword { get; set; }
         public string Userusername { get; set; }
         public Nullable<long> RoleID { get; set; }
+        public Nullable<long> SupervisorGroupId { get; set; }
     
         public virtual ICollection<Attendance> Attendances { get; set; }
         public virtual ICollection<DailyReport> DailyReports { get; set; }

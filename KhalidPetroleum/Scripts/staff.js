@@ -18,14 +18,12 @@ function getUsers() {
                 table.row.add([
                     index + 1,
                     item.UserName,
-                    item.UserEmail,
+                    item.Userusername,  
                     item.UserPhoneNumber,
                     item.UserCNIC,
-                    ((item.UserDOB == null) ? '' : item.UserDOB.split('T')[0]),
-                    ((item.UserGender == true) ? 'MALE' : 'FEMALE'),
                     item.UserType,
                     item.RoleName,
-                    '<button type="button" class="btn bg-light-blue waves-effect" onclick="editStaff('+index+')">Edit</button>'
+                    '<button type="button" class="btn bg-light-blue waves-effect" onclick="editStaff(' + item.UserID + ')">Edit</button> <button type="button" class="btn bg-light-blue waves-effect" onclick="deleteStaff(' + item.UserID + ')">Delete</button>'
                 ]).draw();
             });
         }
@@ -97,21 +95,25 @@ function addUser() {
     });
 }
 
-function editStaff(index) {
-    var item = staffList[index];
+function editStaff(userId) {
+    var userToEdit = null;
+    staffList.forEach(function (item) {
+        if (item.UserID == userId) {
+            userToEdit = item;
+        }
+    });
 
-    $('#txtUserusername1').val(item.Userusername);
-    $('#txtPassword1').val(item.UserPassword);
-    $('#txtFullName1').val(item.UserName);
-    $('#txtEmail1').val(item.UserEmail);
-    $('#txtPhoneNumber1').val(item.UserPhoneNumber);
-    $('#txtCNIC1').val(item.UserCNIC);
-    $('#txtDOB1').val((item.UserDOB == null) ? '' : item.UserDOB.split('T')[0]);
-    $('#txtGender1').val((item.UserGender == true) ? '1' : '0');
-    $('#txtStaffType1').val(item.UserType);
-    $('#txtAddress1').val();
-
-    console.log(item);
+    $('#txtUserId').val(userToEdit.UserID);
+    $('#txtUserusername1').val(userToEdit.Userusername);
+    $('#txtPassword1').val(userToEdit.UserPassword);
+    $('#txtFullName1').val(userToEdit.UserName);
+    $('#txtEmail1').val(userToEdit.UserEmail);
+    $('#txtPhoneNumber1').val(userToEdit.UserPhoneNumber);
+    $('#txtCNIC1').val(userToEdit.UserCNIC);
+    $('#txtDOB1').val((userToEdit.UserDOB == null) ? '' : userToEdit.UserDOB.split('T')[0]);
+    $('#txtGender1').val((userToEdit.UserGender == true) ? '1' : '0');
+    $('#txtStaffType1').val(userToEdit.UserType);
+    $('#txtAddress1').val(userToEdit.UserAddress);
 
     $('#mdModal').modal('show');
 
@@ -130,6 +132,7 @@ function updateStaff() {
     var address = $('#txtAddress1').val();
 
     var json = {
+        "UserID": $('#txtUserId').val(),
         "Userusername": username,
         "UserPassword": pass,
         "UserName": fname,
@@ -147,7 +150,7 @@ function updateStaff() {
     updateStaffApi(json, function (data) {
         if (data == 1) {
             if (data == "1") {
-                $('#alertdiv').html('<div class="alert alert-success"><strong>Success !</strong> Vehicle has been updated</div>');
+                $('#alertdiv').html('<div class="alert alert-success"><strong>Success !</strong> Staff has been updated</div>');
                 setTimeout(function () {
 
                     window.location.href = window.location.href;
@@ -166,4 +169,33 @@ function updateStaff() {
     });
 
     console.log(json);
+}
+
+function deleteStaff(id) {
+    swal({
+        title: "Are you sure ?",
+        text: "This will delete this user from system",
+        type: "info",
+        showCancelButton: true,
+        closeOnConfirm: false,
+        showLoaderOnConfirm: true,
+    }, function () {
+        deleteUserApi(id, function (data) {
+            if (data == "1") {
+                swal({
+                    title: "Success",
+                    text: "User deleted",
+                    type: "success",
+                    confirmButtonText: "Ok"
+                }, function (isConfirm) {
+                    if (isConfirm) {
+                        window.location.href = window.location.href;
+                    }
+                });
+            }
+            else {
+                swal("Error", data, "error");
+            }
+        });
+    });
 }

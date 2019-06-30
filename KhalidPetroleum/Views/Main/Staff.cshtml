@@ -19,6 +19,8 @@
     <link href="~/Content/plugins/node-waves/waves.css" rel="stylesheet" />
     <!-- Animation Css -->
     <link href="~/Content/plugins/animate-css/animate.css" rel="stylesheet" />
+    <!-- Sweetalert Css -->
+    <link href="~/Content/plugins/sweetalert/sweetalert.css" rel="stylesheet" />
     <!-- Custom Css -->
     <link href="~/Css/style.css" rel="stylesheet">
     <!-- Wait Me Css -->
@@ -108,6 +110,14 @@
                         </a>
                     </li>
 
+                    <li @((bool)rights.isMNQuestions ? string.Empty : "style=display:none")>
+                        <a href="/Main/Questions"><i class="material-icons">view_list</i><span>Questions</span></a></li>
+                    <li @((bool)rights.isMNGroups ? string.Empty : "style=display:none")>
+                        <a href="/Main/Groups">
+                            <i class="material-icons">group</i>
+                            <span>Groups</span>
+                        </a>
+                    </li>
                     <li @(rights.isMNDeliverySites ? string.Empty : "style=display:none")>
                         <a href="/Main/DSites">
                             <i class="material-icons">ev_station</i>
@@ -232,6 +242,8 @@
                                                     <option value="MISC">MISC</option>
                                                     <option value="CAPTAIN">CAPTAIN</option>
                                                     <option value="MECHANIC">MECHANIC</option>
+                                                    <option value="ASSISTANT">ASSISTANT</option>
+                                                    <option value="SITE-MANAGER">SITE MANAGER</option>
                                                     <option value="ACCOUNTS-MANAGER">ACCOUNTS-MANAGER</option>
                                                     <option value="OPERATIONS-MANAGER">OPERATIONS-MANAGER</option>
                                                     <option value="ASST-OPERATIONS-MANAGER">ASST-OPERATIONS-MANAGER</option>
@@ -272,12 +284,10 @@
                                     <thead>
                                         <tr>
                                             <th>Sr #</th>
-                                            <th>Name</th>
-                                            <th>Email</th>
+                                            <th>FullName</th>
+                                            <th>Username</th>
                                             <th>Phone</th>
                                             <th>CNIC</th>
-                                            <th>D/O/B</th>
-                                            <th>Gender</th>
                                             <th>Position</th>
                                             <th>Rights</th>
                                             <th></th>
@@ -286,12 +296,10 @@
                                     <tfoot>
                                         <tr>
                                             <th>Sr #</th>
-                                            <th>Name</th>
-                                            <th>Email</th>
+                                            <th>FullName</th>
+                                            <th>Username</th>
                                             <th>Phone</th>
                                             <th>CNIC</th>
-                                            <th>D/O/B</th>
-                                            <th>Gender</th>
                                             <th>Position</th>
                                             <th>Rights</th>
                                             <th></th>
@@ -311,6 +319,7 @@
                     <div class="modal-content modal-col-light-blue">
                         <div class="modal-header">
                             <h3 class="modal-title" id="defaultModalLabel">EDIT DETAILS</h3>
+                            <input type="text" id="txtUserId" style="display:none">
                         </div>
                         <div class="modal-body">
                             <div id="alertdiv" class="row">
@@ -401,6 +410,8 @@
                                                     <option value="MISC">MISC</option>
                                                     <option value="CAPTAIN">CAPTAIN</option>
                                                     <option value="MECHANIC">MECHANIC</option>
+                                                    <option value="ASSISTANT">ASSISTANT</option>
+                                                    <option value="SITE-MANAGER">SITE MANAGER</option>
                                                     <option value="ACCOUNTS-MANAGER">ACCOUNTS-MANAGER</option>
                                                     <option value="OPERATIONS-MANAGER">OPERATIONS-MANAGER</option>
                                                     <option value="ASST-OPERATIONS-MANAGER">ASST-OPERATIONS-MANAGER</option>
@@ -442,6 +453,8 @@
     <script src="~/Content/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
     <!-- Waves Effect Plugin Js -->
     <script src="~/Content/plugins/node-waves/waves.js"></script>
+    <!-- SweetAlert Plugin Js -->
+    <script src="~/Content/plugins/sweetalert/sweetalert.min.js"></script>
     <!-- Jquery DataTable Plugin Js -->
     <script src="~/Content/plugins/jquery-datatable/jquery.dataTables.js"></script>
     <script src="~/Content/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>

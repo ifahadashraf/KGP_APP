@@ -39,6 +39,8 @@ namespace KhalidPetroleum.Models
         public virtual DbSet<DailyCheckList> DailyCheckLists { get; set; }
         public virtual DbSet<Task> Tasks { get; set; }
         public virtual DbSet<DailyReport> DailyReports { get; set; }
+        public virtual DbSet<Group> Groups { get; set; }
+        public virtual DbSet<GroupUser> GroupUsers { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
     
         public virtual ObjectResult<Nullable<decimal>> ADD_DAILY_CHECKLIST(string vehicleno, Nullable<System.DateTime> date)
@@ -159,6 +161,20 @@ namespace KhalidPetroleum.Models
                 new ObjectParameter("userid", typeof(long));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_USER_TASKS_BY_USER_ID_Result>("GET_USER_TASKS_BY_USER_ID", useridParameter);
+        }
+    
+        public virtual ObjectResult<GET_GROUPS_ACTIVE_TASKS_Result> GET_GROUPS_ACTIVE_TASKS()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_GROUPS_ACTIVE_TASKS_Result>("GET_GROUPS_ACTIVE_TASKS");
+        }
+    
+        public virtual ObjectResult<GET_GROUP_TASKS_BY_GROUP_ID_Result> GET_GROUP_TASKS_BY_GROUP_ID(Nullable<long> groupid)
+        {
+            var groupidParameter = groupid.HasValue ?
+                new ObjectParameter("groupid", groupid) :
+                new ObjectParameter("groupid", typeof(long));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_GROUP_TASKS_BY_GROUP_ID_Result>("GET_GROUP_TASKS_BY_GROUP_ID", groupidParameter);
         }
     }
 }

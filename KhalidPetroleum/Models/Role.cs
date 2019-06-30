@@ -38,6 +38,9 @@ namespace KhalidPetroleum.Models
         public Nullable<bool> SRent { get; set; }
         public Nullable<bool> SDailyReport { get; set; }
         public Nullable<bool> SChecklistReport { get; set; }
+        public Nullable<bool> isMNGroups { get; set; }
+        public Nullable<bool> isMNQuestions { get; set; }
+        public bool RoleStatus { get; set; }
     
         public virtual ICollection<User> Users { get; set; }
     }

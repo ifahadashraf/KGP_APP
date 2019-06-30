@@ -117,6 +117,22 @@ namespace KhalidPetroleum.Controllers
                 return View("SignIn");
         }
 
+        public ActionResult Questions()
+        {
+            if (Session["User"] != null)
+                return View();
+            else
+                return View("SignIn");
+        }
+
+        public ActionResult Groups()
+        {
+            if (Session["User"] != null)
+                return View();
+            else
+                return View("SignIn");
+        }
+
         public Dictionary<string, List<Task>> GetMaintenanceTasks()
         {
             var map = new Dictionary<string, List<Task>>();

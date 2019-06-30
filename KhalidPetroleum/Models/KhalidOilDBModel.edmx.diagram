@@ -26,6 +26,8 @@
         <AssociationConnector Association="KhalidOilDBModel.FK_DailyReports_Users" />
         <AssociationConnector Association="KhalidOilDBModel.FK_DailyReports_Vehicles" />
         <AssociationConnector Association="KhalidOilDBModel.FK_DailyReportSales_DailyReports" />
+        <EntityTypeShape EntityType="KhalidOilDBModel.Group" Width="1.5" PointX="0.75" PointY="10.75" />
+        <EntityTypeShape EntityType="KhalidOilDBModel.GroupUser" Width="1.5" PointX="10.375" PointY="5.75" />
         <EntityTypeShape EntityType="KhalidOilDBModel.Role" Width="1.5" PointX="0.75" PointY="0.75" />
         <AssociationConnector Association="KhalidOilDBModel.FK_UserRole" />
         </Diagram>

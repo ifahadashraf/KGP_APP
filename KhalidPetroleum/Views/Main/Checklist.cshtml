@@ -128,6 +128,14 @@
                         </a>
                     </li>
 
+                    <li @((bool)rights.isMNQuestions ? string.Empty : "style=display:none")>
+                        <a href="/Main/Questions"><i class="material-icons">view_list</i><span>Questions</span></a></li>
+                    <li @((bool)rights.isMNGroups ? string.Empty : "style=display:none")>
+                        <a href="/Main/Groups">
+                            <i class="material-icons">group</i>
+                            <span>Groups</span>
+                        </a>
+                    </li>
                     <li @(rights.isMNDeliverySites ? string.Empty : "style=display:none")>
                         <a href="/Main/DSites">
                             <i class="material-icons">ev_station</i>
@@ -434,9 +442,12 @@
                             <h2>
                                 MAINTENANCE REQUIRED
                             </h2>
+                            <div align="right">
+                                <button type="button" class="btn btn-primary m-t-15 waves-effect" onclick="addNewRow()">Add+</button>
+                            </div>
                         </div>
                         <div class="body">
-                            <form class="form-horizontal">
+                            <form id="tasksForm" class="form-horizontal">
                                 <div class="row clearfix">
                                     <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
                                         <label for="email_address_2">1.</label>
@@ -498,10 +509,10 @@
                                     </div>
                                 </div>
                                 
-                                <div align="right">
-                                    <button type="button" class="btn btn-primary m-t-15 waves-effect" onclick="submitCheckList()">SUBMIT</button>
-                                </div>
                             </form>
+                            <div align="right">
+                                <button type="button" class="btn btn-primary m-t-15 waves-effect" onclick="submitCheckList()">SUBMIT</button>
+                            </div>
                         </div>
                     </div>
                 </div>

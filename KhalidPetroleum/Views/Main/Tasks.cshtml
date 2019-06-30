@@ -25,6 +25,35 @@
     <link href="~/Css/style.css" rel="stylesheet">
     <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
     <link href="~/Css/themes/all-themes.css" rel="stylesheet" />
+    <style>
+        .loading {
+            position: fixed;
+            z-index: 999;
+            height: 2em;
+            width: 2em;
+            overflow: visible;
+            margin: auto;
+            top: 0;
+            left: 0;
+            bottom: 175px;
+            right: 175px;
+        }
+
+            .loading:before {
+                content: '';
+                display: block;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0,0,0,0.2);
+            }
+
+        .loading-gif {
+        }
+    </style>
+
 </head>
 <body class="theme-blue">
     <div class="page-loader-wrapper">
@@ -41,6 +70,9 @@
             </div>
             <p>Please wait...</p>
         </div>
+    </div>
+    <div class="loading" style="display: none">
+        <img src="../../Content/images/loading.gif" />
     </div>
     <!-- Top Bar -->
     <nav class="navbar">
@@ -121,6 +153,14 @@
                         </a>
                     </li>
 
+                    <li @((bool)rights.isMNQuestions ? string.Empty : "style=display:none")>
+                        <a href="/Main/Questions"><i class="material-icons">view_list</i><span>Questions</span></a></li>
+                    <li @((bool)rights.isMNGroups ? string.Empty : "style=display:none")>
+                        <a href="/Main/Groups">
+                            <i class="material-icons">group</i>
+                            <span>Groups</span>
+                        </a>
+                    </li>
                     <li @(rights.isMNDeliverySites ? string.Empty : "style=display:none")>
                         <a href="/Main/DSites">
                             <i class="material-icons">ev_station</i>
@@ -205,21 +245,22 @@
                         <div class="body">
                             <input id="txtUserId" style="display:none" value="@user.UserID"/>
                             <input id="txtUserType" style="display:none" value="@user.UserType" /> 
-                            <button type="button" class="btn bg-light-blue waves-effect pull-right" data-toggle="modal" data-target="#mdModal1">+ Add New</button>
+                            <input id="txtUserName" style="display:none" value="@user.UserName" /> 
+                            <button type="button" class="btn bg-light-blue waves-effect pull-right" data-toggle="modal" @((user.UserType == "ADMIN") ? "data-target=#mdModal1" : "style=display:none")>+ Add New</button>
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                 <!-- Nav tabs -->
                                 <ul class="nav nav-tabs" role="tablist">
-                                    <li role="presentation"><a href="#user_tasks" data-toggle="tab" @((user.UserType == "ADMIN") ? string.Empty : "style=display:none")>Users</a></li>
-                                    <li role="presentation"><a href="#group_tasks" data-toggle="tab" @((user.UserType == "ADMIN") ? string.Empty : "style=display:none")>Groups</a></li>
-                                    <li role="presentation" ><a href="#all" data-toggle="tab" @((user.UserType == "ADMIN") ? string.Empty : "style=display:none")>All</a></li>
-                                    <li role="presentation"><a href="#my_tasks" data-toggle="tab" >My Tasks</a></li>
-                                    <li role="presentation"><a href="#readonly_tasks" data-toggle="tab" @((user.UserType == "ACCOUNTS-MANAGER" || user.UserType == "CRO") ? string.Empty : "style=display:none")>CC</a></li>
-                                    <li role="presentation"><a href="#assigned_by_me" data-toggle="tab" @((user.UserType == "ADMIN" || user.UserType == "OPERATIONS-MANAGER" || user.UserType == "CRO") ? string.Empty : "style=display:none")>Assigned By Me</a></li>
+                                    <li role="presentation" class="active in"><a href="#user_tasks" data-toggle="tab">Users</a></li>
+                                    <li role="presentation"><a href="#group_tasks" data-toggle="tab">Groups</a></li>
+                                    <li role="presentation" @((user.UserType == "ADMIN") ? string.Empty : "style=display:none")><a href="#all" data-toggle="tab">Completed</a></li>
+                                    @*<li role="presentation"><a href="#my_tasks" data-toggle="tab" @((user.UserType != "ADMIN") ? string.Empty : "style=display:none")>My Tasks</a></li>
+                                    <li role="presentation"><a href="#readonly_tasks" data-toggle="tab" @((user.UserType != "ADMIN") ? string.Empty : "style=display:none")>CC</a></li>*@
+                                    @*<li role="presentation"><a href="#assigned_by_me" data-toggle="tab" @((user.UserType == "ADMIN" || user.UserType == "OPERATIONS-MANAGER" || user.UserType == "CRO") ? string.Empty : "style=display:none")>Assigned By Me</a></li>*@
                                 </ul>
 
                                 <!-- Tab panes -->
                                 <div class="tab-content">
-                                    <div role="tabpanel" class="tab-pane fade" id="user_tasks">
+                                    <div role="tabpanel" class="tab-pane fade active in" id="user_tasks">
                                         <div class="table-responsive">
                                             <table id="usersTasksTable" class="table table-bordered table-striped table-hover js-basic-example dataTable">
                                                 <thead>
@@ -244,31 +285,21 @@
                                     </div>
                                     <div role="tabpanel" class="tab-pane fade" id="group_tasks">
                                         <div class="table-responsive">
-                                            <table id="tasksTable" class="table table-bordered table-striped table-hover js-basic-example dataTable">
+                                            <table id="groupsTasksTable" class="table table-bordered table-striped table-hover js-basic-example dataTable">
                                                 <thead>
                                                     <tr>
-                                                        <th>No</th>
-                                                        <th>StartDate</th>
-                                                        <th>Est.Date</th>
-                                                        <th>TaskName</th>
-                                                        <th>Owner</th>
-                                                        <th>Assigned</th>
-                                                        <th>Description</th>
-                                                        <th>Updated</th>
-                                                        <th>Status</th>
+                                                        <th>Sr.</th>
+                                                        <th>Groupname</th>
+                                                        <th>Active Tasks</th>
+                                                        <th>Actions</th>
                                                     </tr>
                                                 </thead>
                                                 <tfoot>
                                                     <tr>
-                                                        <th>No</th>
-                                                        <th>StartDate</th>
-                                                        <th>Est.Date</th>
-                                                        <th>TaskName</th>
-                                                        <th>Owner</th>
-                                                        <th>Assigned</th>
-                                                        <th>Description</th>
-                                                        <th>Updated</th>
-                                                        <th>Status</th>
+                                                        <th>Sr.</th>
+                                                        <th>Groupname</th>
+                                                        <th>Active Tasks</th>
+                                                        <th>Actions</th>
                                                     </tr>
                                                 </tfoot>
                                                 <tbody></tbody>
@@ -696,9 +727,9 @@
                                             <select id="sltStatus" class="form-control show-tick">
                                                 <option value="0">Please select</option>
                                                 <option value="PENDING">Pending</option>
-                                                <option value="APPROVED" @((user.UserType == "ACCOUNTS-MANAGER" || user.UserType == "ADMIN") ? string.Empty : "style=display:none")>Approved</option>
+                                                @*<option value="APPROVED" @((user.UserType == "ACCOUNTS-MANAGER" || user.UserType == "ADMIN") ? string.Empty : "style=display:none")>Approved</option>*@
                                                 <option value="COMPLETED">Completed</option>
-                                                <option value="ON_APPROVAL">On Approval</option>
+                                                @*<option value="ON_APPROVAL">On Approval</option>*@
                                                 <option value="IN_PROGRESS">In Progress</option>
                                             </select>
                                         </div>
@@ -719,7 +750,7 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button id="modalBtn" type="button" class="btn btn-link waves-effect" onclick="modalBtnClick()" value="SAVE">SUBMIT</button>
+                            @*<button id="modalBtn" type="button" class="btn btn-link waves-effect" onclick="modalBtnClick()" value="SAVE">SUBMIT</button>*@
                             <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
                         </div>
                     </div>
@@ -736,58 +767,50 @@
                             <div id="alertdiv" class="row">
                             </div>
                             <div class="row">
-                                <div class="col-lg-5">
+                                <div class="col-lg-6">
                                     <div class="form-group">
                                         <label>Assign to</label>
-                                        <select class="form-control">
-                                            <option>Select user</option>
+                                        <select id="sltUsers" class="form-control">
+                                            <option value="-1">Select user</option>
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-lg-5">
+                                <div class="col-lg-6">
                                     <div class="form-group">
                                         <label>Group</label>
-                                        <select class="form-control">
-                                            <option>Select group</option>
+                                        <select id="sltGroups" class="form-control">
+                                            <option value="-1">Select group</option>
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-lg-2">
+                                @*<div class="col-lg-2">
                                     <div class="form-group" style="margin-top: 27px;">
                                         <input type="checkbox" id="isGroupTask" class="form-control chk-col-light-green" />
                                         <label for="isGroupTask">isGroupTask</label>
                                     </div>
-                                </div>
+                                </div>*@
                             </div>
                             <div class="row">
-                                <div class="col-lg-3">
-                                    <label>Name</label>
+                                <div class="col-lg-5">
+                                    <label>Task</label>
                                 </div>
                                 <div class="col-lg-3">
                                     <label>Expected Complete</label>
                                 </div>
-                                <div class="col-lg-2">
-                                    <label>Status</label>
-                                </div>
                                 <div class="col-lg-3">
-                                    <label>Description</label>
+                                    <label>Remarks</label>
                                 </div>
                             </div>
                             <div id="allTasks">
                                 <div class="row">
-                                    <div class="col-lg-3">
-                                        <input class="form-control" type="text" />
+                                    <div class="col-lg-5">
+                                        <input id="taskName_1" class="form-control" type="text" />
                                     </div>
                                     <div class="col-lg-3">
-                                        <input class="form-control" type="date" />
-                                    </div>
-                                    <div class="col-lg-2">
-                                        <select class="form-control">
-                                            <option>Pending</option>
-                                        </select>
+                                        <input id="taskDate_1" class="form-control" type="date" />
                                     </div>
                                     <div class="col-lg-3">
-                                        <input class="form-control" type="text" />
+                                        <input id="details_1" class="form-control" type="text" />
                                     </div>
                                     <div class="col-lg-1">
                                         <button class="btn btn-default" onclick="addNewTaskRow()">+</button>
@@ -796,7 +819,82 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button id="modalBtn" type="button" class="btn btn-link waves-effect" onclick="modalBtnClick()" value="SAVE">SUBMIT</button>
+                            <button id="modalBtn" type="button" class="btn btn-link waves-effect" onclick="submitTasks()" value="SAVE">SUBMIT</button>
+                            <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--Modal Start-->
+            <div class="modal fade" id="mdTasksModal" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <label id="modalVNO">TASK</label>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div id="msgDiv" class="col-sm-12">
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>No.</th>
+                                                <th>Date</th>
+                                                <th>TaskName</th>
+                                                @*<th>Description</th>*@
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="UPTTable">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button id="modalBtn" type="button" class="btn btn-link waves-effect" onclick="submitUpdate()">SUBMIT</button>
+                            <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--Modal End-->
+            <div class="modal fade" id="mdGroupTasksModal" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <label id="modalVNO">TASK</label>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div id="msgDiv" class="col-sm-12">
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>No.</th>
+                                                <th>Date</th>
+                                                <th>Task</th>
+                                                @*<th>Description</th>*@
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="UPTTable"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button id="modalBtn" type="button" class="btn btn-link waves-effect" onclick="submitUpdate()">SUBMIT</button>
                             <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
                         </div>
                     </div>

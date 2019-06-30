@@ -264,6 +264,22 @@ namespace KhalidPetroleum.Controllers
             return JsonConvert.SerializeObject(list);
         }
 
+        [System.Web.Http.HttpGet]
+        public String DeleteUser(long id)
+        {
+            try
+            {
+                var user = db.Users.Where(x => x.UserID == id).FirstOrDefault();
+                user.UserStatus = false;
+                db.SaveChanges();
+                return "1";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
+
         [System.Web.Http.HttpPost]
         public String AddUnloadSite()
         {
@@ -412,8 +428,23 @@ namespace KhalidPetroleum.Controllers
         [System.Web.Http.HttpGet]
         public String GetRoles()
         {
-            var list = db.Database.SqlQuery<Role>("SELECT * FROM Roles").ToList<Role>();
+            var list = db.Database.SqlQuery<Role>("SELECT * FROM Roles WHERE RoleStatus = 1").ToList <Role>();
             return JsonConvert.SerializeObject(list);
+        }
+
+        [System.Web.Http.HttpGet]
+        public String DeleteRole(int id)
+        {
+            try
+            {
+                var role = db.Roles.Where(x => x.RoleID == id).FirstOrDefault();
+                role.RoleStatus = false;
+                db.SaveChanges();
+                return "1";
+            }
+            catch(Exception ex){
+                return ex.Message;
+            }
         }
 
         [System.Web.Http.HttpPost]
@@ -619,7 +650,7 @@ namespace KhalidPetroleum.Controllers
                 string requestFromPost = reader.ReadToEnd();
 
                 var user = JsonConvert.DeserializeObject<User>(requestFromPost);
-                var obj = db.Users.Where(x => x.Userusername == user.Userusername).ToList()[0];
+                var obj = db.Users.Where(x => x.UserID == user.UserID).FirstOrDefault();
                 obj.UserName = user.UserName;
                 obj.UserCNIC = user.UserCNIC;
                 obj.UserDOB = user.UserDOB;
@@ -663,34 +694,71 @@ namespace KhalidPetroleum.Controllers
                 var list = JsonConvert.DeserializeObject<List<Task>>(requestFromPost);
                 int declineCount = 0, completeCount = 0, approvedCount = 0, progressCount = 0;
                 var temp = list[0];
-                var ck = db.DailyCheckLists.Where(x => x.CheckListID == (long)temp.DailyChecklistId).ToList()[0];
-                foreach (var item in list)
+                if (temp.DailyChecklistId != null)
                 {
-                    if ((bool)item.IsApproved)
-                        approvedCount++;
-                    else
-                        declineCount++;
+                    var ck = db.DailyCheckLists.Where(x => x.CheckListID == (long)temp.DailyChecklistId).ToList()[0];
+                    foreach (var item in list)
+                    {
+                        if ((bool)item.IsApproved)
+                            approvedCount++;
+                        else
+                            declineCount++;
 
-                    if ((bool)item.IsApproved && item.TaskStatus == "COMPLETED")
-                        completeCount++;
-                    if ((bool)item.IsApproved && item.TaskStatus == "IN_PROGRESS")
-                        progressCount++;
+                        if ((bool)item.IsApproved && item.TaskStatus == "COMPLETED")
+                            completeCount++;
+                        if ((bool)item.IsApproved && item.TaskStatus == "IN_PROGRESS")
+                            progressCount++;
 
-                    var task = db.Tasks.Where(x => x.TaskId == item.TaskId).ToList()[0];
-                    db.Entry(task).CurrentValues.SetValues(item);
+                        var task = db.Tasks.Where(x => x.TaskId == item.TaskId).ToList()[0];
+                        db.Entry(task).CurrentValues.SetValues(item);
+                    }
+                    if (approvedCount > 0)
+                        ck.Status = "APPROVED";
+                    if (progressCount > 0)
+                        ck.Status = "IN_PROGRESS";
+                    if (completeCount == approvedCount)
+                        ck.Status = "COMPLETED";
+                    if (declineCount == list.Count)
+                        ck.Status = "DECLINED";
+
+
+                    db.SaveChanges();
                 }
-                if (approvedCount > 0)
-                    ck.Status = "APPROVED";
-                if (progressCount > 0)
-                    ck.Status = "IN_PROGRESS";
-                if(completeCount == approvedCount)
-                    ck.Status = "COMPLETED";
-                if (declineCount == list.Count)
-                    ck.Status = "DECLINED";
+                else
+                {
+                    foreach (var item in list)
+                    {
+                        var task = db.Tasks.Where(x => x.TaskId == item.TaskId).ToList()[0];
+                        task.TaskStatus = item.TaskStatus;
+                        task.Details = item.Details;
+                        task.EstimatedDate = item.EstimatedDate;
+                        task.TaskName = item.TaskName;
+                    }
+                    db.SaveChanges();
+                }
+                
+                
+                return "1";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
 
+        [System.Web.Http.HttpPost]
+        public string SubmitNewTasks()
+        {
+            try
+            {
+                StreamReader reader = new StreamReader(Request.InputStream);
+                string requestFromPost = reader.ReadToEnd();
+
+                var list = JsonConvert.DeserializeObject<List<Task>>(requestFromPost);
+                db.Tasks.AddRange(list);
 
                 db.SaveChanges();
-                
+
                 return "1";
             }
             catch (Exception ex)
@@ -718,9 +786,165 @@ namespace KhalidPetroleum.Controllers
         }
 
         [System.Web.Http.HttpGet]
+        public string GetGroups()
+        {
+            return JsonConvert.SerializeObject(db.Groups.ToList<Group>());
+        }
+
+        [System.Web.Http.HttpGet]
         public string GetUserPendingTasks()
         {
             return JsonConvert.SerializeObject(db.GET_USERS_ACTIVE_TASKS().ToList<GET_USERS_ACTIVE_TASKS_Result>());
+        }
+
+        [System.Web.Http.HttpGet]
+        public string GetGroupPendingTasks()
+        {
+            return JsonConvert.SerializeObject(db.GET_GROUPS_ACTIVE_TASKS().ToList<GET_GROUPS_ACTIVE_TASKS_Result>());
+        }
+
+        [System.Web.Http.HttpGet]
+        public string GetUserPendingTasksByUserId(long userid)
+        {
+            return JsonConvert.SerializeObject(db.GET_USER_TASKS_BY_USER_ID(userid).ToList<GET_USER_TASKS_BY_USER_ID_Result>());
+        }
+
+        [System.Web.Http.HttpGet]
+        public string GetGroupPendingTasksByGroupId(long groupid)
+        {
+            return JsonConvert.SerializeObject(db.GET_GROUP_TASKS_BY_GROUP_ID(groupid).ToList<GET_GROUP_TASKS_BY_GROUP_ID_Result>());
+        }
+
+        [System.Web.Http.HttpGet]
+        public string GetGroupMembers(long groupid)
+        {
+            var ids = db.GroupUsers.Where(x => x.GroupId == groupid).Select(x => x.UserId).ToList<long>();
+            //var users = db.Users.Where(x => ids.Contains(x.UserID)).ToList();
+            var filteredUser = db.GET_ALL_USERS().Where(x => ids.Contains(x.UserID));
+            return JsonConvert.SerializeObject(filteredUser, Formatting.None ,new JsonSerializerSettings { 
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            });
+        }
+
+        [System.Web.Http.HttpPost]
+        public string AddQuestion()
+        {
+            try
+            {
+                StreamReader reader = new StreamReader(Request.InputStream);
+                string requestFromPost = reader.ReadToEnd();
+
+                var question = JsonConvert.DeserializeObject<Question>(requestFromPost);
+                db.Questions.Add(question);
+                db.SaveChanges();
+                return "1";
+            }
+            catch (Exception e)
+            {
+                return e.Message;
+            }
+
+        }
+
+        [System.Web.Http.HttpPost]
+        public string UpdateQuestion()
+        {
+            try
+            {
+                StreamReader reader = new StreamReader(Request.InputStream);
+                string requestFromPost = reader.ReadToEnd();
+
+                var question = JsonConvert.DeserializeObject<Question>(requestFromPost);
+                var q = db.Questions.Where(x => x.QuestionID == question.QuestionID).ToList()[0];
+                q.QuestionStatement = question.QuestionStatement;
+                q.Status = question.Status;
+                db.SaveChanges();
+                return "1";
+            }
+            catch (Exception e)
+            {
+                return e.Message;
+            }
+
+        }
+
+        [System.Web.Http.HttpPost]
+        public string SubmitGroups()
+        {
+            try
+            {
+                StreamReader reader = new StreamReader(Request.InputStream);
+                string requestFromPost = reader.ReadToEnd();
+
+                var gd = JsonConvert.DeserializeObject<GroupDetails>(requestFromPost);
+                long gid = 0;
+                if (gd.GroupId > 0)
+                {
+                    gid = gd.GroupId;
+                    var alreadyMembers = db.GroupUsers.Where(x => x.GroupId == gid).ToList();
+                    foreach (var user in alreadyMembers)
+                    {
+                        db.GroupUsers.Remove(user);
+                        //if (gd.Users.Contains(Convert.ToInt32(user.UserId)))
+                        //{
+                        //    gd.Users.Remove(Convert.ToInt32(user.UserId));
+                        //}
+                    }
+                    foreach (var userid in gd.Users)
+                    {
+                        db.GroupUsers.Add(new GroupUser()
+                        {
+                            GroupId = gid,
+                            UserId = userid
+                        });
+                    }
+                    db.Groups.Where(x => x.GroupId == gid).FirstOrDefault().GroupName = gd.GroupName;
+                    db.SaveChanges();
+                    return "1";
+                }
+                else
+                {
+                    db.Groups.Add(new Group()
+                    {
+                        GroupName = gd.GroupName,
+                        Created = DateTime.Now,
+                        GroupStatus = true
+                    });
+                    db.SaveChanges();
+                    gid = db.Groups.OrderByDescending(x => x.GroupId).ToList<Group>()[0].GroupId;
+                    foreach (var userid in gd.Users)
+                    {
+                        db.GroupUsers.Add(new GroupUser()
+                        {
+                            GroupId = gid,
+                            UserId = userid
+                        });
+                    }
+                    db.SaveChanges();
+                    return "1";
+                }
+                
+                
+            }
+            catch (Exception e)
+            {
+                return e.Message;
+            }
+
+        }
+
+        [System.Web.Http.HttpGet]
+        public string GetMyGroups(long userId)
+        {
+            var myGroups = db.GroupUsers.Where(x => x.UserId == userId).Select(x => x.GroupId).ToList<long>();
+            return JsonConvert.SerializeObject(myGroups);
+        }
+
+        [System.Web.Http.HttpGet]
+        public string GetAllTasks()
+        {
+            var tasks = db.Tasks.Where(x => x.TaskStatus == "COMPLETED").OrderByDescending(x => x.TaskId).ToList();
+            return JsonConvert.SerializeObject(tasks);
         }
 
     }
