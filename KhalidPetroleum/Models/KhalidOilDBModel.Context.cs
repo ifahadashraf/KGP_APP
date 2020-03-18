@@ -176,5 +176,18 @@ namespace KhalidPetroleum.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_GROUP_TASKS_BY_GROUP_ID_Result>("GET_GROUP_TASKS_BY_GROUP_ID", groupidParameter);
         }
+    
+        public virtual ObjectResult<GET_MONTHLY_REPORT_Result> GET_MONTHLY_REPORT(Nullable<System.DateTime> from, Nullable<System.DateTime> to)
+        {
+            var fromParameter = from.HasValue ?
+                new ObjectParameter("From", from) :
+                new ObjectParameter("From", typeof(System.DateTime));
+    
+            var toParameter = to.HasValue ?
+                new ObjectParameter("To", to) :
+                new ObjectParameter("To", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_MONTHLY_REPORT_Result>("GET_MONTHLY_REPORT", fromParameter, toParameter);
+        }
     }
 }

@@ -5,7 +5,8 @@
 $(document).on("click", ".expand_report", function () {
 	var report = list_reports[parseInt(this.id)];
 	var date = new Date(report.Date);
-	dateStr = date.getDate() + '/' + (date.getMonth() + 1) + '/' + (date.getYear() - 100) + " [" + (date.getHours() <= 9 ? "0" + date.getHours() : date.getHours()) + ":" + (date.getMinutes() <= 9 ? "0" + date.getMinutes() : date.getMinutes()) + ":" + (date.getSeconds() <= 9 ? "0" + date.getSeconds() : date.getSeconds()) + "]";
+	dateStr = date.getDate() + '/' + (date.getMonth() + 1) + '/' + (date.getYear() - 100) +
+        " [" + (date.getHours() <= 9 ? "0" + date.getHours() : date.getHours()) + ":" + (date.getMinutes() <= 9 ? "0" + date.getMinutes() : date.getMinutes()) + ":" + (date.getSeconds() <= 9 ? "0" + date.getSeconds() : date.getSeconds()) + "]";
 	$('#txtDate').val(dateStr);
 	$('#txtFB').val(report.UserName);
 	$('#txtVN').val(report.VehicleNumber);

@@ -947,5 +947,28 @@ namespace KhalidPetroleum.Controllers
             return JsonConvert.SerializeObject(tasks);
         }
 
+        [System.Web.Http.HttpPost]
+        public string AddDepot()
+        {
+            try
+            {
+                StreamReader reader = new StreamReader(Request.InputStream);
+                string requestFromPost = reader.ReadToEnd();
+                var depot = JsonConvert.DeserializeObject<Depot>(requestFromPost);
+                db.Depots.Add(depot);
+                db.SaveChanges();
+                return "1";
+            }
+            catch (Exception e)
+            {
+                return e.Message;
+            }
+        }
+
+        [System.Web.Http.HttpGet]
+        public string GetMonthlyReport(DateTime from, DateTime to)
+        {
+            return JsonConvert.SerializeObject(db.GET_MONTHLY_REPORT(from, to).ToList<GET_MONTHLY_REPORT_Result>());
+        }
     }
 }

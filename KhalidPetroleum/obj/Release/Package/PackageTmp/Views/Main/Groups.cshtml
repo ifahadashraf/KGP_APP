@@ -1,0 +1,340 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    @{var rights = Session["Rights"] as KhalidPetroleum.Models.Role;
+    var user = Session["User"] as KhalidPetroleum.Models.User;
+    var outerIndex = 0;
+    var innerInex = 0;}
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>Vehicle Management System</title>
+    <!-- Favicon-->
+    <link rel="icon" href="~/Content/images/khalid.jpg" type="image/x-icon">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+    <!-- Bootstrap Core Css -->
+    <link href="~/Content/plugins/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <!-- JQuery DataTable Css -->
+    <link href="~/Content/plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css" rel="stylesheet">
+    <!-- Bootstrap Material Datetime Picker Css -->
+    <link href="~/Content/plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css" rel="stylesheet" />
+    <!-- Waves Effect Css -->
+    <link href="~/Content/plugins/node-waves/waves.css" rel="stylesheet" />
+    <!-- Animation Css -->
+    <link href="~/Content/plugins/animate-css/animate.css" rel="stylesheet" />
+    <!-- Custom Css -->
+    <link href="~/Css/style.css" rel="stylesheet">
+    <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
+    <link href="~/Css/themes/all-themes.css" rel="stylesheet" />
+
+    <style>
+        .loading {
+            position: fixed;
+            z-index: 999;
+            height: 2em;
+            width: 2em;
+            overflow: visible;
+            margin: auto;
+            top: 0;
+            left: 0;
+            bottom: 175px;
+            right: 175px;
+        }
+
+            .loading:before {
+                content: '';
+                display: block;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0,0,0,0.2);
+            }
+
+        .loading-gif {
+        }
+    </style>
+</head>
+<body class="theme-blue">
+    <div class="page-loader-wrapper">
+        <div class="loader">
+            <div class="preloader">
+                <div class="spinner-layer pl-blue">
+                    <div class="circle-clipper left">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="circle-clipper right">
+                        <div class="circle"></div>
+                    </div>
+                </div>
+            </div>
+            <p>Please wait...</p>
+        </div>
+    </div>
+    <div class="loading" style="display: none">
+        <img src="../../Content/images/loading.gif" />
+    </div>
+    <!-- Top Bar -->
+    <nav class="navbar">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
+                <a href="javascript:void(0);" class="bars"></a>
+                <a class="navbar-brand">Khalid Group of Petroleum | Groups</a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <!-- Notifications -->
+                    <li class="dropdown">
+                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button">
+                            <i class="material-icons">menu</i>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="header">Menu</li>
+                            <li class="body">
+                                <ul class="menu">
+                                    <li>
+                                        <a href="/Main/SignIn">
+                                            <div class="icon-circle bg-light-green">
+                                                <i class="material-icons">input</i>
+                                            </div>
+                                            <div class="menu-info">
+                                                <h4>Logout</h4>
+                                                <p>
+                                                    Exit the system
+                                                </p>
+                                            </div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- #END# Notifications -->
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- #Top Bar -->
+    <section>
+        <!-- Left Sidebar -->
+        <aside id="leftsidebar" class="sidebar">
+            <!-- User Info -->
+            <div class="user-info">
+                <div class="image">
+                    <img src="~/Content/images/khalid.jpg" width="48" height="48" alt="User" />
+                </div>
+                <div class="info-container">
+                    <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">@Session["Username"]</div>
+                    <div class="email">Khalid group</div>
+                </div>
+            </div>
+            <!-- #User Info -->
+            <!-- Menu -->
+            <div class="menu">
+                <ul class="list">
+                    <li class="header">MAIN NAVIGATION</li>
+                    <li>
+                        <a href="/Main/Index">
+                            <i class="material-icons">home</i>
+                            <span>Home</span>
+                        </a>
+                    </li>
+                    <li @(rights.isMNVehicles ? string.Empty : "style=display:none")>
+                        <a href="/Main/Vehicles">
+                            <i class="material-icons">directions_car</i>
+                            <span>Vehicles</span>
+                        </a>
+                    </li>
+                    <li @(rights.isMNStaff ? string.Empty : "style=display:none")>
+                        <a href="/Main/Staff">
+                            <i class="material-icons">person</i>
+                            <span>Staff</span>
+                        </a>
+                    </li>
+
+                    <li @((bool)rights.isMNQuestions ? string.Empty : "style=display:none")>
+                        <a href="/Main/Questions"><i class="material-icons">view_list</i><span>Questions</span></a></li>
+                    <li class="active">
+                        <a href="/Main/Groups">
+                            <i class="material-icons">group</i>
+                            <span>Groups</span>
+                        </a>
+                    </li>
+                    <li @(rights.isMNDeliverySites ? string.Empty : "style=display:none")>
+                        <a href="/Main/DSites">
+                            <i class="material-icons">ev_station</i>
+                            <span>Delivery Sites</span>
+                        </a>
+                    </li>
+
+                    <li @((user.UserID == 3) ? string.Empty : "style=display:none")>
+                        <a href="/Main/Roles">
+                            <i class="material-icons">supervisor_account</i>
+                            <span>Roles</span>
+                        </a>
+                    </li>
+                    <li @((bool)rights.MStats ? string.Empty : "style=display:none")>
+                        <a href="/Admin/Index">
+                            <i class="material-icons">assessment</i>
+                            <span>Stats</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <!-- #Menu -->
+            <!-- Footer -->
+            <!-- #Footer -->
+        </aside>
+        <!-- #END# Left Sidebar -->
+    </section>
+    <section class="content">
+        <div class="container-fluid">
+            <div class="block-header">
+                <h2>Groups</h2>
+                <input id="uid" type="text" value="@user.UserID" style="display: none" />
+                <input id="uname" type="text" value="@user.UserName" style="display: none" />
+            </div>
+
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>
+                                DETAILS
+                            </h2>
+                        </div>
+                        <div class="body">
+                            <button type="button" class="btn bg-light-blue waves-effect pull-right" data-toggle="modal" data-target="#mdModal">+ Add New</button><br />
+                            <div class="table-responsive">
+                                <table id="checklistsTable" class="table table-bordered table-striped table-hover dataTable js-exportable">
+                                    <thead>
+                                        <tr>
+                                            <th>Id</th>
+                                            <th>GroupName</th>
+                                            <th>GroupCreated</th>
+                                            <th>GroupStatus</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--Modal Start-->
+            <div class="modal fade" id="mdModal" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <label id="modalVNO">Group</label>
+                            <div id="alertdiv"></div>
+                        </div>
+                        <div class="modal-body gp-modal">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label>Group Name</label>
+                                        <input id="txtGroupName" class="form-control" type="text"/>
+                                        <input id="txtGroupId" class="form-control" type="text" style="display:none" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-10">
+                                    <div class="form-group">
+                                        <label>Users</label>
+                                        <select id="sltUsers1" class="form-control">
+                                            <option value="-1">Select user</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2">
+                                    <div class="form-group">
+                                        <label></label>
+                                        <button class="btn btn-primary" onclick="addNewRow()" style="margin-top: 25px;">+</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="gp-users">
+                                
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button id="modalBtn" type="button" class="btn btn-link waves-effect" onclick="submitGroup()">SUBMIT</button>
+                            <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--Modal End-->
+
+            <!--Modal Start-->
+            <div class="modal fade" id="mdModal1" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <label id="modalVNO">Groups</label>
+                        </div>
+                        <div class="modal-body">
+                            <table class="table table-bordered table-striped table-hover dataTable js-exportable">
+                                <thead>
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Name</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="membersTable"></tbody>
+
+                            </table>
+                        </div>
+                        <div class="modal-footer">
+                            <button id="modalBtn" type="button" class="btn btn-link waves-effect" onclick="submitGroup()">SUBMIT</button>
+                            <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--Modal End-->
+        </div>
+    </section>
+    <!-- Jquery Core Js -->
+
+    <script src="../../Content/plugins/jquery/jquery.min.js"></script>
+    <!-- Jquery DataTable Plugin Js -->
+    <script src="~/Content/plugins/jquery-datatable/jquery.dataTables.js"></script>
+    <script src="~/Content/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
+    <script src="~/Content/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>
+    <script src="~/Content/plugins/jquery-datatable/extensions/export/buttons.flash.min.js"></script>
+    <script src="~/Content/plugins/jquery-datatable/extensions/export/jszip.min.js"></script>
+    <script src="~/Content/plugins/jquery-datatable/extensions/export/pdfmake.min.js"></script>
+    <script src="~/Content/plugins/jquery-datatable/extensions/export/vfs_fonts.js"></script>
+    <script src="~/Content/plugins/jquery-datatable/extensions/export/buttons.html5.min.js"></script>
+    <script src="~/Content/plugins/jquery-datatable/extensions/export/buttons.print.min.js"></script>
+    <!-- Bootstrap Core Js -->
+    <script src="~/Content/plugins/bootstrap/js/bootstrap.js"></script>
+    <!-- Select Plugin Js -->
+    <script src="~/Content/plugins/bootstrap-select/js/bootstrap-select.js"></script>
+    <!-- Slimscroll Plugin Js -->
+    <script src="~/Content/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
+    <!-- Waves Effect Plugin Js -->
+    <script src="~/Content/plugins/node-waves/waves.js"></script>
+    <script src="~/Scripts/main.js"></script>
+    <!-- Demo Js -->
+    <script src="~/Scripts/js/admin.js"></script>
+    <script src="~/Scripts/js/demo.js"></script>
+    <script src="~/Scripts/groups.js"></script>
+    <!-- Moment Plugin Js -->
+    <script src="~/Content/plugins/momentjs/moment.js"></script>
+    <!-- Bootstrap Material Datetime Picker Plugin Js -->
+    <script src="~/Content/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js"></script>
+
+
+</body>
+</html>

@@ -60,12 +60,12 @@ $(document).on("click", ".expand_report", function () {
     $('#OpeningMeter').html(report.OpeningMeter);
     $('#ClosingMeter').html(report.ClosingMeter);
     $('#total_kms').html(report.ClosingMeter - report.OpeningMeter);
-    $('#avg').html((report.ClosingMeter - report.OpeningMeter) / report.FilledFuelQuantity);
+    $('#avg').html(((report.ClosingMeter - report.OpeningMeter) / report.FilledFuelQuantity).toFixed(2));
     var expenses = report.ToolExpense + report.MunshiExpense + report.ParkingExpense + report.MealExpense + report.OtherExpense + (report.FilledFuelRate * report.FilledFuelQuantity);
     var recovery = (report.SUPDifferenceRate * report.SUPDifferenceQuantity) + (report.HSDDifferenceRate * report.HSDDifferenceQuantity);
 
     if (recovery - expenses > 0) {
-        $('#total_gain').html(recovery - expenses);
+        $('#total_gain').html((recovery - expenses).toFixed(2));
         $('#total_loss').html('-');
     }
     else if (recovery - expenses == 0) {
@@ -73,7 +73,7 @@ $(document).on("click", ".expand_report", function () {
         $('#total_loss').html(0);
     }
     else {
-        $('#total_loss').html(expenses - recovery);
+        $('#total_loss').html((expenses - recovery).toFixed(2));
         $('#total_gain').html('-');
     }
 
@@ -102,7 +102,10 @@ var list_reports = [];
 
 function getDailyReports() {
 
-    var table = $('#reportTable').DataTable();
+    var table = $('#reportTable').DataTable({
+        "order": [[0, "desc"]],
+        "bDestroy": true
+    });
 
     var from = $('#txtFromDate').val();
     var to = $('#txtToDate').val();
@@ -122,18 +125,20 @@ function getDailyReports() {
                 if (arr.length > 0) {
                     table.clear().draw();
                     $.each(arr, function (index, item) {
-                        list_reports.push(item);
-                        var date = new Date(item.report.Date);
-                        dateStr = (date.getDate() <= 9 ? "0" + date.getDate() : date.getDate()) + '/' + ((date.getMonth() + 1) <= 9 ? "0" + (date.getMonth() + 1) : (date.getMonth() + 1)) + '/' + (date.getYear() - 100);
-                        table.row.add([
-                            item.report.DailyReportID,
-                            dateStr,
-                            item.report.VehicleNumber,
-                            item.report.UserName,
-                            item.report.DepotID,
-                            item.report.DepotName,
-                            '<div class="row"><div class="col-md-6"><button type="button" class="btn bg-light-blue waves-effect expand_report" data-toggle="modal" data-target="#mdModal" id=' + index + '>Expand</button></div> <div class="col-md-6"><button type="button" class="btn bg-light-blue waves-effect" data-toggle="modal" data-target="#galleryModal" onclick="makeTiles(' + item.report.DailyReportID + ')">Images</button></div></div>'
-                        ]).draw();
+                        if (item.report.IsVerified === true) {
+                            list_reports.push(item);
+                            var date = new Date(item.report.Date);
+                            dateStr = (date.getDate() <= 9 ? "0" + date.getDate() : date.getDate()) + '/' + ((date.getMonth() + 1) <= 9 ? "0" + (date.getMonth() + 1) : (date.getMonth() + 1)) + '/' + (date.getYear() - 100);
+                            table.row.add([
+                                item.report.DailyReportID,
+                                dateStr,
+                                item.report.VehicleNumber,
+                                item.report.UserName,
+                                item.report.DepotID,
+                                item.report.DepotName,
+                                '<div class="row"><div class="col-md-6"><button id="' + (list_reports.length - 1) + '" type="button" class="btn bg-light-blue waves-effect expand_report" data-toggle="modal" data-target="#mdModal" id=' + index + '>Expand</button></div> <div class="col-md-6"><button type="button" class="btn bg-light-blue waves-effect" data-toggle="modal" data-target="#galleryModal" onclick="makeTiles(' + item.report.DailyReportID + ')">Images</button></div></div>'
+                            ]).draw();
+                        }
                     });
                     swal({
                         title: "",

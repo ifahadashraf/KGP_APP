@@ -122,6 +122,14 @@
                         </a>
                     </li>
 
+                    <li @((bool)rights.isMNQuestions ? string.Empty : "style=display:none")>
+                        <a href="/Main/Questions"><i class="material-icons">view_list</i><span>Questions</span></a></li>
+                    <li @((bool)rights.isMNGroups ? string.Empty : "style=display:none")>
+                        <a href="/Main/Groups">
+                            <i class="material-icons">group</i>
+                            <span>Groups</span>
+                        </a>
+                    </li>
                     <li @(rights.isMNDeliverySites ? string.Empty : "style=display:none")>
                         <a href="/Main/DSites">
                             <i class="material-icons">ev_station</i>
@@ -135,7 +143,7 @@
                             <span>Roles</span>
                         </a>
                     </li>
-                    <li @((user.UserID == 3 || user.UserType == "CRO" || user.UserType == "ACCOUNTS-MANAGER") ? string.Empty : "style=display:none")>
+                    <li @((bool)rights.MStats ? string.Empty : "style=display:none")>
                         <a href="/Admin/Index">
                             <i class="material-icons">assessment</i>
                             <span>Stats</span>
@@ -588,7 +596,7 @@
                             <div class="row">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <div class="row">
-                                        <div class="col-md-3">
+                                        <div class="col-md-2">
                                             <label for="depotCode">Code</label>
                                             <input type="text" id="txtNewDepotCode" class="form-control" placeholder="">
                                         </div>
@@ -596,13 +604,19 @@
                                             <label for="depotName">Name</label>
                                             <input type="text" id="txtNewDepotName" class="form-control" placeholder="">
                                         </div>
+                                        <div class="col-md-5">
+                                            <label for="depotName">Location</label>
+                                            <input type="text" id="txtNewDepotLocation" class="form-control" placeholder="">
+                                        </div>
                                     </div>
 
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-link waves-effect">SAVE CHANGES</button>
+                            <button id="saveDepot" type="button" class="btn btn-link waves-effect" onclick="addDepot()" >
+                                SAVE
+                            </button>
                             <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
                         </div>
                     </div>

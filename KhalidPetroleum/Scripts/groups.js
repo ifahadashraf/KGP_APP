@@ -2,7 +2,7 @@
 var users = [];
 
 var tableMy = $('#checklistsTable').DataTable({
-    "order": [[0, "desc"]],
+    "order": [[0, "asc"]],
     "pageLength": 10
 });
 
@@ -14,6 +14,7 @@ var tableMy = $('#checklistsTable').DataTable({
         $('#sltUsers1 option[value=-1]').prop('selected', true);
         $('#txtGroupName').val('');
         $('#txtGroupId').val('');
+        membersCounter = 1;
     })
 })();
 
@@ -38,8 +39,10 @@ function getUsers() {
 
         if (arr.length > 0) {
             $.each(arr, function (index, item) {
-                users.push(item);
-                $('#sltUsers'+membersCounter).append('<option value="' + item.UserID + '">' + item.UserName + '</option>');
+                if (item.Userusername) {
+                    users.push(item);
+                    $('#sltUsers1').append('<option value="' + item.UserID + '">' + item.UserName + '</option>');
+                }
             });
         }
     });
@@ -50,7 +53,7 @@ function getMembers(id, gpn) {
         var arr = JSON.parse(data);
         if (arr) {
             $.each(arr, function (ix, item) {
-                $('#sltUsers' + membersCounter + ' option[value='+item.UserID+']').prop('selected', true);
+                $('#sltUsers' + membersCounter + ' option[value=' + item.UserID + ']').prop('selected', true);
                 addNewRow();
                 //$('#membersTable').append(
                 //    '<tr><td>' + item.UserID + '</td><td>' + item.UserName + '</td></tr>'
@@ -91,6 +94,7 @@ function addNewRow() {
 
 function removeNewRow(id) {
     $('#' + id).remove();
+    membersCounter -= 1;
 }
 
 function submitGroup() {
@@ -121,7 +125,7 @@ function submitGroup() {
 
     submitGroupsApi(json, function (data) {
         if (data == "1") {
-            $('#alertdiv').html('<div class="alert alert-success"><strong>Success !</strong> New group has been created</div>')
+            $('#alertdiv').html('<div class="alert alert-success"><strong>Success !</strong></div>')
             setTimeout(function () {
 
                 window.location.href = window.location.href;

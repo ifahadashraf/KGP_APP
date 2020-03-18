@@ -41,6 +41,7 @@ namespace KhalidPetroleum.Models
         public Nullable<bool> isMNGroups { get; set; }
         public Nullable<bool> isMNQuestions { get; set; }
         public bool RoleStatus { get; set; }
+        public Nullable<bool> MonthlyReports { get; set; }
     
         public virtual ICollection<User> Users { get; set; }
     }

@@ -150,7 +150,7 @@ function addNewRole() {
         "SChecklistReport": false,
         "SVerification": false,
         "isMNQuestions": false,
-        "isMNGroups": false
+        "isMNGroups": false,
     }
     var i = 0;
     for (var key in body) {
@@ -228,6 +228,7 @@ function updateRole() {
     }
     body["RoleName"] = $('#txtRoleName').val();
     body["RoleID"] = id_forEdit;
+    body["RoleStatus"] = true;
 
     updateRoleApi(body, function (data) {
         $('#alertdiv').html('');

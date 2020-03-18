@@ -15,6 +15,7 @@
 });
 
 var rolesArr = [];
+var userArr = [];
 
 var id_forEdit = -1;
 
@@ -33,7 +34,7 @@ function onClickbtnCloseModal() {
     var val = $('#btnAddModal').html('Add');
     $('#txtRoleName').val('');
     var i = 0;
-    for (var i = 0; i <= 11; i++) {
+    for (var i = 0; i <= 18; i++) {
         $("#checkbox_" + i).prop('checked', true);
     }
     $('#txtRoleName').prop('disabled', false);
@@ -54,7 +55,14 @@ function editModal(it) {
         "isHRent": false,
         "isHPettyCash": false,
         "isHCash": false,
-        "isHpayments": false
+        "isHPayments": false,
+        "MStats": false,
+        "SRent": false,
+        "SDailyReport": false,
+        "SChecklistReport": false,
+        "SVerification": false,
+        "isMNQuestions": false,
+        "isMNGroups": false
     }
     var i = 0;
     for (var key in body) {
@@ -79,6 +87,7 @@ function getUsers() {
         if (arr.length > 0) {
             $('#sltUsers').html('');
             $.each(arr, function (index, item) {
+                userArr.push(item);
                 if (item.Userusername != "" && item.Userusername != null)
                     $('#sltUsers').append('<option value="'+item.UserID+'">'+item.UserName+'</option>');
             });
@@ -106,7 +115,7 @@ function getRoles() {
                 table.row.add([
                     index + 1,
                     item.RoleName,
-                    '<button type="button" class="btn bg-light-blue waves-effect" onclick="editModal('+index+')">Edit</button><button type="button" class="btn bg-light-blue waves-effect">Delete</button>'
+                    '<button type="button" class="btn bg-light-blue waves-effect" onclick="editModal('+index+')">Edit</button><button type="button" class="btn bg-light-blue waves-effect" onclick="deleteRole('+item.RoleID+')">Delete</button>'
                 ]).draw();
             });
         }
@@ -134,7 +143,14 @@ function addNewRole() {
         "isHRent" : false,
         "isHPettyCash" : false,
         "isHCash" : false,
-        "isHpayments" : false
+        "isHPayments": false,
+        "MStats": false,
+        "SRent": false,
+        "SDailyReport": false,
+        "SChecklistReport": false,
+        "SVerification": false,
+        "isMNQuestions": false,
+        "isMNGroups": false,
     }
     var i = 0;
     for (var key in body) {
@@ -143,13 +159,14 @@ function addNewRole() {
         i++;
     }
     body["RoleName"] = $('#txtRoleName').val();
+    body["RoleStatus"] = true;
 
     addNewRoleApi(body, function (data) {
         $('#alertdiv').html('');
         if (data == "1") {
             $('#alertdiv').html('<div class="alert alert-success"><strong>Success !</strong> New role has been added</div>')
             setTimeout(function () {
-                $('#alertdiv').html('');
+                window.location.href = window.location.href;
             }, 1500);
         }
         else {
@@ -194,7 +211,14 @@ function updateRole() {
         "isHRent": false,
         "isHPettyCash": false,
         "isHCash": false,
-        "isHpayments": false
+        "isHpayments": false,
+        "MStats": false,
+        "SRent": false,
+        "SDailyReport": false,
+        "SChecklistReport": false,
+        "SVerification": false,
+        "isMNQuestions": false,
+        "isMNGroups": false
     }
     var i = 0;
     for (var key in body) {
@@ -204,6 +228,7 @@ function updateRole() {
     }
     body["RoleName"] = $('#txtRoleName').val();
     body["RoleID"] = id_forEdit;
+    body["RoleStatus"] = true;
 
     updateRoleApi(body, function (data) {
         $('#alertdiv').html('');
@@ -219,5 +244,46 @@ function updateRole() {
         else {
             $('#alertdiv').html('<div class="alert alert-danger"><strong>Error !</strong>' + data + '</div>')
         }
+    });
+}
+
+var changeRole = function(id) {
+    var uid = $(id).val();
+    var userObj = null;
+    for (var i = 0; i < userArr.length; i++) {
+        if (userArr[i].UserID == uid) {
+            userObj = userArr[i];
+        }
+    }
+
+    $('#sltRoles').val(userObj.RoleID).change();
+}
+
+function deleteRole(id) {
+    swal({
+        title: "Are you sure ?",
+        text: "This will delete this role from system",
+        type: "info",
+        showCancelButton: true,
+        closeOnConfirm: false,
+        showLoaderOnConfirm: true,
+    }, function () {
+        deleteRoleApi(id, function (data) {
+            if (data == "1") {
+                swal({
+                    title: "Success",
+                    text: "Role deleted",
+                    type: "success",
+                    confirmButtonText: "Ok"
+                }, function (isConfirm) {
+                    if (isConfirm) {
+                        window.location.href = window.location.href;
+                    }
+                });
+            }
+            else {
+                swal("Error", data, "error");
+            }
+        });
     });
 }

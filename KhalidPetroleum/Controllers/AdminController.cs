@@ -50,6 +50,13 @@ namespace KhalidPetroleum.Controllers
             else
                 return View("SignIn");
         }
+        public ActionResult MonthlyReports()
+        {
+            if (Session["User"] != null)
+                return View();
+            else
+                return View("SignIn");
+        }
 
     }
 }

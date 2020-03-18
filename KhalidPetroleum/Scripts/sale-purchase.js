@@ -38,40 +38,40 @@ function addNewSalesRow() {
     {
         var currentTime = +new Date();
         var html = '<tr id="' + currentTime + '">' +
-                                '<td class="col-md-3">' +
-                                    '<div class="form-group">' +
-                                        '<div class="form-line">' +
-                                            '<input type="number" id="txtDeliveryNo" class="form-control" placeholder="">' +
-                                        '</div>' +
-                                    '</div>' +
-                                '</td>' +
-                                '<td class="col-md-3">' +
-                                    '<div class="form-group">' +
-                                        '<div class="form-line">' +
-                                            '<input type="number" id="txtSaleQuantity" class="form-control" placeholder="">' +
-                                        '</div>' +
-                                    '</div>' +
-                                '</td>' +
-                                '<td class="col-md-3">' +
-                                    '<div class="form-group">' +
-                                        '<div class="form-line">' +
-                                            '<input id="inp'+currentTime+'" type="text" style="display:none" hidden/>'+
-                                            '<select id="txtUnloadSite" class="form-control" onchange="setHidden(this,\'inp'+currentTime+'\')"><option value="-1">-Select Site-</option>';
-                                                $.each(listOfUnloadSites,function(index,item){
-                                                    html += '<option value="' + item.SiteID + '">' + item.SiteID +' - '+ item.SiteName + '</option>';
-                                                });
-                                    html += '</select>' +
-                                        '</div>' +
-                                    '</div>' +
-                                '</td>' +
-                                '<td class="col-md-2">' +
-                                    '<div class="form-group">' +
-                                        '<div class="form-line">' +
-                                            '<input type="file" id="fileUpload" class="form-control dynamic_input_file" placeholder="" accept="image/jpeg">' +
-                                        '</div>' +
-                                    '</div>' +
-                                '</td>' +
-                            '</tr>';
+                        '<td class="col-md-3">' +
+                            '<div class="form-group">' +
+                                '<div class="form-line">' +
+                                    '<input type="number" id="txtDeliveryNo" class="form-control" placeholder="">' +
+                                '</div>' +
+                            '</div>' +
+                        '</td>' +
+                        '<td class="col-md-3">' +
+                            '<div class="form-group">' +
+                                '<div class="form-line">' +
+                                    '<input type="number" id="txtSaleQuantity" class="form-control" placeholder="">' +
+                                '</div>' +
+                            '</div>' +
+                        '</td>' +
+                        '<td class="col-md-3">' +
+                            '<div class="form-group">' +
+                                '<div class="form-line">' +
+                                    '<input id="inp'+currentTime+'" type="text" style="display:none" hidden/>'+
+                                    '<select id="txtUnloadSite" class="form-control" onchange="setHidden(this,\'inp'+currentTime+'\')"><option value="-1">-Select Site-</option>';
+                                        $.each(listOfUnloadSites,function(index,item){
+                                            html += '<option value="' + item.SiteID + '">' + item.SiteID +' - '+ item.SiteName + '</option>';
+                                        });
+                            html += '</select>' +
+                                '</div>' +
+                            '</div>' +
+                        '</td>' +
+                        '<td class="col-md-2">' +
+                            '<div class="form-group">' +
+                                '<div class="form-line">' +
+                                    '<input type="file" id="fileUpload" class="form-control dynamic_input_file" placeholder="" accept="image/jpeg">' +
+                                '</div>' +
+                            '</div>' +
+                        '</td>' +
+                    '</tr>';
         $('#salesTable').append(html);
         listOfRowIds.push(currentTime);
     }
@@ -530,6 +530,25 @@ function submitDailyReport() {
 
 function sendReport() {
 
+}
+
+function addDepot() {
+    $('#saveDepot').prop('disabled', true);
+    $('#saveDepot').text('Please wait...');
+
+    addDepotApi({
+        DepotCode: $('#txtNewDepotCode').val(),
+        DepotName: $('#txtNewDepotName').val(),
+        DepotLocation: $("#txtNewDepotLocation").val(),
+    }, function (resp) {
+        if (resp === "1") {
+            window.location.href = window.location.href;
+        } else {
+            alert(resp);
+        }
+        $('#saveDepot').prop('disabled', false);
+        $('#saveDepot').text('SAVE');
+    });
 }
 
 //*********************************************END CALL FUNCTIONS**********************************************//

@@ -185,15 +185,25 @@
       <End Role="DailyReport" EntitySet="DailyReports" />
       <End Role="DailyReportSale" EntitySet="DailyReportSales" />
     </AssociationSet>
+    <FunctionImport Name="GET_USERS_ACTIVE_TASKS" ReturnType="Collection(KhalidOilDBModel.GET_USERS_ACTIVE_TASKS_Result)" />
+    <FunctionImport Name="GET_USER_TASKS_BY_USER_ID" ReturnType="Collection(KhalidOilDBModel.GET_USER_TASKS_BY_USER_ID_Result)">
+      <Parameter Name="userid" Mode="In" Type="Int64" />
+    </FunctionImport>
+    <FunctionImport Name="GET_GROUPS_ACTIVE_TASKS" ReturnType="Collection(KhalidOilDBModel.GET_GROUPS_ACTIVE_TASKS_Result)" />
+    <EntitySet Name="Groups" EntityType="KhalidOilDBModel.Group" />
+    <FunctionImport Name="GET_GROUP_TASKS_BY_GROUP_ID" ReturnType="Collection(KhalidOilDBModel.GET_GROUP_TASKS_BY_GROUP_ID_Result)">
+      <Parameter Name="groupid" Mode="In" Type="Int64" />
+    </FunctionImport>
+    <EntitySet Name="GroupUsers" EntityType="KhalidOilDBModel.GroupUser" />
     <EntitySet Name="Roles" EntityType="KhalidOilDBModel.Role" />
     <AssociationSet Name="FK_UserRole" Association="KhalidOilDBModel.FK_UserRole">
       <End Role="Role" EntitySet="Roles" />
       <End Role="User" EntitySet="Users" />
     </AssociationSet>
-    <FunctionImport Name="GET_USER_TASKS_BY_USER_ID">
-      <Parameter Name="userid" Mode="In" Type="Int64" />
+    <FunctionImport Name="GET_MONTHLY_REPORT" ReturnType="Collection(KhalidOilDBModel.GET_MONTHLY_REPORT_Result)">
+      <Parameter Name="From" Mode="In" Type="DateTime" />
+      <Parameter Name="To" Mode="In" Type="DateTime" />
     </FunctionImport>
-    <FunctionImport Name="GET_USERS_ACTIVE_TASKS" ReturnType="Collection(KhalidOilDBModel.GET_USERS_ACTIVE_TASKS_Result)" />
   </EntityContainer>
   <ComplexType Name="GET_PARENT_COMPANY_RENT_BY_DATE_Result">
     <Property Type="Int32" Name="ParentCompany" Nullable="false" />
@@ -227,6 +237,7 @@
     <Property Name="RoleID" Type="Int64" />
     <NavigationProperty Name="Attendances" Relationship="KhalidOilDBModel.FK_Attendances_Users" FromRole="User" ToRole="Attendance" />
     <NavigationProperty Name="DailyReports" Relationship="KhalidOilDBModel.FK_DailyReports_Users" FromRole="User" ToRole="DailyReport" />
+    <Property Name="SupervisorGroupId" Type="Int64" />
     <NavigationProperty Name="Role" Relationship="KhalidOilDBModel.FK_UserRole" FromRole="User" ToRole="Role" />
   </EntityType>
   <Association Name="FK_Attendances_Users">
@@ -496,6 +507,72 @@
     <Property Type="String" Name="DepotLocation" Nullable="true" />
     <Property Type="Boolean" Name="DepotStatus" Nullable="true" />
   </ComplexType>
+  <ComplexType Name="GET_USERS_ACTIVE_TASKS_Result">
+    <Property Type="Int64" Name="UserID" Nullable="false" />
+    <Property Type="String" Name="Username" Nullable="true" />
+    <Property Type="Int32" Name="ActiveTasks" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="GET_USER_TASKS_BY_USER_ID_Result">
+    <Property Type="Int64" Name="TaskId" Nullable="false" />
+    <Property Type="String" Name="TaskName" Nullable="false" />
+    <Property Type="String" Name="Details" Nullable="true" />
+    <Property Type="DateTime" Name="StartDate" Nullable="false" />
+    <Property Type="DateTime" Name="EstimatedDate" Nullable="true" />
+    <Property Type="Int64" Name="TaskOwner" Nullable="false" />
+    <Property Type="Int64" Name="AssignedTo" Nullable="true" />
+    <Property Type="DateTime" Name="LastUpdate" Nullable="true" Precision="23" />
+    <Property Type="String" Name="TaskStatus" Nullable="false" />
+    <Property Type="Int32" Name="TaskType" Nullable="true" />
+    <Property Type="String" Name="VehicleNumber" Nullable="true" MaxLength="50" />
+    <Property Type="Int64" Name="DailyChecklistId" Nullable="true" />
+    <Property Type="Boolean" Name="IsApproved" Nullable="true" />
+    <Property Type="Int64" Name="RelatedTaskId" Nullable="true" />
+    <Property Type="Int64" Name="CCGroupId" Nullable="true" />
+    <Property Type="Boolean" Name="IsGroupTask" Nullable="true" />
+    <Property Type="String" Name="OwnerName" Nullable="true" />
+    <Property Type="String" Name="AssigneeName" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="GET_GROUPS_ACTIVE_TASKS_Result">
+    <Property Type="Int64" Name="GroupId" Nullable="false" />
+    <Property Type="String" Name="GroupName" Nullable="false" />
+    <Property Type="Int32" Name="ActiveTasks" Nullable="true" />
+  </ComplexType>
+  <EntityType Name="Group">
+    <Key>
+      <PropertyRef Name="GroupId" />
+    </Key>
+    <Property Name="GroupId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="GroupName" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Created" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="GroupStatus" Type="Boolean" Nullable="false" />
+    <Property Name="GroupType" Type="Int32" />
+  </EntityType>
+  <ComplexType Name="GET_GROUP_TASKS_BY_GROUP_ID_Result">
+    <Property Type="Int64" Name="TaskId" Nullable="false" />
+    <Property Type="String" Name="TaskName" Nullable="false" />
+    <Property Type="String" Name="Details" Nullable="true" />
+    <Property Type="DateTime" Name="StartDate" Nullable="false" />
+    <Property Type="DateTime" Name="EstimatedDate" Nullable="true" />
+    <Property Type="Int64" Name="TaskOwner" Nullable="false" />
+    <Property Type="Int64" Name="AssignedTo" Nullable="true" />
+    <Property Type="DateTime" Name="LastUpdate" Nullable="true" Precision="23" />
+    <Property Type="String" Name="TaskStatus" Nullable="false" />
+    <Property Type="Int32" Name="TaskType" Nullable="true" />
+    <Property Type="String" Name="VehicleNumber" Nullable="true" MaxLength="50" />
+    <Property Type="Int64" Name="DailyChecklistId" Nullable="true" />
+    <Property Type="Boolean" Name="IsApproved" Nullable="true" />
+    <Property Type="Int64" Name="RelatedTaskId" Nullable="true" />
+    <Property Type="Int64" Name="CCGroupId" Nullable="true" />
+    <Property Type="Boolean" Name="IsGroupTask" Nullable="true" />
+  </ComplexType>
+  <EntityType Name="GroupUser">
+    <Key>
+      <PropertyRef Name="GroupId" />
+      <PropertyRef Name="UserId" />
+    </Key>
+    <Property Name="GroupId" Type="Int64" Nullable="false" />
+    <Property Name="UserId" Type="Int64" Nullable="false" />
+  </EntityType>
   <EntityType Name="Role">
     <Key>
       <PropertyRef Name="RoleID" />
@@ -519,7 +596,11 @@
     <Property Name="SRent" Type="Boolean" />
     <Property Name="SDailyReport" Type="Boolean" />
     <Property Name="SChecklistReport" Type="Boolean" />
+    <Property Name="isMNGroups" Type="Boolean" />
+    <Property Name="isMNQuestions" Type="Boolean" />
+    <Property Name="RoleStatus" Type="Boolean" Nullable="false" />
     <NavigationProperty Name="Users" Relationship="KhalidOilDBModel.FK_UserRole" FromRole="Role" ToRole="User" />
+    <Property Name="MonthlyReports" Type="Boolean" />
   </EntityType>
   <Association Name="FK_UserRole">
     <End Type="KhalidOilDBModel.Role" Role="Role" Multiplicity="0..1" />
@@ -533,9 +614,35 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <ComplexType Name="GET_USERS_ACTIVE_TASKS_Result">
-    <Property Type="Int64" Name="UserID" Nullable="false" />
-    <Property Type="String" Name="Username" Nullable="true" />
-    <Property Type="Int32" Name="ActiveTasks" Nullable="true" />
+  <ComplexType Name="GET_MONTHLY_REPORT_Result">
+    <Property Type="Int64" Name="DailyReportID" Nullable="false" />
+    <Property Type="DateTime" Name="Date" Nullable="false" />
+    <Property Type="String" Name="VehicleNumber" Nullable="false" MaxLength="50" />
+    <Property Type="Int64" Name="DriverID" Nullable="false" />
+    <Property Type="String" Name="VCM" Nullable="true" MaxLength="50" />
+    <Property Type="Int64" Name="DepotID" Nullable="false" />
+    <Property Type="Int32" Name="PurchasedSUP" Nullable="true" />
+    <Property Type="Int32" Name="PurchasedHSD" Nullable="true" />
+    <Property Type="String" Name="SUPDropOff" Nullable="true" MaxLength="50" />
+    <Property Type="Double" Name="SUPDifferenceRate" Nullable="true" />
+    <Property Type="Double" Name="SUPDifferenceQuantity" Nullable="true" />
+    <Property Type="String" Name="HSDDropOff" Nullable="true" MaxLength="50" />
+    <Property Type="Double" Name="HSDDifferenceRate" Nullable="true" />
+    <Property Type="Double" Name="HSDDifferenceQuantity" Nullable="true" />
+    <Property Type="Int32" Name="ToolExpense" Nullable="true" />
+    <Property Type="Int32" Name="MunshiExpense" Nullable="true" />
+    <Property Type="Int32" Name="ParkingExpense" Nullable="true" />
+    <Property Type="Int32" Name="GuardExpense" Nullable="true" />
+    <Property Type="Int32" Name="MealExpense" Nullable="true" />
+    <Property Type="Int32" Name="OtherExpense" Nullable="true" />
+    <Property Type="Double" Name="FilledFuelRate" Nullable="true" />
+    <Property Type="Double" Name="FilledFuelQuantity" Nullable="true" />
+    <Property Type="Int32" Name="OpeningMeter" Nullable="true" />
+    <Property Type="Int32" Name="ClosingMeter" Nullable="true" />
+    <Property Type="Double" Name="PetrolAverage" Nullable="true" />
+    <Property Type="Boolean" Name="IsVerified" Nullable="true" />
+    <Property Type="String" Name="DepotName" Nullable="true" />
+    <Property Type="String" Name="DriverName" Nullable="true" />
+    <Property Type="String" Name="VCMName" Nullable="true" />
   </ComplexType>
 </Schema>

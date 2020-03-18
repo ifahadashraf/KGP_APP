@@ -174,6 +174,9 @@
     <Compile Include="Models\GET_GROUP_TASKS_BY_GROUP_ID_Result.cs">
       <DependentUpon>KhalidOilDBModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\GET_MONTHLY_REPORT_Result.cs">
+      <DependentUpon>KhalidOilDBModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\GET_PARENT_COMPANY_RENT_BY_DATE_Result.cs">
       <DependentUpon>KhalidOilDBModel.tt</DependentUpon>
     </Compile>
@@ -3599,6 +3602,7 @@
     <Content Include="Scripts\js\thumbs.js" />
     <Content Include="Scripts\js\wheel.js" />
     <Content Include="Scripts\maintenance.js" />
+    <Content Include="Scripts\monthly.js" />
     <Content Include="Scripts\questions.js" />
     <Content Include="Scripts\rents.js" />
     <Content Include="Scripts\roles.js" />
@@ -3692,6 +3696,7 @@
     <Content Include="Views\Main\Questions.cshtml" />
     <Content Include="Views\Main\Groups.cshtml" />
     <Content Include="Views\Admin\Verification.cshtml" />
+    <Content Include="Views\Admin\MonthlyReports.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

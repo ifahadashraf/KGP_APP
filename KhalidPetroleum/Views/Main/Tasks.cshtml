@@ -246,7 +246,7 @@
                             <input id="txtUserId" style="display:none" value="@user.UserID"/>
                             <input id="txtUserType" style="display:none" value="@user.UserType" /> 
                             <input id="txtUserName" style="display:none" value="@user.UserName" /> 
-                            <button type="button" class="btn bg-light-blue waves-effect pull-right" data-toggle="modal" @((user.UserType == "ADMIN") ? "data-target=#mdModal1" : "style=display:none")>+ Add New</button>
+                            <button type="button" class="btn bg-light-blue waves-effect pull-right" data-toggle="modal" @((user.UserID == 3 || user.UserID == 51) ? "data-target=#mdModal1" : "style=display:none")>+ Add New</button>
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                 <!-- Nav tabs -->
                                 <ul class="nav nav-tabs" role="tablist">

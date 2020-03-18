@@ -48,6 +48,8 @@ var GET_MY_GROUPS = "GetMyGroups";
 var GET_ALL_TASKS = "GetAllTasks";
 var DELETE_ROLE = "DeleteRole";
 var DELTE_USER = "DeleteUser";
+var ADD_DEPOT = "AddDepot";
+var GET_MONTHLY_REPORT = "GetMonthlyReport"
 
 //*************END OF CONSTANTS*************//
 
@@ -677,6 +679,33 @@ function deleteRoleApi(id, cb) {
 function deleteUserApi(id, cb) {
     $.ajax({
         url: BASE_URL + DELTE_USER + "?id=" + id,
+        method: "GET",
+        success: function (data) {
+            cb(data);
+        },
+        error: function (data) {
+            cb(data);
+        }
+    });
+}
+
+function addDepotApi(body, cb) {
+    $.ajax({
+        url: BASE_URL + ADD_DEPOT,
+        method: "POST",
+        data: JSON.stringify(body),
+        success: function (data) {
+            cb(data);
+        },
+        error: function (data) {
+            cb(data);
+        }
+    });
+}
+
+function getMonthlyReportApi(from, to, cb) {
+    $.ajax({
+        url: BASE_URL + GET_MONTHLY_REPORT + '?from=' + from + '&to=' + to,
         method: "GET",
         success: function (data) {
             cb(data);
